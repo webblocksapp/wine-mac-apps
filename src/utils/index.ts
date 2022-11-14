@@ -1,4 +1,3 @@
-export * from './mkdir';
-export * from './openApp';
+export * from './mapFlags';
+export * from './runScript';
 export * from './useWine';
-export * from './winecfg';

@@ -19,22 +19,9 @@
         "all": true,
         "scope": [
           {
-            "name": "run-open",
-            "cmd": "open",
-            "args": ["-a", { "validator": "\\S+" }]
-          },
-          {
-            "name": "run-mkdir",
-            "cmd": "mkdir",
-            "args": [{ "validator": "\\S+" }]
-          },
-          {
-            "name": "run-winecfg",
+            "name": "run-script",
             "cmd": "sh",
-            "args": [
-              { "validator": "-c" },
-              { "validator": "^WINEPREFIX=(\\S+) winecfg$" }
-            ]
+            "args": [{ "validator": "-c" }, { "validator": "(.*?)" }]
           }
         ]
       }
