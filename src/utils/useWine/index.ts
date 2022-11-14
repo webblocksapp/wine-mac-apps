@@ -6,7 +6,11 @@ import { createStore } from 'solid-js/store';
 
 export const useWine = (config: { appName: string; engine?: string }) => {
   const [childProcess, setChildProcess] = createSignal<ChildProcess>();
-  const [store, setStore] = createStore({ WINE_APP_FOLDER: '' });
+  const [env, setEnv] = createStore({
+    WINE_APP_FOLDER: '',
+    WINE_BIN_PATH: '',
+    WINE_EXPORT_PATH: '',
+  });
   const [output, setOutput] = createSignal<string | undefined>('');
 
   const runScripts = async (scripts: string[]) => {
@@ -22,23 +26,13 @@ export const useWine = (config: { appName: string; engine?: string }) => {
    */
   const buildWineForApp = async () => {
     runScripts([
-      `mkdir -p ${store.WINE_APP_FOLDER}`,
-      `mkdir -p ${store.WINE_APP_FOLDER}/wine`,
-      `tar -xf ${envState.WINE_ENGINES_FOLDER}/${config.engine}.tar.7z -C ${store.WINE_APP_FOLDER} -v`,
-      `tar -xf ${store.WINE_APP_FOLDER}/wswine.bundle -C ${store.WINE_APP_FOLDER}/wine`,
-      `rm ${store.WINE_APP_FOLDER}/wswine.bundle`,
+      `mkdir -p ${env.WINE_APP_FOLDER}`,
+      `mkdir -p ${env.WINE_APP_FOLDER}/wine`,
+      `tar -xf ${envState.WINE_ENGINES_FOLDER}/${config.engine}.tar.7z -C ${env.WINE_APP_FOLDER} -v`,
+      `mv ${env.WINE_APP_FOLDER}/wswine.bundle/* ${env.WINE_APP_FOLDER}/wine`,
+      `rm -r ${env.WINE_APP_FOLDER}/wswine.bundle`,
+      `${env.WINE_EXPORT_PATH} WINEPREFIX=${env.WINE_APP_FOLDER} wine32on64 wineboot`,
     ]);
-  };
-
-  /**
-   * Creates the wine application prefix folder.
-   */
-  const createWineAppPrefix = async () => {
-    setChildProcess(
-      await runScript(
-        `${envState.WINE_EXPORT_PATH} WINEPREFIX=${store.WINE_APP_FOLDER} wine32on64 wineboot`
-      )
-    );
   };
 
   /**
@@ -47,7 +41,7 @@ export const useWine = (config: { appName: string; engine?: string }) => {
   const winecfg = async () => {
     setChildProcess(
       await runScript(
-        `${envState.WINE_EXPORT_PATH} WINEPREFIX=${store.WINE_APP_FOLDER} wine32on64 winecfg`
+        `${env.WINE_EXPORT_PATH} WINEPREFIX=${env.WINE_APP_FOLDER} wine32on64 winecfg`
       )
     );
   };
@@ -64,8 +58,8 @@ export const useWine = (config: { appName: string; engine?: string }) => {
 
     setChildProcess(
       await runScript(
-        `${envState.WINE_EXPORT_PATH} WINEPREFIX=${
-          store.WINE_APP_FOLDER
+        `${env.WINE_EXPORT_PATH} WINEPREFIX=${
+          env.WINE_APP_FOLDER
         } winetricks ${tricks.join(' ')} ${flags}`
       )
     );
@@ -80,10 +74,9 @@ export const useWine = (config: { appName: string; engine?: string }) => {
   };
 
   createEffect(() => {
-    setStore(
-      'WINE_APP_FOLDER',
-      `${envState.WINE_APPS_FOLDER}/${config.appName}`
-    );
+    setEnv('WINE_APP_FOLDER', `${envState.WINE_APPS_FOLDER}/${config.appName}`);
+    setEnv('WINE_BIN_PATH', `${env.WINE_APP_FOLDER}/wine/bin`);
+    setEnv('WINE_EXPORT_PATH', `PATH="${env.WINE_BIN_PATH}:$PATH"`);
   });
 
   createEffect(() => {
@@ -92,7 +85,6 @@ export const useWine = (config: { appName: string; engine?: string }) => {
 
   return {
     buildWineForApp,
-    createWineAppPrefix,
     winecfg,
     winetricks,
     childProcess,

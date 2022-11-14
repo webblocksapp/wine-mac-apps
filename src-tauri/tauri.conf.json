@@ -7,7 +7,7 @@
     "withGlobalTauri": false
   },
   "package": {
-    "productName": "mac-games-porter",
+    "productName": "wine-mac-apps",
     "version": "0.0.0"
   },
   "tauri": {
@@ -70,7 +70,7 @@
         "fullscreen": false,
         "height": 600,
         "resizable": true,
-        "title": "mac-games-porter",
+        "title": "wine-mac-apps",
         "width": 800
       }
     ]
