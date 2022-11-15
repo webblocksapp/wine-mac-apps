@@ -3,3 +3,7 @@ export * from './Job';
 export * from './JobStep';
 export * from './Pipeline';
 export * from './ProcessStatus';
+export * from './ShellProcess';
+export * from './ShellRunner';
+export * from './WineAppConfig';
+export * from './WineAppEnv';

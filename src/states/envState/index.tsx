@@ -6,6 +6,4 @@ export const [envState, setEnvState] = createStore<EnvState>({
   WINE_BASE_FOLDER: '',
   WINE_ENGINES_FOLDER: '',
   WINE_APPS_FOLDER: '',
-  WINE_BIN_PATH: '',
-  WINE_EXPORT_PATH: '',
 });

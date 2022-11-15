@@ -1,25 +1,29 @@
-import {
-  Component,
-  createEffect,
-  createSignal,
-  Match,
-  onMount,
-  Switch,
-} from 'solid-js';
+import { Component, createSignal, Match, Switch } from 'solid-js';
 import { Button } from '@components';
-import { useWine } from '@utils';
 import { envState, setEnvState } from '@states';
 import { homeDir } from '@tauri-apps/api/path';
+import { useWineApp } from '@utils';
 
 export const App: Component = () => {
   const [loading, setLoading] = createSignal(true);
-  const wine = useWine({ appName: 'steam', engine: 'WS11WineCX64Bit22.0.1' });
+  const wine = useWineApp({
+    appName: 'steam',
+    engine: 'WS11WineCX64Bit22.0.1',
+  });
 
   const initEnv = async () => {
-    setEnvState('HOME', (await homeDir()).replace(/\/$/, ''));
-    setEnvState('WINE_BASE_FOLDER', `${envState.HOME}/Wine`);
-    setEnvState('WINE_ENGINES_FOLDER', `${envState.WINE_BASE_FOLDER}/engines`);
-    setEnvState('WINE_APPS_FOLDER', `${envState.WINE_BASE_FOLDER}/apps`);
+    const HOME = (await homeDir()).replace(/\/$/, '');
+    const WINE_BASE_FOLDER = `${HOME}/Wine`;
+    const WINE_ENGINES_FOLDER = `${WINE_BASE_FOLDER}/engines`;
+    const WINE_APPS_FOLDER = `${WINE_BASE_FOLDER}/apps`;
+
+    setEnvState({
+      HOME: (await homeDir()).replace(/\/$/, ''),
+      WINE_BASE_FOLDER,
+      WINE_ENGINES_FOLDER,
+      WINE_APPS_FOLDER,
+    });
+
     setLoading(false);
   };
 
@@ -32,7 +36,7 @@ export const App: Component = () => {
         <Match when={loading() === false}>
           <ol>
             <li>
-              <Button onClick={wine.buildWineForApp}>Engine</Button>
+              <Button onClick={wine.createWineApp}>Engine</Button>
             </li>
             {/* <li>
               Run the winecfg command.
@@ -67,9 +71,15 @@ export const App: Component = () => {
               </pre>
             </li> */}
             <li>
+              Pipeline
+              <pre>
+                <code>{JSON.stringify(wine.pipeline, null, 2)}</code>
+              </pre>
+            </li>
+            <li>
               Output
               <pre>
-                <code>{wine.output()}</code>
+                <code>{wine.consoleOutput()}</code>
               </pre>
             </li>
           </ol>
