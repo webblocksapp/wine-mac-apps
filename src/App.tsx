@@ -38,38 +38,38 @@ export const App: Component = () => {
             <li>
               <Button onClick={wine.createWineApp}>Engine</Button>
             </li>
-            {/* <li>
-              Run the winecfg command.
-              <pre>
-                <code>WINEPREFIX="path/to/app-name-prefix" winecfg</code>
-              </pre>
-              <Button onClick={wine.buildWineForApp}>Engine</Button>
-              <Button onClick={wine.createWineAppPrefix}>
-                Create wine app prefix
-              </Button>
-              <Button onClick={wine.winecfg}>Winecfg</Button>
-            </li>
             <li>
-              (If required) Run winetricks command.
-              <pre>
-                <code>
-                  WINEPREFIX="path/to/app-name-prefix" winetricks --force -q
-                  lib1 lib2
-                </code>
-              </pre>
-              <Button onClick={() => wine.winetricks(['steam'])}>
+              <Button
+                onClick={() =>
+                  wine.winetricks(['steam', 'dxvk_macos.verb'], {
+                    silent: false,
+                    onlyEcho: true,
+                  })
+                }
+              >
                 winetricks steam
               </Button>
             </li>
             <li>
-              Run the app.
-              <pre>
-                <code>
-                  WINEPREFIX="path/to/app-name-prefix" wine
-                  path/to/app-name-prefix/app.exe
-                </code>
-              </pre>
-            </li> */}
+              <Button onClick={wine.winecfg}>winecfg</Button>
+            </li>
+            <li>
+              <Button
+                onClick={() =>
+                  wine.runProgram(
+                    'drive_c/Program Files (x86)/Steam/steam.exe',
+                    [
+                      '-noreactlogin',
+                      '-allosarches',
+                      '-cef-force-32bit',
+                      '-udpforce',
+                    ]
+                  )
+                }
+              >
+                Run steam
+              </Button>
+            </li>
             <li>
               Pipeline
               <pre>

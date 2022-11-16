@@ -38,6 +38,7 @@ export const useShellRunner = (
   const runPipeline = async (workflow: Pipeline) => {
     let abort = false;
     setPipeline(workflow);
+    setConsoleOutput('');
 
     try {
       for (const jobs of workflow.jobs) {
@@ -73,7 +74,10 @@ export const useShellRunner = (
     setPipeline('jobs', jobIndex, 'steps', stepIndex, 'status', status);
   };
 
-  const runScript = async (script: string) => {
+  const runScript = async (
+    script: string,
+    options?: { force?: boolean; onlyEcho?: boolean }
+  ) => {
     const commands = buildCommands(script);
     const result: { status: ProcessStatus } = { status: 'finished' };
     let abort = false;
@@ -85,8 +89,9 @@ export const useShellRunner = (
         continue;
       }
 
-      setChildProcess(await tauriRunScript(command));
-      abort = abortProcessOnError();
+      if (options?.onlyEcho !== true)
+        setChildProcess(await tauriRunScript(command));
+      if (options?.force !== true) abort = abortProcessOnError();
     }
 
     return result;

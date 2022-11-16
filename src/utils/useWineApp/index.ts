@@ -29,14 +29,30 @@ export const useWineApp = (config: WineAppConfig) => {
    */
   const winetricks = async (
     tricks: string[],
-    options?: { silent?: boolean; force?: boolean }
+    options?: { silent?: boolean; force?: boolean; onlyEcho?: boolean }
   ) => {
     options = { silent: true, force: true, ...options };
     const flags = mapFlags(options, { silent: '-q', force: '--force' });
+    console.log(flags);
+    for (let trick of tricks) {
+      await runScript(
+        `{{WINE_APP_EXPORT_PATH}} WINEPREFIX={{WINE_APP_FOLDER}} WINE={{WINE_APP_BIN_PATH}}/wine32on64 winetricks ${trick} ${flags}`,
+        { force: true, onlyEcho: options?.onlyEcho }
+      );
+    }
+  };
+
+  const runProgram = async (
+    executablePath: string,
+    exeFlags: string[] = [],
+    options?: { onlyEcho?: boolean }
+  ) => {
+    exeFlags = exeFlags?.map?.((item) => `"${item}"`);
     await runScript(
-      `{{WINE_APP_EXPORT_PATH}} WINEPREFIX={{WINE_APP_FOLDER}} winetricks ${tricks.join(
+      `{{WINE_APP_EXPORT_PATH}} WINEPREFIX={{WINE_APP_FOLDER}} exec wine32on64 "{{WINE_APP_FOLDER}}/${executablePath}" ${exeFlags.join(
         ' '
-      )} ${flags}`
+      )}`,
+      { onlyEcho: options?.onlyEcho }
     );
   };
 
@@ -46,5 +62,6 @@ export const useWineApp = (config: WineAppConfig) => {
     winetricks,
     consoleOutput,
     pipeline,
+    runProgram,
   };
 };

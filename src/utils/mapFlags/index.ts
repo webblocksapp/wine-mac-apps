@@ -7,7 +7,7 @@ export const mapFlags = <T extends { [key: string]: any }>(
   Object.keys(data).forEach((key) => {
     const value = data[key];
     if (typeof value === 'boolean' && value) {
-      flags += `${map[key]} `;
+      flags += `${map[key] || ''} `;
     }
   });
 
