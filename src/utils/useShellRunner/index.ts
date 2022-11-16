@@ -21,12 +21,20 @@ export const useShellRunner = (
     jobs: [],
   });
 
+  /**
+   * Splits an script into separate commands.
+   */
   const buildCommands = (script: string) => {
     script = strReplacer(script, { ...config.appEnv });
     const commands = addCodeStatusExecution(script.split('&&'));
     return commands;
   };
 
+  /**
+   * Adds an script for echoing code status.
+   * - 0 success.
+   * - 1 error.
+   */
   const addCodeStatusExecution = (commands: string[]) => {
     const parsedCommands: string[] = [];
     commands.forEach((cmd) => {
@@ -35,6 +43,9 @@ export const useShellRunner = (
     return parsedCommands;
   };
 
+  /**
+   * Executes a pipeline workflow.
+   */
   const runPipeline = async (workflow: Pipeline) => {
     let abort = false;
     setPipeline(workflow);
@@ -66,6 +77,9 @@ export const useShellRunner = (
     }
   };
 
+  /**
+   * Sets the pipeline step status.
+   */
   const setStepStatus = (
     jobIndex: number,
     stepIndex: number,
@@ -74,6 +88,10 @@ export const useShellRunner = (
     setPipeline('jobs', jobIndex, 'steps', stepIndex, 'status', status);
   };
 
+  /**
+   * It runs the script and also handles the console output
+   * during its execution.
+   */
   const runScript = async (
     script: string,
     options?: { force?: boolean; onlyEcho?: boolean }
@@ -97,6 +115,9 @@ export const useShellRunner = (
     return result;
   };
 
+  /**
+   * Abort a process when status code 1 (error).
+   */
   const abortProcessOnError = () => {
     if (outputText().match(/(STATUS_COMMAND_CODE):(1)/g)?.length) {
       return true;
@@ -105,14 +126,23 @@ export const useShellRunner = (
     return false;
   };
 
+  /**
+   * Prints text at console output.
+   */
   const print = (text: string) => {
     setConsoleOutput((prev) => `${prev}${text}`);
   };
 
+  /**
+   * Gets the output text from the child process.
+   */
   const outputText = () => {
     return `${childProcess()?.stdout || ''}${childProcess()?.stderr || ''}`;
   };
 
+  /**
+   * Formats output text of unnecessary visible data.
+   */
   const parseOutputText = (text: string) => {
     return text.replace?.(/(STATUS_COMMAND_CODE):(\d)/g, '') || '';
   };
