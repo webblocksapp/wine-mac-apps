@@ -33,7 +33,7 @@ export const useWineApp = (config: WineAppConfig) => {
   ) => {
     options = { silent: true, force: true, ...options };
     const flags = mapFlags(options, { silent: '-q', force: '--force' });
-    console.log(flags);
+
     for (let trick of tricks) {
       await runScript(
         `{{WINE_APP_EXPORT_PATH}} WINEPREFIX={{WINE_APP_FOLDER}} WINE={{WINE_APP_BIN_PATH}}/wine32on64 winetricks ${trick} ${flags}`,

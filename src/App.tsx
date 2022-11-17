@@ -1,6 +1,6 @@
 import { Component, createSignal, Match, Switch } from 'solid-js';
-import { Button } from '@components';
-import { envState, setEnvState } from '@states';
+import { Box, Button, Grid } from '@components';
+import { setEnvState } from '@states';
 import { homeDir } from '@tauri-apps/api/path';
 import { useWineApp } from '@utils';
 
@@ -85,6 +85,34 @@ export const App: Component = () => {
           </ol>
         </Match>
       </Switch>
+
+      <Grid container spacing={2}>
+        <Grid item xs={12} md={6}>
+          <Grid container spacing={2}>
+            <Grid item xs={6}>
+              <Box style={{ 'background-color': 'red' }}>A-1</Box>
+            </Grid>
+            <Grid item xs={6}>
+              <Box>A-2</Box>
+            </Grid>
+            <Grid item xs={6}>
+              <Box>A-3</Box>
+            </Grid>
+            <Grid item xs={6}>
+              <Box>A-4</Box>
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <Box>B</Box>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <Box>C</Box>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <Box>D</Box>
+        </Grid>
+      </Grid>
     </div>
   );
 };

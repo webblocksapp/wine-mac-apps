@@ -15,6 +15,7 @@
     "paths": {
       "@components": ["src/components"],
       "@constants": ["src/constants"],
+      "@hocs": ["src/hocs"],
       "@interfaces": ["src/interfaces"],
       "@shell": ["src/shell"],
       "@states": ["src/states"],
