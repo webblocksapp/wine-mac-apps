@@ -338,6 +338,11 @@
   resolved "https://registry.yarnpkg.com/@picocss/pico/-/pico-1.5.6.tgz#82a2253e8dc12657f1a7de4e68c01cdc74f798b7"
   integrity sha512-9R+OdtMuHijKa7AQKBrng/1Q/Cd3BnEigYJXmOxI10Eka2qGGDa4b0hua8UeYu01BTtAiO70K7CQuHffU4YXGA==
 
+"@solidjs/router@^0.5.0":
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@solidjs/router/-/router-0.5.0.tgz#b324c64f79d94c2b55011c2c8eea0a76771754fc"
+  integrity sha512-rNR07l21tWWDVmCbaapggB89rEX7jlM2XChpTLqEGEnj46LzVZ8zgvjcF6NNKScByAlLpoQUkVIjB2KHpcMi+w==
+
 "@tauri-apps/api@^1.1.0":
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/@tauri-apps/api/-/api-1.2.0.tgz#1f196b3e012971227f41b98214c846430a4eb477"
@@ -891,6 +896,11 @@ slash@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/slash/-/slash-3.0.0.tgz#6539be870c165adbd5240220dbe361f1bc4d4634"
   integrity sha512-g9Q1haeby36OSStwb4ntCGGGaKsaVSjQ68fBxoQcutl5fS1vuY18H3wSt3jFyFtrkx+Kz0V1G85A4MyAdDMi2Q==
+
+solid-form-handler@^1.0.0-alpha.4:
+  version "1.0.0-alpha.4"
+  resolved "https://registry.yarnpkg.com/solid-form-handler/-/solid-form-handler-1.0.0-alpha.4.tgz#022b7b8bbfeaf02baccdf764dee5517640fa3761"
+  integrity sha512-EWGNQddEn/Zx/YQur/n3GQQmPMmtE6hx3jzwNkX87EBieIMr/TJZbF3wBDdpb1bBW93Tb9/zx0fYGLk5WoSAcQ==
 
 solid-js@^1.4.7:
   version "1.6.2"

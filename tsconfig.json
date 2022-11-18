@@ -17,6 +17,9 @@
       "@constants": ["src/constants"],
       "@hocs": ["src/hocs"],
       "@interfaces": ["src/interfaces"],
+      "@layouts": ["src/layouts"],
+      "@pages": ["src/pages"],
+      "@routes": ["src/routes"],
       "@shell": ["src/shell"],
       "@states": ["src/states"],
       "@utils": ["src/utils"]

@@ -1,6 +1,14 @@
 import { JSX } from 'solid-js';
 import { FlexboxProps, GridProps, SpacingProps } from '@interfaces';
-import { withFlex, withGrid, withSpacing } from '@hocs';
+import {
+  withBorder,
+  withDisplay,
+  withFlex,
+  withGrid,
+  withShadow,
+  withSizing,
+  withSpacing,
+} from '@hocs';
 
 export interface BaseBoxProps extends JSX.HTMLAttributes<HTMLDivElement> {}
 export interface BoxProps
@@ -9,8 +17,18 @@ export interface BoxProps
     GridProps,
     SpacingProps {}
 
-export const Box = withGrid(
-  withFlex(
-    withSpacing((props: BaseBoxProps) => <div {...props}>{props.children}</div>)
+export const Box = withSizing(
+  withShadow(
+    withBorder(
+      withDisplay(
+        withGrid(
+          withFlex(
+            withSpacing((props: BaseBoxProps) => (
+              <div {...props}>{props.children}</div>
+            ))
+          )
+        )
+      )
+    )
   )
 );

@@ -1,2 +1,30 @@
 @import '@picocss/pico/css/pico.css';
 @import 'bootstrap/dist/css/bootstrap-grid.min.css';
+@import 'bootstrap/dist/css/bootstrap-utilities.min.css';
+
+body,
+html,
+#root {
+  min-height: 100vh;
+  height: 100%;
+}
+
+input:not([type='checkbox'], [type='radio']),
+select,
+textarea {
+  margin-bottom: 0px;
+}
+
+:root {
+  --invalid-color: #b71c1c;
+  --typography-spacing-vertical: 0;
+}
+
+.helper-text {
+  color: var(--secondary);
+  margin-top: 0.3rem;
+}
+
+.invalid {
+  color: var(--invalid-color);
+}
