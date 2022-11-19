@@ -1,5 +1,6 @@
 import { Component } from 'solid-js';
+import { WineAppForm } from './WineAppForm';
 
 export const WineAppManager: Component = () => {
-  return <>Wine App Manager Works!!!</>;
+  return <WineAppForm />;
 };

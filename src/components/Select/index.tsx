@@ -1,3 +1,4 @@
+import { Box, FormHelperText, FormLabel, List, ListItem } from '@components';
 import { SelectableOption } from '@interfaces';
 import { FormHandler } from 'solid-form-handler';
 import {
@@ -9,11 +10,16 @@ import {
   splitProps,
 } from 'solid-js';
 import { createStore } from 'solid-js/store';
+import './index.css';
 
 export interface SelectProps
-  extends Omit<JSX.DetailsHtmlAttributes<HTMLDetailsElement>, 'onInput'> {
+  extends Omit<
+    JSX.DetailsHtmlAttributes<HTMLDetailsElement>,
+    'onInput' | 'onBlur'
+  > {
   error?: boolean;
   errorMessage?: string;
+  helperText?: string;
   formHandler?: FormHandler;
   label?: string;
   name?: string;
@@ -21,10 +27,14 @@ export interface SelectProps
   options?: Array<SelectableOption>;
   placeholder?: string;
   triggers?: string[];
-  onInput: (event: { currentTarget: HTMLLIElement; target: Element }) => void;
+  onInput?: (event: { currentTarget: HTMLLIElement; target: Element }) => void;
+  onBlur?: (event: { currentTarget: HTMLElement }) => void;
 }
 
 export const Select: Component<SelectProps> = (props) => {
+  let detailsRef: HTMLDetailsElement | undefined;
+  let summaryRef: HTMLDetailsElement | undefined;
+
   /**
    * Props are divided in two groups:
    * - local: newer or extended/computed props.
@@ -35,6 +45,7 @@ export const Select: Component<SelectProps> = (props) => {
     'error',
     'errorMessage',
     'formHandler',
+    'helperText',
     'id',
     'label',
     'onBlur',
@@ -48,6 +59,11 @@ export const Select: Component<SelectProps> = (props) => {
   ]);
 
   /**
+   * Click flag for avoid validating during an option is selected.
+   */
+  const [optionHovered, setOptionHovered] = createSignal(false);
+
+  /**
    * Derived/computed states from props.
    */
   const [store, setStore] = createStore({
@@ -55,6 +71,7 @@ export const Select: Component<SelectProps> = (props) => {
     errorMessage: '',
     id: '',
     value: '',
+    selectedOptionLabel: '',
   });
 
   /**
@@ -69,7 +86,7 @@ export const Select: Component<SelectProps> = (props) => {
     //Form handler prop sets and validate the value onInput.
     local.formHandler?.setFieldValue?.(
       local.name,
-      event?.currentTarget?.value,
+      event?.currentTarget.getAttribute('data-value'),
       {
         htmlElement: event.currentTarget,
         validateOn: ['input'],
@@ -78,24 +95,25 @@ export const Select: Component<SelectProps> = (props) => {
 
     //onInput prop is preserved
     local?.onInput?.(event);
+    detailsRef?.removeAttribute('open');
+
+    setOptionHovered(false);
   };
 
   /**
    * Extended onBlur event.
    */
   const onBlur: SelectProps['onBlur'] = (event) => {
+    if (optionHovered()) return;
+
     //Form handler prop validate and touch the field.
     local.formHandler?.validateField?.(local.name, {
-      validateOn: [event.type],
+      validateOn: ['onBlur'],
     });
     local.formHandler?.touchField?.(local.name);
 
     //onBlur prop is preserved
-    if (typeof local.onBlur === 'function') {
-      local.onBlur(event);
-    } else {
-      local.onBlur?.[0](local.onBlur?.[1], event);
-    }
+    local?.onBlur?.(event);
   };
 
   /**
@@ -165,18 +183,73 @@ export const Select: Component<SelectProps> = (props) => {
     local.formHandler?.setFieldDefaultValue?.(local.name, local.value);
   });
 
+  createEffect(() => {
+    const label =
+      local?.options?.find((option) => option?.value == store.value)?.label ||
+      '';
+    setStore('selectedOptionLabel', label);
+  });
+
   return (
-    <details {...rest} role="list">
-      <summary aria-haspopup="listbox">{local.placeholder}</summary>
-      <ul role="listbox">
-        <For each={options()}>
-          {(option) => (
-            <li value={option.value} onClick={onInput}>
-              {option.label}
-            </li>
-          )}
-        </For>
-      </ul>
-    </details>
+    <Box>
+      {local.label && (
+        <FormLabel
+          for={store.id}
+          error={store.error}
+          onClick={() => {
+            detailsRef?.setAttribute('open', 'true');
+            summaryRef?.focus();
+          }}
+        >
+          {local.label}
+        </FormLabel>
+      )}
+      <details
+        {...rest}
+        classList={{
+          ...local.classList,
+          select: true,
+        }}
+        id={store.id}
+        role="list"
+        ref={detailsRef}
+      >
+        <summary
+          aria-haspopup="listbox"
+          ref={summaryRef}
+          onBlur={onBlur}
+          classList={{
+            'invalid-border': store.error,
+            'invalid-icon': store.error,
+          }}
+        >
+          {store.selectedOptionLabel || local.placeholder}
+        </summary>
+        <List role="listbox">
+          <For each={options()}>
+            {(option) => (
+              <ListItem
+                data-value={option.value}
+                onClick={onInput}
+                onMouseEnter={() => {
+                  setOptionHovered(true);
+                }}
+                onMouseLeave={() => {
+                  setOptionHovered(false);
+                }}
+              >
+                {option.label}
+              </ListItem>
+            )}
+          </For>
+        </List>
+      </details>
+      {local.helperText && <FormHelperText>{local.helperText}</FormHelperText>}
+      {store.error && (
+        <FormHelperText error={store.error}>
+          {store.errorMessage}
+        </FormHelperText>
+      )}
+    </Box>
   );
 };

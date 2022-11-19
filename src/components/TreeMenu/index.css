@@ -1,0 +1,21 @@
+.tree-menu li {
+  padding: 1rem 0;
+}
+
+.tree-menu ul > li {
+  padding: 0.2rem 0;
+}
+
+.tree-menu li > details > summary {
+  padding: 1rem 0px;
+  margin-bottom: 0;
+}
+
+.tree-menu li ul details {
+  border-bottom: none;
+}
+
+.tree-menu details {
+  margin-bottom: 0;
+  padding-bottom: 0;
+}

@@ -1,7 +1,16 @@
-import { Component, JSX } from 'solid-js';
+import { Component, JSX, mergeProps, splitProps } from 'solid-js';
 
-export interface ListProps extends JSX.OlHTMLAttributes<HTMLUListElement> {}
+export interface ListProps extends JSX.OlHTMLAttributes<HTMLUListElement> {
+  bullet?: boolean;
+}
 
 export const List: Component<ListProps> = (props) => {
-  return <ul {...props} />;
+  const [local, rest] = splitProps(props, ['bullet', 'classList']);
+
+  return (
+    <ul
+      {...rest}
+      classList={{ ...local.classList, 'no-bullet': local.bullet ?? true }}
+    />
+  );
 };

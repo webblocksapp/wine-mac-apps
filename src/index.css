@@ -17,7 +17,15 @@ textarea {
 
 :root {
   --invalid-color: #b71c1c;
-  --typography-spacing-vertical: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin-bottom: 0px;
 }
 
 .helper-text {
@@ -27,4 +35,21 @@ textarea {
 
 .invalid {
   color: var(--invalid-color);
+}
+
+.invalid-border {
+  border-color: var(--form-element-invalid-border-color) !important;
+}
+
+.invalid-border:focus {
+  border-color: var(--form-element-invalid-active-border-color) !important;
+  box-shadow: 0 0 0 var(--outline-width) var(--form-element-invalid-focus-color) !important;
+}
+
+.invalid-icon::after {
+  background-image: var(--icon-invalid);
+}
+
+.no-bullet {
+  list-style: none;
 }

@@ -1,9 +1,10 @@
 import { WineAppConfig } from '@interfaces';
-import { envState } from '@states';
+import { useEnvState } from '@states';
 import { createEffect } from 'solid-js';
 import { createStore } from 'solid-js/store';
 
 export const useAppEnv = (config: WineAppConfig) => {
+  const { envState } = useEnvState();
   const [appEnv, setAppEnv] = createStore({
     ...envState,
     WINE_APP_FOLDER: '',

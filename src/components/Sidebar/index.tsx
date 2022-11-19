@@ -1,6 +1,8 @@
-import { Box } from '@components';
+import { Box, BoxProps } from '@components';
 import { Component } from 'solid-js';
 
-export const Sidebar: Component = () => {
-  return <Box></Box>;
+export interface SidebarProps extends BoxProps {}
+
+export const Sidebar: Component<SidebarProps> = (props) => {
+  return <Box {...props} />;
 };

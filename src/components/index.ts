@@ -1,3 +1,4 @@
+export * from './Accordion';
 export * from './Box';
 export * from './Button';
 export * from './FormHelperText';
@@ -9,4 +10,6 @@ export * from './ListItem';
 export * from './Select';
 export * from './Sidebar';
 export * from './TextInput';
+export * from './TreeMenu';
 export * from './Typography';
+export * from './Wrap';
