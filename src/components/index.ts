@@ -1,6 +1,7 @@
 export * from './Accordion';
 export * from './Box';
 export * from './Button';
+export * from './FilePathInput';
 export * from './FormHelperText';
 export * from './FormLabel';
 export * from './Grid';

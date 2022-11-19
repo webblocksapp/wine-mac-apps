@@ -1,0 +1,19 @@
+.file-path-input {
+  position: relative;
+}
+
+.file-path-input button {
+  display: inline-block;
+}
+
+.file-path-input .prev-slot button {
+  border: 0;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.file-path-input .next-slot button {
+  border: 0;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}

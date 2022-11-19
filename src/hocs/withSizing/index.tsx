@@ -16,11 +16,11 @@ export const withSizing = <T,>(BaseComponent: Component<T>) => {
       <BaseComponent
         {...props}
         style={{
-          ...props.style,
           width: fullWidth() || parseSize(props.width),
           height: fullHeight() || parseSize(props.height),
           maxWidth: parseSize(props.maxWidth),
           maxHeight: parseSize(props.maxHeight),
+          ...props.style,
         }}
       />
     );

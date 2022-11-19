@@ -5,6 +5,7 @@ import {
   DisplayProps,
   FlexboxProps,
   GridProps,
+  PositionProps,
   ShadowProps,
   SizingProps,
   SpacingProps,
@@ -18,6 +19,7 @@ import {
   withSizing,
   withSpacing,
 } from '@hocs';
+import { withPosition } from 'src/hocs/withPosition';
 
 export interface BaseBoxProps
   extends Omit<JSX.HTMLAttributes<HTMLDivElement>, 'style' | 'classList'> {}
@@ -30,17 +32,20 @@ export interface BoxProps
     ShadowProps,
     SizingProps,
     DisplayProps,
+    PositionProps,
     CssProps {}
 
-export const Box: Component<BoxProps> = withSizing(
-  withShadow(
-    withBorder(
-      withDisplay(
-        withGrid(
-          withFlex(
-            withSpacing((props: BaseBoxProps) => (
-              <div {...props}>{props.children}</div>
-            ))
+export const Box: Component<BoxProps> = withPosition(
+  withSizing(
+    withShadow(
+      withBorder(
+        withDisplay(
+          withGrid(
+            withFlex(
+              withSpacing((props: BaseBoxProps) => (
+                <div {...props}>{props.children}</div>
+              ))
+            )
           )
         )
       )

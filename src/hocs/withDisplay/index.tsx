@@ -7,7 +7,6 @@ export const withDisplay = <T,>(BaseComponent: Component<T>) => {
       <BaseComponent
         {...props}
         classList={{
-          ...props.classList,
           'd-block': props.display === 'block',
           'd-flex': props.display === 'flex',
           'd-grid': props.display === 'grid',
@@ -18,6 +17,7 @@ export const withDisplay = <T,>(BaseComponent: Component<T>) => {
           'd-table-cell': props.display === 'table-cell',
           'd-table-row': props.display === 'table-row',
           'd-inline-flex': props.display === 'inline-flex',
+          ...props.classList,
         }}
       />
     );

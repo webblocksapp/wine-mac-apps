@@ -6,7 +6,6 @@ export const withFlex = <T,>(BaseComponent: Component<T>) => {
     <BaseComponent
       {...props}
       classList={{
-        ...props.classList,
         'align-content-around': props.alignContent === 'space-around',
         'align-content-center': props.alignContent === 'center',
         'align-content-end': props.alignContent === 'flex-end',
@@ -44,6 +43,7 @@ export const withFlex = <T,>(BaseComponent: Component<T>) => {
         'order-3': props.order == 3,
         'order-first': props.order == -1,
         'order-last': props.order == 6,
+        ...props.classList,
       }}
     />
   );

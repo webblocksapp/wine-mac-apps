@@ -1,16 +1,19 @@
-import { Component, createEffect, JSX, splitProps } from 'solid-js';
+import { Component, createEffect, JSX, JSXElement, splitProps } from 'solid-js';
 import { Box, FormHelperText, FormLabel } from '@components';
 import { FormHandler } from 'solid-form-handler';
 import { createStore } from 'solid-js/store';
+import './index.css';
 
 export interface TextInputProps
-  extends JSX.InputHTMLAttributes<HTMLInputElement> {
+  extends Omit<JSX.InputHTMLAttributes<HTMLInputElement>, 'type'> {
   label?: string;
   helperText?: string;
   error?: boolean;
   errorMessage?: string;
   formHandler?: FormHandler;
   triggers?: string[];
+  prevSlot?: JSXElement;
+  nextSlot?: JSXElement;
 }
 
 export const TextInput: Component<TextInputProps> = (props) => {
@@ -24,6 +27,8 @@ export const TextInput: Component<TextInputProps> = (props) => {
     'label',
     'onBlur',
     'onInput',
+    'prevSlot',
+    'nextSlot',
     'value',
     'triggers',
   ]);
@@ -136,14 +141,42 @@ export const TextInput: Component<TextInputProps> = (props) => {
           {local.label}
         </FormLabel>
       )}
-      <input
-        {...rest}
-        id={store.id}
-        aria-invalid={store.error || undefined}
-        onInput={onInput}
-        onBlur={onBlur}
-        value={store.value}
-      />
+      <Box
+        display="flex"
+        alignItems="stretch"
+        classList={{
+          'has-prev-slot': local.prevSlot,
+          'has-next-slot': local.nextSlot,
+        }}
+      >
+        {local.prevSlot && (
+          <Box
+            classList={{ 'prev-slot': true, 'invalid-border': store.error }}
+            display="flex"
+            alignItems="center"
+          >
+            {local.prevSlot}
+          </Box>
+        )}
+        <input
+          {...rest}
+          id={store.id}
+          aria-invalid={store.error || undefined}
+          onInput={onInput}
+          onBlur={onBlur}
+          value={store.value}
+          type="text"
+        />
+        {local.nextSlot && (
+          <Box
+            classList={{ 'next-slot': true, 'invalid-border': store.error }}
+            display="flex"
+            alignItems="center"
+          >
+            {local.nextSlot}
+          </Box>
+        )}
+      </Box>
       {local.helperText && <FormHelperText>{local.helperText}</FormHelperText>}
       {store.error && (
         <FormHelperText error={store.error}>

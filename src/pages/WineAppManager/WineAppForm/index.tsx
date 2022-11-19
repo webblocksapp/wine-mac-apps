@@ -1,5 +1,11 @@
 import { Component } from 'solid-js';
-import { Grid, Typography, TextInput, Select } from '@components';
+import {
+  Grid,
+  Typography,
+  TextInput,
+  Select,
+  FilePathInput,
+} from '@components';
 import { useFormHandler } from '@utils';
 import { schema } from './schema';
 
@@ -13,7 +19,7 @@ export const WineAppForm: Component = () => {
       </Grid>
       <Grid item xs={12}>
         <form>
-          <Grid container spacing={3}>
+          <Grid container spacing={4}>
             <Grid item xs={12}>
               <TextInput
                 label="Application Name"
@@ -32,6 +38,13 @@ export const WineAppForm: Component = () => {
                     label: 'WS11WineCX64Bit22.0.1',
                   },
                 ]}
+                formHandler={formHandler}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <FilePathInput
+                label="Setup Executable Path"
+                name="setupExecutablePath"
                 formHandler={formHandler}
               />
             </Grid>

@@ -11,8 +11,13 @@ html,
 
 input:not([type='checkbox'], [type='radio']),
 select,
-textarea {
+textarea,
+button {
   margin-bottom: 0px;
+}
+
+input:not([type='checkbox'], [type='radio'], [type='range']) {
+  height: auto;
 }
 
 :root {

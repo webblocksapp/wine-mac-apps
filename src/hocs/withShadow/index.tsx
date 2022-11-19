@@ -6,11 +6,11 @@ export const withShadow = <T,>(BaseComponent: Component<T>) => {
     <BaseComponent
       {...props}
       classList={{
-        ...props.classList,
         'shadow-none': props.boxShadow == 0,
         'shadow-sm': props.boxShadow == 1,
         shadow: props.boxShadow == 2,
         'shadow-lg': props.boxShadow == 3,
+        ...props.classList,
       }}
     />
   );

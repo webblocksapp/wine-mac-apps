@@ -1,0 +1,21 @@
+.has-prev-slot > input {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.has-next-slot > input {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.prev-slot {
+  border: 1px solid var(--form-element-border-color);
+  border-top-left-radius: var(--border-radius);
+  border-bottom-left-radius: var(--border-radius);
+}
+
+.next-slot {
+  border: 1px solid var(--form-element-border-color);
+  border-top-right-radius: var(--border-radius);
+  border-bottom-right-radius: var(--border-radius);
+}

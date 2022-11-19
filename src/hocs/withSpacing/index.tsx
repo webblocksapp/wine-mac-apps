@@ -6,7 +6,6 @@ export const withSpacing = <T,>(BaseComponent: Component<T>) => {
     <BaseComponent
       {...props}
       classList={{
-        ...props.classList,
         'm-0': props.m == 0 || props.margin == 0,
         'm-1': props.m == 1 || props.margin == 1,
         'm-2': props.m == 2 || props.margin == 2,
@@ -93,6 +92,7 @@ export const withSpacing = <T,>(BaseComponent: Component<T>) => {
         'py-5': props.py == 5 || props.paddingY == 5,
         'm-auto': props.m === 'auto' || props.margin == 'auto',
         'mx-auto': props.m === 'auto' || props.margin == 'auto',
+        ...props.classList,
       }}
     />
   );

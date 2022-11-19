@@ -6,7 +6,6 @@ export const withBorder = <T,>(BaseComponent: Component<T>) => {
     <BaseComponent
       {...props}
       classList={{
-        ...props.classList,
         border: props.border,
         'border-1': props.border == 1,
         'border-2': props.border == 2,
@@ -21,6 +20,7 @@ export const withBorder = <T,>(BaseComponent: Component<T>) => {
         'border-bottom-0': props.borderBottom == 0,
         'border-start': props.borderLeft,
         'border-start-0': props.borderLeft == 0,
+        ...props.classList,
       }}
     />
   );
