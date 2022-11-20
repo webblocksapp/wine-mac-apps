@@ -1,2 +1,3 @@
 export * from './useEnvState';
-export * from './wineEngineState';
+export * from './useWineEngineState';
+export * from './useWinetrickState';

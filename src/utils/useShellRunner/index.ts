@@ -1,17 +1,10 @@
 import { ChildProcess } from '@tauri-apps/api/shell';
 import { createEffect, createSignal } from 'solid-js';
 import { runScript as tauriRunScript, strReplacer } from '@utils';
-import {
-  Pipeline,
-  ProcessStatus,
-  WineAppConfig,
-  WineAppEnv,
-} from '@interfaces';
+import { Env, Pipeline, ProcessStatus } from '@interfaces';
 import { createStore } from 'solid-js/store';
 
-export const useShellRunner = (
-  config: WineAppConfig & { appEnv: WineAppEnv }
-) => {
+export const useShellRunner = (config?: { env: Env }) => {
   const [childProcess, setChildProcess] = createSignal<ChildProcess>();
   const [consoleOutput, setConsoleOutput] = createSignal<string | undefined>(
     ''
@@ -25,8 +18,9 @@ export const useShellRunner = (
    * Splits an script into separate commands.
    */
   const buildCommands = (script: string) => {
-    script = strReplacer(script, { ...config.appEnv });
-    const commands = addCodeStatusExecution(script.split('&&'));
+    script = strReplacer(script, { ...config?.env });
+    let commands = script.split('&&');
+    commands = addCodeStatusExecution(commands);
     return commands;
   };
 
@@ -134,10 +128,11 @@ export const useShellRunner = (
   };
 
   /**
-   * Gets the output text from the child process.
+   * Gets the complete output text from the child process.
+   * (stdout and stderr)
    */
   const outputText = () => {
-    return `${childProcess()?.stdout || ''}${childProcess()?.stderr || ''}`;
+    return `${stdout()}${stderr()}`;
   };
 
   /**
@@ -147,9 +142,23 @@ export const useShellRunner = (
     return text.replace?.(/(STATUS_COMMAND_CODE):(\d)/g, '') || '';
   };
 
+  /**
+   * Returns stout console output.
+   */
+  const stdout = () => {
+    return parseOutputText(childProcess()?.stdout || '');
+  };
+
+  /**
+   * Returns stderr console output.
+   */
+  const stderr = () => {
+    return parseOutputText(childProcess()?.stderr || '');
+  };
+
   createEffect(() => {
-    setConsoleOutput((prev) => `${prev}${parseOutputText(outputText())}`);
+    setConsoleOutput((prev) => `${prev}${outputText()}`);
   });
 
-  return { runPipeline, consoleOutput, pipeline, runScript };
+  return { runPipeline, consoleOutput, pipeline, runScript, stdout, stderr };
 };

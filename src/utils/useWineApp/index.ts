@@ -5,8 +5,7 @@ import { createWineAppPipeline, runWineCfgScript } from '@shell';
 export const useWineApp = (config: WineAppConfig) => {
   const appEnv = useAppEnv(config);
   const { consoleOutput, runPipeline, runScript, pipeline } = useShellRunner({
-    ...config,
-    appEnv,
+    env: appEnv,
   });
 
   /**

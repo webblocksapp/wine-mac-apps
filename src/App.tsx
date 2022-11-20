@@ -3,10 +3,11 @@ import { useEnvState } from '@states';
 import { homeDir } from '@tauri-apps/api/path';
 import { useRoutes } from '@solidjs/router';
 import { routes } from '@routes';
-import { useWineEngineModel } from '@models';
+import { useWineEngineModel, useWinetrickModel } from '@models';
 
 export const App: Component = () => {
   const wineEngineModel = useWineEngineModel();
+  const winetrickModel = useWinetrickModel();
 
   const initEnv = async () => {
     const HOME = (await homeDir()).replace(/\/$/, '');
@@ -24,7 +25,16 @@ export const App: Component = () => {
   };
 
   const appSetup = () => {
-    Promise.all([initEnv(), wineEngineModel.list()]);
+    Promise.all([
+      initEnv(),
+      wineEngineModel.list(),
+      winetrickModel.listApps(),
+      winetrickModel.listBenchmarks(),
+      winetrickModel.listDlls(),
+      winetrickModel.listFonts(),
+      winetrickModel.listGames(),
+      winetrickModel.listSettings(),
+    ]);
   };
 
   appSetup();

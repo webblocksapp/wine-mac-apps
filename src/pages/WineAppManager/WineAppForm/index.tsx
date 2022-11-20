@@ -8,6 +8,7 @@ import {
 } from '@components';
 import { useFormHandler } from '@utils';
 import { schema } from './schema';
+import { useWinetrickModel } from '@models';
 
 export const WineAppForm: Component = () => {
   const formHandler = useFormHandler(schema);
