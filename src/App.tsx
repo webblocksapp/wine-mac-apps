@@ -25,16 +25,7 @@ export const App: Component = () => {
   };
 
   const appSetup = () => {
-    Promise.all([
-      initEnv(),
-      wineEngineModel.list(),
-      winetrickModel.listApps(),
-      winetrickModel.listBenchmarks(),
-      winetrickModel.listDlls(),
-      winetrickModel.listFonts(),
-      winetrickModel.listGames(),
-      winetrickModel.listSettings(),
-    ]);
+    Promise.all([initEnv(), wineEngineModel.list(), winetrickModel.list()]);
   };
 
   appSetup();

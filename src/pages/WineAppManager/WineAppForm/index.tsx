@@ -5,10 +5,10 @@ import {
   TextInput,
   Select,
   FilePathInput,
+  WinetricksSelector,
 } from '@components';
 import { useFormHandler } from '@utils';
 import { schema } from './schema';
-import { useWinetrickModel } from '@models';
 
 export const WineAppForm: Component = () => {
   const formHandler = useFormHandler(schema);
@@ -50,7 +50,7 @@ export const WineAppForm: Component = () => {
               />
             </Grid>
             <Grid item xs={12}>
-              {JSON.stringify(formHandler.formData(), null, 2)}
+              <WinetricksSelector name="winetricks" formHandler={formHandler} />
             </Grid>
           </Grid>
         </form>

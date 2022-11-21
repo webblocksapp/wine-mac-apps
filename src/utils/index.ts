@@ -1,3 +1,5 @@
+export * from './capitalize';
+export * from './debounce';
 export * from './mapFlags';
 export * from './parseSize';
 export * from './pxToRem';

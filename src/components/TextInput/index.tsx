@@ -1,4 +1,11 @@
-import { Component, createEffect, JSX, JSXElement, splitProps } from 'solid-js';
+import {
+  Component,
+  createEffect,
+  createUniqueId,
+  JSX,
+  JSXElement,
+  splitProps,
+} from 'solid-js';
 import { Box, FormHelperText, FormLabel } from '@components';
 import { FormHandler } from 'solid-form-handler';
 import { createStore } from 'solid-js/store';
@@ -14,9 +21,11 @@ export interface TextInputProps
   triggers?: string[];
   prevSlot?: JSXElement;
   nextSlot?: JSXElement;
+  type?: 'text' | 'search';
 }
 
 export const TextInput: Component<TextInputProps> = (props) => {
+  const id = createUniqueId();
   const [local, rest] = splitProps(props, [
     'aria-invalid',
     'error',
@@ -117,7 +126,7 @@ export const TextInput: Component<TextInputProps> = (props) => {
    * Initializes the form field unique id.
    */
   createEffect(() => {
-    setStore('id', local.id || rest.name || '');
+    setStore('id', local.id || rest.name || id);
   });
 
   /**
@@ -165,7 +174,6 @@ export const TextInput: Component<TextInputProps> = (props) => {
           onInput={onInput}
           onBlur={onBlur}
           value={store.value}
-          type="text"
         />
         {local.nextSlot && (
           <Box

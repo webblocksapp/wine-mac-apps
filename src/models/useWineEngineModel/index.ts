@@ -15,7 +15,7 @@ export const useWineEngineModel = () => {
   };
 
   const selectWineEngines = () => {
-    return wineEngineState.store.wineEngines;
+    return () => wineEngineState.store.wineEngines;
   };
 
   return { list, selectWineEngines };

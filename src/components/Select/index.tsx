@@ -5,6 +5,7 @@ import {
   Component,
   createEffect,
   createSignal,
+  createUniqueId,
   For,
   JSX,
   splitProps,
@@ -34,6 +35,7 @@ export interface SelectProps
 export const Select: Component<SelectProps> = (props) => {
   let detailsRef: HTMLDetailsElement | undefined;
   let summaryRef: HTMLDetailsElement | undefined;
+  const id = createUniqueId();
 
   /**
    * Props are divided in two groups:
@@ -156,7 +158,7 @@ export const Select: Component<SelectProps> = (props) => {
    * Initializes the form field unique id.
    */
   createEffect(() => {
-    setStore('id', local.id || local.name || '');
+    setStore('id', local.id || local.name || id);
   });
 
   /**

@@ -34,3 +34,4 @@ export * from './WineEngine';
 export * from './WineEngineState';
 export * from './Winetrick';
 export * from './WinetrickState';
+export * from './WinetrickType';

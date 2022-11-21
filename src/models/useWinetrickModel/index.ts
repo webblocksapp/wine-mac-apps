@@ -59,35 +59,56 @@ export const useWinetrickModel = () => {
     }
   };
 
+  const list = async () => {
+    try {
+      winetrickState.listing(true);
+      await Promise.all([
+        listApps(),
+        listBenchmarks(),
+        listDlls(),
+        listFonts(),
+        listGames(),
+        listSettings(),
+      ]);
+    } finally {
+      winetrickState.listing(false);
+    }
+  };
+
   const selectWinetricks = () => {
-    return winetrickState.store.winetricks;
+    return () => winetrickState.store.winetricks;
   };
 
   const selectWinetricksApps = () => {
-    return winetrickState.store.winetricks.apps;
+    return () => winetrickState.store.winetricks.apps;
   };
 
   const selectWinetricksBenchmarks = () => {
-    return winetrickState.store.winetricks.benchmarks;
+    return () => winetrickState.store.winetricks.benchmarks;
   };
 
   const selectWinetricksDlls = () => {
-    return winetrickState.store.winetricks.dlls;
+    return () => winetrickState.store.winetricks.dlls;
   };
 
   const selectWinetricksFonts = () => {
-    return winetrickState.store.winetricks.fonts;
+    return () => winetrickState.store.winetricks.fonts;
   };
 
   const selectWinetricksGames = () => {
-    return winetrickState.store.winetricks.games;
+    return () => winetrickState.store.winetricks.games;
   };
 
   const selectWinetricksSettings = () => {
-    return winetrickState.store.winetricks.settings;
+    return () => winetrickState.store.winetricks.settings;
+  };
+
+  const selectListing = () => {
+    return () => winetrickState.store.listing;
   };
 
   return {
+    list,
     listApps,
     listBenchmarks,
     listDlls,
@@ -101,5 +122,6 @@ export const useWinetrickModel = () => {
     selectWinetricksFonts,
     selectWinetricksGames,
     selectWinetricksSettings,
+    selectListing,
   };
 };

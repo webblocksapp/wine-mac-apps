@@ -16,6 +16,7 @@ const [store, setStore] = createStore<WinetrickState>({
   listingFonts: false,
   listingGames: false,
   listingSettings: false,
+  listing: false,
 });
 
 export const useWinetrickState = () => {
@@ -67,6 +68,10 @@ export const useWinetrickState = () => {
     setStore('listingSettings', flag);
   };
 
+  const listing = (flag: boolean) => {
+    setStore('listing', flag);
+  };
+
   return {
     listApps,
     listingApps,
@@ -80,6 +85,7 @@ export const useWinetrickState = () => {
     listingGames,
     listSettings,
     listingSettings,
+    listing,
     store,
   };
 };

@@ -939,7 +939,7 @@ solid-form-handler@^1.0.0-alpha.4:
   resolved "https://registry.yarnpkg.com/solid-form-handler/-/solid-form-handler-1.0.0-alpha.4.tgz#022b7b8bbfeaf02baccdf764dee5517640fa3761"
   integrity sha512-EWGNQddEn/Zx/YQur/n3GQQmPMmtE6hx3jzwNkX87EBieIMr/TJZbF3wBDdpb1bBW93Tb9/zx0fYGLk5WoSAcQ==
 
-solid-js@^1.4.7:
+solid-js@^1.6.2:
   version "1.6.2"
   resolved "https://registry.yarnpkg.com/solid-js/-/solid-js-1.6.2.tgz#0030960cf697b3cad0cc9046f4e9388dcd2bc7d2"
   integrity sha512-AZBsj+Yn1xliniTTeuQKG9V7VQVkQ8lZmSKvBjpcVSoZeF7nvt/N5f7Kcsx6QSufioa2YgvBjkIiA0cM0qhotw==

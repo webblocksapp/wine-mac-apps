@@ -15,4 +15,5 @@ export type WinetrickState = {
   listingFonts: boolean;
   listingGames: boolean;
   listingSettings: boolean;
+  listing: boolean;
 };

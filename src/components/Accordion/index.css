@@ -1,0 +1,12 @@
+details.accordion {
+  padding: 0;
+}
+
+details.accordion > summary {
+  padding-bottom: 1rem;
+  margin-bottom: 0.4rem !important;
+}
+
+details.accordion[open] {
+  padding-bottom: 1rem;
+}

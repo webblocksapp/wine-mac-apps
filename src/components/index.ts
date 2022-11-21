@@ -1,6 +1,8 @@
 export * from './Accordion';
 export * from './Box';
 export * from './Button';
+export * from './Checkbox';
+export * from './Checkboxes';
 export * from './FilePathInput';
 export * from './FormHelperText';
 export * from './FormLabel';
@@ -13,4 +15,5 @@ export * from './Sidebar';
 export * from './TextInput';
 export * from './TreeMenu';
 export * from './Typography';
+export * from './WinetricksSelector';
 export * from './Wrap';
