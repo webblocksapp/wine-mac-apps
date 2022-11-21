@@ -15,5 +15,6 @@ export * from './Sidebar';
 export * from './TextInput';
 export * from './TreeMenu';
 export * from './Typography';
+export * from './WineEngineSelector';
 export * from './WinetricksSelector';
 export * from './Wrap';

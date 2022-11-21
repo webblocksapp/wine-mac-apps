@@ -3,15 +3,15 @@ import {
   Grid,
   Typography,
   TextInput,
-  Select,
   FilePathInput,
   WinetricksSelector,
+  WineEngineSelector,
 } from '@components';
 import { useFormHandler } from '@utils';
 import { schema } from './schema';
 
 export const WineAppForm: Component = () => {
-  const formHandler = useFormHandler(schema);
+  const formHandler = useFormHandler(schema, { silentValidation: false });
 
   return (
     <Grid container spacing={4}>
@@ -29,18 +29,7 @@ export const WineAppForm: Component = () => {
               />
             </Grid>
             <Grid item xs={12}>
-              <Select
-                label="Wine Engine"
-                name="engine"
-                placeholder="Select an engine"
-                options={[
-                  {
-                    value: 'WS11WineCX64Bit22.0.1',
-                    label: 'WS11WineCX64Bit22.0.1',
-                  },
-                ]}
-                formHandler={formHandler}
-              />
+              <WineEngineSelector name="engine" formHandler={formHandler} />
             </Grid>
             <Grid item xs={12}>
               <FilePathInput
@@ -51,6 +40,11 @@ export const WineAppForm: Component = () => {
             </Grid>
             <Grid item xs={12}>
               <WinetricksSelector name="winetricks" formHandler={formHandler} />
+            </Grid>
+            <Grid item xs={12}>
+              <pre>
+                <code>{JSON.stringify(formHandler.formData(), null, 2)}</code>
+              </pre>
             </Grid>
           </Grid>
         </form>

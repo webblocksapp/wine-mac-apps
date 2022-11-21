@@ -24,7 +24,11 @@ export interface SelectProps
   formHandler?: FormHandler;
   label?: string;
   name?: string;
-  value?: string | number;
+  value?: any;
+  mapConfig?: {
+    fn: (value: any) => any;
+    valueKey: string;
+  };
   options?: Array<SelectableOption>;
   placeholder?: string;
   triggers?: string[];
@@ -88,7 +92,7 @@ export const Select: Component<SelectProps> = (props) => {
     //Form handler prop sets and validate the value onInput.
     local.formHandler?.setFieldValue?.(
       local.name,
-      event?.currentTarget.getAttribute('data-value'),
+      mapSelectedOption(event?.currentTarget.getAttribute('data-value')),
       {
         htmlElement: event.currentTarget,
         validateOn: ['input'],
@@ -116,6 +120,13 @@ export const Select: Component<SelectProps> = (props) => {
 
     //onBlur prop is preserved
     local?.onBlur?.(event);
+  };
+
+  /**
+   * Maps the value to the desired type.
+   */
+  const mapSelectedOption = (value: any) => {
+    return props?.mapConfig?.fn?.(value) ?? value;
   };
 
   /**
@@ -186,9 +197,10 @@ export const Select: Component<SelectProps> = (props) => {
   });
 
   createEffect(() => {
+    const valueKey = props.mapConfig?.valueKey;
+    const value = valueKey ? (store.value as any)[valueKey] : store.value;
     const label =
-      local?.options?.find((option) => option?.value == store.value)?.label ||
-      '';
+      local?.options?.find((option) => option?.value == value)?.label || '';
     setStore('selectedOptionLabel', label);
   });
 

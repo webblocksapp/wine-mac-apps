@@ -1,1 +1,3 @@
-export type WineEngine = { name: string };
+import { Id } from '@interfaces';
+
+export type WineEngine = { id?: Id; name: string; url: string };
