@@ -1,4 +1,4 @@
-import { PositionScale } from '@app-types';
+import { PositionScale } from '@interfaces';
 import { JSX } from 'solid-js';
 
 export interface PositionProps {

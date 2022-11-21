@@ -3,6 +3,7 @@ export * from './Box';
 export * from './Button';
 export * from './Checkbox';
 export * from './Checkboxes';
+export * from './Dialog';
 export * from './FilePathInput';
 export * from './FormHelperText';
 export * from './FormLabel';

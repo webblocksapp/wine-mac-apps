@@ -3,6 +3,7 @@ export * from './BorderScale';
 export * from './ColSize';
 export * from './CommonObject';
 export * from './CssProps';
+export * from './DeviceSize';
 export * from './DisplayProps';
 export * from './Env';
 export * from './EnvState';

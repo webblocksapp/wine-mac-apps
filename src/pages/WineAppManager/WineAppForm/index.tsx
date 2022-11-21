@@ -11,7 +11,7 @@ import { useFormHandler } from '@utils';
 import { schema } from './schema';
 
 export const WineAppForm: Component = () => {
-  const formHandler = useFormHandler(schema, { silentValidation: false });
+  const formHandler = useFormHandler(schema);
 
   return (
     <Grid container spacing={4}>
@@ -46,6 +46,7 @@ export const WineAppForm: Component = () => {
                 <code>{JSON.stringify(formHandler.formData(), null, 2)}</code>
               </pre>
             </Grid>
+            <Grid item xs={12}></Grid>
           </Grid>
         </form>
       </Grid>
