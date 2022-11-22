@@ -11,7 +11,7 @@ export const Button: Component<ButtonProps> = (props) => {
 
   return (
     <button
-      {...rest}
+      type="button"
       classList={{
         ...local.classList,
         primary: props.color === 'primary',
@@ -20,6 +20,7 @@ export const Button: Component<ButtonProps> = (props) => {
         outline: props.variant === 'outline',
         filled: props.variant === ('filled' || undefined),
       }}
+      {...rest}
     />
   );
 };

@@ -3,10 +3,10 @@ import {
   useFormHandler as useBaseFormHandler,
   yupSchema,
 } from 'solid-form-handler';
-import { AnyObjectSchema } from 'yup';
+import { SchemaOf } from 'yup';
 
 export const useFormHandler = <T>(
-  schema: AnyObjectSchema,
+  schema: SchemaOf<T, never>,
   options?: FormHandlerOptions
 ) => {
   return useBaseFormHandler<T>(yupSchema(schema), {

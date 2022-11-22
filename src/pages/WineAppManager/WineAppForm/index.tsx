@@ -1,17 +1,21 @@
 import { Component } from 'solid-js';
 import {
+  Dialog,
   Grid,
   Typography,
   TextInput,
   FilePathInput,
   WinetricksSelector,
   WineEngineSelector,
+  useDialogContext,
+  Button,
 } from '@components';
 import { useFormHandler } from '@utils';
 import { schema } from './schema';
 
 export const WineAppForm: Component = () => {
   const formHandler = useFormHandler(schema);
+  const { createDialog } = useDialogContext();
 
   return (
     <Grid container spacing={4}>
@@ -46,9 +50,15 @@ export const WineAppForm: Component = () => {
                 <code>{JSON.stringify(formHandler.formData(), null, 2)}</code>
               </pre>
             </Grid>
-            <Grid item xs={12}></Grid>
           </Grid>
         </form>
+        <Button
+          onClick={() => {
+            createDialog();
+          }}
+        >
+          Open Modal
+        </Button>
       </Grid>
     </Grid>
   );

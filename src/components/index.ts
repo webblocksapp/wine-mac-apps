@@ -4,6 +4,7 @@ export * from './Button';
 export * from './Checkbox';
 export * from './Checkboxes';
 export * from './Dialog';
+export * from './DialogProvider';
 export * from './FilePathInput';
 export * from './FormHelperText';
 export * from './FormLabel';
