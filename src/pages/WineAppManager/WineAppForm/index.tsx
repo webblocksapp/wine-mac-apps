@@ -54,7 +54,9 @@ export const WineAppForm: Component = () => {
         </form>
         <Button
           onClick={() => {
-            createDialog();
+            createDialog({
+              content: () => <>{JSON.stringify(formHandler.formData())}</>,
+            });
           }}
         >
           Open Modal

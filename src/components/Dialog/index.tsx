@@ -22,7 +22,7 @@ export interface DialogProps
   onCancel?: Function;
   acceptText?: string;
   cancelText?: string;
-  content?: JSXElement | string;
+  content?: () => JSXElement | string;
 }
 
 export const Dialog: Component<DialogProps> = (props) => {
@@ -89,7 +89,7 @@ export const Dialog: Component<DialogProps> = (props) => {
         }}
       >
         <a aria-label="Close" class="close" onClick={close}></a>
-        <Box>{local.content}</Box>
+        <Box>{local?.content?.()}</Box>
         <footer>
           <Button variant="outline" color="secondary" onClick={onCancel}>
             {props.cancelText || 'Cancel'}

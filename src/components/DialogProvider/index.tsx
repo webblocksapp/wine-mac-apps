@@ -33,7 +33,7 @@ export const DialogProvider: Component<DialogProviderProps> = (props) => {
     dialogsProps: [],
   });
 
-  const createDialog = (props?: DialogProps) => {
+  const createDialog = (props: DialogProps = {}) => {
     const id = createUniqueId();
     setStore('dialogsProps', (dialogsProps) => [
       ...dialogsProps,
