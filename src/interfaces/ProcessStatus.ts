@@ -1,6 +1,6 @@
 export type ProcessStatus =
   | 'inProgress'
-  | 'finished'
+  | 'success'
   | 'pending'
   | 'cancelled'
   | 'error';

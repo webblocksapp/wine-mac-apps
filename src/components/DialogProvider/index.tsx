@@ -6,7 +6,6 @@ import {
   JSXElement,
   useContext,
 } from 'solid-js';
-import { Portal } from 'solid-js/web';
 import { createStore } from 'solid-js/store';
 import { Box, Dialog, DialogProps } from '@components';
 import { Id } from '@interfaces';
@@ -17,6 +16,10 @@ const DialogContext = createContext({
   },
   destroyDialog: (id: Id) => {
     id;
+  },
+  configDialog: (id: Id, config: Partial<DialogProps>) => {
+    id;
+    config;
   },
 });
 
@@ -47,16 +50,22 @@ export const DialogProvider: Component<DialogProviderProps> = (props) => {
     });
   };
 
+  const configDialog = (id: Id, config: Partial<DialogProps>) => {
+    const index = store.dialogsProps.findIndex((item) => item.id == id);
+    setStore('dialogsProps', index, (dialogProps) => ({
+      ...dialogProps,
+      ...config,
+    }));
+  };
+
   return (
-    <DialogContext.Provider value={{ createDialog, destroyDialog }}>
+    <DialogContext.Provider
+      value={{ createDialog, destroyDialog, configDialog }}
+    >
       {props.children}
       <Box>
         <For each={store.dialogsProps}>
-          {(dialogProps) => (
-            <Portal>
-              <Dialog {...dialogProps} />
-            </Portal>
-          )}
+          {(dialogProps) => <Dialog {...dialogProps} />}
         </For>
       </Box>
     </DialogContext.Provider>

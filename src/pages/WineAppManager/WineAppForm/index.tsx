@@ -1,6 +1,5 @@
 import { Component } from 'solid-js';
 import {
-  Dialog,
   Grid,
   Typography,
   TextInput,
@@ -9,9 +8,11 @@ import {
   WineEngineSelector,
   useDialogContext,
   Button,
+  PipelineViewer,
 } from '@components';
 import { useFormHandler } from '@utils';
 import { schema } from './schema';
+import { createWineAppPipeline } from '@shell';
 
 export const WineAppForm: Component = () => {
   const formHandler = useFormHandler(schema);
@@ -19,6 +20,9 @@ export const WineAppForm: Component = () => {
 
   return (
     <Grid container spacing={4}>
+      <Grid item xs={12}>
+        <PipelineViewer pipeline={createWineAppPipeline} />
+      </Grid>
       <Grid item xs={12}>
         <Typography component="h4">Create Wine App</Typography>
       </Grid>
@@ -55,7 +59,7 @@ export const WineAppForm: Component = () => {
         <Button
           onClick={() => {
             createDialog({
-              content: () => <>{JSON.stringify(formHandler.formData())}</>,
+              content: ({ dialogId }) => <>{JSON.stringify(dialogId)}</>,
             });
           }}
         >

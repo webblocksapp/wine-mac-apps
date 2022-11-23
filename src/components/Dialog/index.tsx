@@ -1,6 +1,6 @@
 import { Box, Button, useDialogContext } from '@components';
 import { MAX_WIDTHS } from '@constants';
-import { DeviceSize } from '@interfaces';
+import { DeviceSize, Id } from '@interfaces';
 import {
   Component,
   createEffect,
@@ -22,7 +22,7 @@ export interface DialogProps
   onCancel?: Function;
   acceptText?: string;
   cancelText?: string;
-  content?: () => JSXElement | string;
+  content?: (args: { dialogId?: Id }) => JSXElement | string;
 }
 
 export const Dialog: Component<DialogProps> = (props) => {
@@ -72,13 +72,14 @@ export const Dialog: Component<DialogProps> = (props) => {
   });
 
   onCleanup(() => {
-    body.style.overflow = 'auto';
+    const dialogs = document.getElementsByClassName('dialog-component') || [];
+    if (dialogs.length <= 1) body.style.overflow = 'auto';
   });
 
   return (
     <dialog
       {...rest}
-      classList={{ ...local.classList, dialog: true }}
+      classList={{ ...local.classList, dialog: true, 'dialog-component': true }}
       open={open()}
     >
       <article
@@ -89,7 +90,7 @@ export const Dialog: Component<DialogProps> = (props) => {
         }}
       >
         <a aria-label="Close" class="close" onClick={close}></a>
-        <Box>{local?.content?.()}</Box>
+        <Box>{local?.content?.({ dialogId: props.id })}</Box>
         <footer>
           <Button variant="outline" color="secondary" onClick={onCancel}>
             {props.cancelText || 'Cancel'}

@@ -4,7 +4,9 @@ details.accordion {
 
 details.accordion > summary {
   padding-bottom: 1rem;
-  margin-bottom: 0.4rem !important;
+  margin-bottom: 0rem !important;
+  display: flex;
+  justify-content: space-between;
 }
 
 details.accordion[open] {

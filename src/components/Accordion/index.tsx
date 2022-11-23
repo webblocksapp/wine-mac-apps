@@ -1,9 +1,9 @@
-import { Component, JSX, splitProps } from 'solid-js';
+import { Component, JSX, JSXElement, splitProps } from 'solid-js';
 import './index.css';
 
 export interface AccordionProps
   extends JSX.DetailsHtmlAttributes<HTMLDetailsElement> {
-  text: string;
+  text: JSXElement | string;
 }
 
 export const Accordion: Component<AccordionProps> = (props) => {

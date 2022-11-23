@@ -1,10 +1,10 @@
 import { Pipeline } from '@interfaces';
 
 export const createWineAppPipeline: Pipeline = {
-  name: 'Create wine app',
+  name: 'Create wine app - Workflow',
   jobs: [
     {
-      name: 'Create wine app',
+      name: 'Create wine app - Job',
       steps: [
         {
           name: 'Creating wine app folder',

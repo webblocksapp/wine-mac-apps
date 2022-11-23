@@ -4,7 +4,7 @@ import { runScript as tauriRunScript, strReplacer } from '@utils';
 import { Env, Pipeline, ProcessStatus } from '@interfaces';
 import { createStore } from 'solid-js/store';
 
-export const useShellRunner = (config?: { env: Env }) => {
+export const useShellRunner = (config?: { env?: Env }) => {
   const [childProcess, setChildProcess] = createSignal<ChildProcess>();
   const [consoleOutput, setConsoleOutput] = createSignal<string | undefined>(
     ''
