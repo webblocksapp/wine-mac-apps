@@ -1,2 +1,2 @@
 export * from './TestFlow';
-export * from './WineAppManager';
+export * from './WineAppCreator';

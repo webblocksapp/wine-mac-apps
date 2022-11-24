@@ -4,6 +4,7 @@
 
 .file-path-input button {
   display: inline-block;
+  min-width: 100px;
 }
 
 .file-path-input .prev-slot button {

@@ -17,6 +17,7 @@ export * from './List';
 export * from './ListItem';
 export * from './LoadingSpinner';
 export * from './PipelineViewer';
+export * from './ProcessStatusIcon';
 export * from './Select';
 export * from './Sidebar';
 export * from './TextInput';

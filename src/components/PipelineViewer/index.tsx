@@ -5,16 +5,11 @@ import {
   Card,
   Code,
   Grid,
-  Image,
-  LoadingSpinner,
+  ProcessStatusIcon,
   Typography,
 } from '@components';
-import { Component, For, Match, Switch } from 'solid-js';
+import { Component, For } from 'solid-js';
 import { capitalize } from '@utils';
-import PendingIcon from '@imgs/pending-icon.png';
-import FailedIcon from '@imgs/failed-icon.png';
-import SuccessIcon from '@imgs/success-icon.png';
-import { ProcessStatusIcon } from '../ProcessStatusIcon';
 
 export interface PipelineViewerProps {
   pipeline: Pipeline;

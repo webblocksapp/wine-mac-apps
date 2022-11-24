@@ -9,14 +9,25 @@ import {
   useDialogContext,
   Button,
   PipelineViewer,
+  Box,
 } from '@components';
 import { useFormHandler } from '@utils';
 import { schema } from './schema';
 import { createWineAppPipeline } from '@shell';
 
-export const WineAppForm: Component = () => {
+export const WineAppCreator: Component = () => {
   const formHandler = useFormHandler(schema);
   const { createDialog } = useDialogContext();
+
+  const submit = async (event: Event) => {
+    event.preventDefault();
+    try {
+      await formHandler.validateForm();
+      createDialog({
+        content: ({ dialogId }) => <>{JSON.stringify(dialogId)}</>,
+      });
+    } catch (error) {}
+  };
 
   return (
     <Grid container spacing={4}>
@@ -27,7 +38,7 @@ export const WineAppForm: Component = () => {
         <Typography component="h4">Create Wine App</Typography>
       </Grid>
       <Grid item xs={12}>
-        <form>
+        <form onSubmit={submit}>
           <Grid container spacing={4}>
             <Grid item xs={12}>
               <TextInput
@@ -54,17 +65,15 @@ export const WineAppForm: Component = () => {
                 <code>{JSON.stringify(formHandler.formData(), null, 2)}</code>
               </pre>
             </Grid>
+            <Grid item xs={12}>
+              <Box display="flex" justifyContent="flex-end">
+                <Button type="submit" disabled={formHandler.isFormInvalid()}>
+                  Create
+                </Button>
+              </Box>
+            </Grid>
           </Grid>
         </form>
-        <Button
-          onClick={() => {
-            createDialog({
-              content: ({ dialogId }) => <>{JSON.stringify(dialogId)}</>,
-            });
-          }}
-        >
-          Open Modal
-        </Button>
       </Grid>
     </Grid>
   );

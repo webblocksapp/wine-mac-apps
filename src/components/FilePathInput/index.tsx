@@ -25,6 +25,9 @@ export const FilePathInput: Component<FileInputProps> = (props) => {
   const onClick = async () => {
     const filePath = (await open()) as string;
     setStore('value', filePath);
+    rest?.formHandler?.setFieldValue?.(rest.name, filePath, {
+      validateOn: ['change'],
+    });
   };
 
   return (

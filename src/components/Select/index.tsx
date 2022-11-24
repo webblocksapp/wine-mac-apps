@@ -114,7 +114,7 @@ export const Select: Component<SelectProps> = (props) => {
 
     //Form handler prop validate and touch the field.
     local.formHandler?.validateField?.(local.name, {
-      validateOn: ['onBlur'],
+      validateOn: ['blur'],
     });
     local.formHandler?.touchField?.(local.name);
 
