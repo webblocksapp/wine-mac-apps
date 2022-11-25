@@ -12,6 +12,7 @@ export const useShellRunner = (config?: { env?: Env }) => {
   const [pipeline, setPipeline] = createStore<Pipeline>({
     name: '',
     jobs: [],
+    status: 'pending',
   });
 
   /**
@@ -63,6 +64,8 @@ export const useShellRunner = (config?: { env?: Env }) => {
           }
         }
       }
+
+      setPipeline('status', abort ? 'cancelled' : 'success');
     } catch (error) {
       if (error instanceof Error) {
         const errorMessage = error.message;
@@ -91,7 +94,7 @@ export const useShellRunner = (config?: { env?: Env }) => {
     options?: { force?: boolean; onlyEcho?: boolean }
   ) => {
     const commands = buildCommands(script);
-    const result: { status: ProcessStatus } = { status: 'finished' };
+    const result: { status: ProcessStatus } = { status: 'success' };
     let abort = false;
     for (let command of commands) {
       setChildProcess(await tauriRunScript(`echo ${command}`));

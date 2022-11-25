@@ -11,29 +11,43 @@ import {
   PipelineViewer,
   Box,
 } from '@components';
-import { useFormHandler } from '@utils';
+import { useFormHandler, useWineApp } from '@utils';
+import { WineApp } from '@interfaces';
 import { schema } from './schema';
-import { createWineAppPipeline } from '@shell';
 
 export const WineAppCreator: Component = () => {
-  const formHandler = useFormHandler(schema);
+  const formHandler = useFormHandler<WineApp>(schema);
+  const { formData } = formHandler;
   const { createDialog } = useDialogContext();
 
   const submit = async (event: Event) => {
     event.preventDefault();
     try {
-      await formHandler.validateForm();
-      createDialog({
-        content: ({ dialogId }) => <>{JSON.stringify(dialogId)}</>,
-      });
+      createWineApp();
     } catch (error) {}
+  };
+
+  const createWineApp = () => {
+    const { pipeline, ...rest } = useWineApp({
+      appName: 'Steam',
+      engine: {
+        url: 'https://mega.nz/file/VF4mSCpQ#UDC10env2AKKAEqqfv2Gbz8sk26mkwn1VNcAOL_nIi4',
+        version: 'WS11WineCX64Bit22.0.1',
+        id: 1,
+      },
+    });
+
+    rest.createWineApp();
+
+    createDialog({
+      content: ({ dialogId }) => (
+        <PipelineViewer id={dialogId} pipeline={pipeline} />
+      ),
+    });
   };
 
   return (
     <Grid container spacing={4}>
-      <Grid item xs={12}>
-        <PipelineViewer pipeline={createWineAppPipeline} />
-      </Grid>
       <Grid item xs={12}>
         <Typography component="h4">Create Wine App</Typography>
       </Grid>
@@ -67,9 +81,7 @@ export const WineAppCreator: Component = () => {
             </Grid>
             <Grid item xs={12}>
               <Box display="flex" justifyContent="flex-end">
-                <Button type="submit" disabled={formHandler.isFormInvalid()}>
-                  Create
-                </Button>
+                <Button type="submit">Create</Button>
               </Box>
             </Grid>
           </Grid>

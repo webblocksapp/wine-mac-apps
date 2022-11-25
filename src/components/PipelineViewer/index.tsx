@@ -1,4 +1,4 @@
-import { Pipeline } from '@interfaces';
+import { Id, Pipeline } from '@interfaces';
 import {
   Accordion,
   Box,
@@ -12,6 +12,7 @@ import { Component, For } from 'solid-js';
 import { capitalize } from '@utils';
 
 export interface PipelineViewerProps {
+  id?: Id;
   pipeline: Pipeline;
 }
 

@@ -15,21 +15,21 @@ export const WineEngineSelector: Component<WineEngineSelectorProps> = (
   const wineEngineModel = useWineEngineModel();
   const wineEngines = wineEngineModel.selectWineEngines();
 
+  const mapConfig: SelectProps['mapConfig'] = {
+    fn: (id: Id) => wineEngines().find((item) => item.id == id),
+    valueKey: 'id',
+  };
+
   createEffect(() => {
     setOptions(() => {
       const options: SelectableOption[] = [];
       wineEngines().forEach((engine) => {
-        options.push({ value: engine.id as number, label: engine.name });
+        options.push({ value: engine.id as number, label: engine.version });
       });
 
       return options;
     });
   });
-
-  const mapConfig: SelectProps['mapConfig'] = {
-    fn: (id: Id) => wineEngines().find((item) => item.id == id),
-    valueKey: 'id',
-  };
 
   return (
     <Select

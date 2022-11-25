@@ -1,1 +1,3 @@
-export type WineAppConfig = { appName: string; engine: string };
+import { WineEngine } from '@interfaces';
+
+export type WineAppConfig = { appName: string; engine: WineEngine };

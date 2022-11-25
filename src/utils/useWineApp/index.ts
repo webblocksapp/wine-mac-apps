@@ -1,8 +1,14 @@
 import { mapFlags, useAppEnv, useShellRunner } from '@utils';
 import { WineAppConfig } from '@interfaces';
-import { createWineAppPipeline, runWineCfgScript } from '@shell';
+import {
+  createWineAppScript,
+  extractWineEngineScript,
+  generateWinePrefixScript,
+  runWineCfgScript,
+} from '@scripts';
+import { withOwner } from '@hocs';
 
-export const useWineApp = (config: WineAppConfig) => {
+export const useWineApp = withOwner((config: WineAppConfig) => {
   const appEnv = useAppEnv(config);
   const { consoleOutput, runPipeline, runScript, pipeline } = useShellRunner({
     env: appEnv,
@@ -12,8 +18,29 @@ export const useWineApp = (config: WineAppConfig) => {
    * Creates a copy of the wine version from the engine
    * for the app to work standalone.
    */
-  const createWineApp = async () => {
-    return runPipeline(createWineAppPipeline);
+  const createWineApp = async (options?: { winetricks?: string[] }) => {
+    return runPipeline({
+      name: 'Create wine app - Workflow',
+      jobs: [
+        {
+          name: 'Create wine app - Job',
+          steps: [
+            {
+              name: 'Creating wine app folder',
+              script: createWineAppScript,
+            },
+            {
+              name: 'Extracting wine engine',
+              script: extractWineEngineScript,
+            },
+            {
+              name: 'Generating wine prefix',
+              script: generateWinePrefixScript,
+            },
+          ],
+        },
+      ],
+    });
   };
 
   /**
@@ -63,4 +90,4 @@ export const useWineApp = (config: WineAppConfig) => {
     pipeline,
     runProgram,
   };
-};
+});

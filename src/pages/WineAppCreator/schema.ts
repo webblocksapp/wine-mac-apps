@@ -6,7 +6,7 @@ export const schema: SchemaOf<WineApp> = yup.object({
   engine: yup
     .object({
       id: yup.mixed().optional(),
-      name: yup.string().required(),
+      version: yup.string().required(),
       url: yup.string().required(),
     })
     .required(),
