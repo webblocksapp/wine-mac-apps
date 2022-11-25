@@ -1,4 +1,4 @@
-import { mapFlags, useAppEnv, useShellRunner } from '@utils';
+import { mapFlags, useShellRunner } from '@utils';
 import { WineAppConfig } from '@interfaces';
 import {
   createWineAppScript,
@@ -6,19 +6,46 @@ import {
   generateWinePrefixScript,
   runWineCfgScript,
 } from '@scripts';
-import { withOwner } from '@hocs';
+import { useAppModel } from '@models';
 
-export const useWineApp = withOwner((config: WineAppConfig) => {
-  const appEnv = useAppEnv(config);
+export const useWineApp = (config: WineAppConfig) => {
+  const appModel = useAppModel();
+  const env = appModel.selectEnv();
+
+  /**
+   * Initializes the env paths.
+   */
+  const initEnv = () => {
+    const HOME = env().HOME;
+    const WINE_BASE_FOLDER = `${HOME}/Wine`;
+    const WINE_ENGINES_FOLDER = `${WINE_BASE_FOLDER}/engines`;
+    const WINE_APPS_FOLDER = `${WINE_BASE_FOLDER}/apps`;
+    const WINE_APP_FOLDER = `${WINE_APPS_FOLDER}/${config.appName}`;
+    const WINE_APP_BIN_PATH = `${WINE_APP_FOLDER}/wine/bin`;
+    const WINE_APP_EXPORT_PATH = `PATH="${WINE_APP_BIN_PATH}:$PATH"`;
+    const WINE_ENGINE_VERSION = config.engine.version;
+
+    return {
+      HOME,
+      WINE_BASE_FOLDER,
+      WINE_ENGINES_FOLDER,
+      WINE_APPS_FOLDER,
+      WINE_APP_FOLDER,
+      WINE_APP_BIN_PATH,
+      WINE_APP_EXPORT_PATH,
+      WINE_ENGINE_VERSION,
+    };
+  };
+
   const { consoleOutput, runPipeline, runScript, pipeline } = useShellRunner({
-    env: appEnv,
+    env: initEnv(),
   });
 
   /**
    * Creates a copy of the wine version from the engine
    * for the app to work standalone.
    */
-  const createWineApp = async (options?: { winetricks?: string[] }) => {
+  const createWineApp = (options?: { winetricks?: string[] }) => {
     return runPipeline({
       name: 'Create wine app - Workflow',
       jobs: [
@@ -68,6 +95,9 @@ export const useWineApp = withOwner((config: WineAppConfig) => {
     }
   };
 
+  /**
+   * Executes a program through wine.
+   */
   const runProgram = async (
     executablePath: string,
     exeFlags: string[] = [],
@@ -90,4 +120,4 @@ export const useWineApp = withOwner((config: WineAppConfig) => {
     pipeline,
     runProgram,
   };
-});
+};

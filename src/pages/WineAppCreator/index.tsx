@@ -1,4 +1,4 @@
-import { Component } from 'solid-js';
+import { Component, createEffect } from 'solid-js';
 import {
   Grid,
   Typography,
@@ -23,11 +23,13 @@ export const WineAppCreator: Component = () => {
   const submit = async (event: Event) => {
     event.preventDefault();
     try {
-      createWineApp();
-    } catch (error) {}
+      await createWineApp();
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  const createWineApp = () => {
+  const createWineApp = async () => {
     const { pipeline, ...rest } = useWineApp({
       appName: 'Steam',
       engine: {
@@ -37,13 +39,15 @@ export const WineAppCreator: Component = () => {
       },
     });
 
-    rest.createWineApp();
-
     createDialog({
       content: ({ dialogId }) => (
         <PipelineViewer id={dialogId} pipeline={pipeline} />
       ),
     });
+
+    await rest.createWineApp();
+
+    console.log(rest.consoleOutput());
   };
 
   return (

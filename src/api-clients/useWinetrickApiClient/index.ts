@@ -11,7 +11,7 @@ export const useWinetrickApiClient = () => {
 
       mappedData.push({
         verb,
-        description: description.replace(/^\s+/, ''),
+        description: description?.replace?.(/^\s+/, ''),
       });
     }
     return mappedData;

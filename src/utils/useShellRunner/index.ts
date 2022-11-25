@@ -1,5 +1,5 @@
 import { ChildProcess } from '@tauri-apps/api/shell';
-import { createEffect, createSignal } from 'solid-js';
+import { createSignal } from 'solid-js';
 import { runScript as tauriRunScript, strReplacer } from '@utils';
 import { Env, Pipeline, ProcessStatus } from '@interfaces';
 import { createStore } from 'solid-js/store';
@@ -47,20 +47,19 @@ export const useShellRunner = (config?: { env?: Env }) => {
     setConsoleOutput('');
 
     try {
-      for (const jobs of workflow.jobs) {
-        for (let i = 0; i < jobs.steps.length; i++) {
-          const steps = jobs.steps;
-          for (let j = 0; j < steps.length; j++) {
-            if (abort) {
-              setStepStatus(i, j, 'cancelled');
-              continue;
-            } else {
-              setStepStatus(i, j, 'inProgress');
-              const step = steps[j];
-              const { status } = await runScript(step.script);
-              if (status === 'error') abort = true;
-              setStepStatus(i, j, status);
-            }
+      for (let i = 0; i < workflow.jobs.length; i++) {
+        const job = workflow.jobs[i];
+        const steps = job.steps;
+        for (let j = 0; j < steps.length; j++) {
+          if (abort) {
+            setStepStatus(i, j, 'cancelled');
+            continue;
+          } else {
+            setStepStatus(i, j, 'inProgress');
+            const step = steps[j];
+            const { status } = await runScript(step.script);
+            if (status === 'error') abort = true;
+            setStepStatus(i, j, status);
           }
         }
       }
@@ -96,20 +95,25 @@ export const useShellRunner = (config?: { env?: Env }) => {
     const commands = buildCommands(script);
     const result: { status: ProcessStatus } = { status: 'success' };
     let abort = false;
+
     for (let command of commands) {
-      setChildProcess(await tauriRunScript(`echo ${command}`));
+      await runCommand(`echo ${command}`);
 
       if (abort) {
         result.status = 'error';
         continue;
       }
 
-      if (options?.onlyEcho !== true)
-        setChildProcess(await tauriRunScript(command));
+      if (options?.onlyEcho !== true) await runCommand(command);
       if (options?.force !== true) abort = abortProcessOnError();
     }
 
     return result;
+  };
+
+  const runCommand = async (command: string) => {
+    setChildProcess(await tauriRunScript(command));
+    print(outputText());
   };
 
   /**
@@ -141,7 +145,7 @@ export const useShellRunner = (config?: { env?: Env }) => {
   /**
    * Formats output text of unnecessary visible data.
    */
-  const parseOutputText = (text: string) => {
+  const parseOutputText = (text: string = '') => {
     return text.replace?.(/(STATUS_COMMAND_CODE):(\d)/g, '') || '';
   };
 
@@ -149,19 +153,22 @@ export const useShellRunner = (config?: { env?: Env }) => {
    * Returns stout console output.
    */
   const stdout = () => {
-    return parseOutputText(childProcess()?.stdout || '');
+    return childProcess()?.stdout || '';
   };
 
   /**
    * Returns stderr console output.
    */
   const stderr = () => {
-    return parseOutputText(childProcess()?.stderr || '');
+    return childProcess()?.stderr || '';
   };
 
-  createEffect(() => {
-    setConsoleOutput((prev) => `${prev}${outputText()}`);
-  });
-
-  return { runPipeline, consoleOutput, pipeline, runScript, stdout, stderr };
+  return {
+    runPipeline,
+    consoleOutput: () => parseOutputText(consoleOutput()),
+    pipeline,
+    runScript,
+    stdout,
+    stderr,
+  };
 };
