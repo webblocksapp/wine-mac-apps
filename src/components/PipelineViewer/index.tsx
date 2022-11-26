@@ -7,8 +7,9 @@ import {
   Grid,
   ProcessStatusIcon,
   Typography,
+  useDialogContext,
 } from '@components';
-import { Component, For } from 'solid-js';
+import { Component, createEffect, For } from 'solid-js';
 import { capitalize } from '@utils';
 
 export interface PipelineViewerProps {
@@ -17,6 +18,20 @@ export interface PipelineViewerProps {
 }
 
 export const PipelineViewer: Component<PipelineViewerProps> = (props) => {
+  const { configDialog } = useDialogContext();
+
+  createEffect(() => {
+    if (
+      props.pipeline.status === 'success' ||
+      props.pipeline.status === 'error' ||
+      props.pipeline.status === 'cancelled'
+    ) {
+      configDialog(props.id, { acceptDisabled: false });
+    } else {
+      configDialog(props.id, { acceptDisabled: true });
+    }
+  });
+
   return (
     <Grid container spacing={4}>
       <Grid item xs={12}>
@@ -50,7 +65,7 @@ export const PipelineViewer: Component<PipelineViewerProps> = (props) => {
                           </Box>
                         }
                       >
-                        <Code>Hello world!</Code>
+                        <Code>{step.output}</Code>
                       </Accordion>
                     )}
                   </For>

@@ -1,10 +1,17 @@
 import { ChildProcess } from '@tauri-apps/api/shell';
-import { createSignal } from 'solid-js';
+import { createSignal, observable } from 'solid-js';
 import { runScript as tauriRunScript, strReplacer } from '@utils';
-import { Env, Pipeline, ProcessStatus } from '@interfaces';
+import {
+  Env,
+  Pipeline,
+  ProcessStatus,
+  ScriptOptions,
+  Subscription,
+} from '@interfaces';
 import { createStore } from 'solid-js/store';
 
 export const useShellRunner = (config?: { env?: Env }) => {
+  const env = { ...config?.env };
   const [childProcess, setChildProcess] = createSignal<ChildProcess>();
   const [consoleOutput, setConsoleOutput] = createSignal<string | undefined>(
     ''
@@ -16,25 +23,35 @@ export const useShellRunner = (config?: { env?: Env }) => {
   });
 
   /**
-   * Splits an script into separate commands.
+   * Adds envs to be replaced
    */
-  const buildCommands = (script: string) => {
-    script = strReplacer(script, { ...config?.env });
-    let commands = script.split('&&');
-    commands = addCodeStatusExecution(commands);
-    return commands;
+  const mergeEnv = (newEnv?: Env) => {
+    Object.assign(env, newEnv);
   };
 
   /**
-   * Adds an script for echoing code status.
-   * - 0 success.
-   * - 1 error.
+   * Splits an script into separate commands.
    */
-  const addCodeStatusExecution = (commands: string[]) => {
+  const buildCommands = (
+    script: string,
+    options?: { showStatusCode?: boolean; echo?: boolean }
+  ) => {
+    script = strReplacer(script, env);
+    let commands = script.split(/;/g);
+    commands = commands.map((command) =>
+      command.replace(/^\s+/, '').replace(/$\s+/, '')
+    );
+
     const parsedCommands: string[] = [];
-    commands.forEach((cmd) => {
-      parsedCommands.push(`${cmd}; echo "STATUS_COMMAND_CODE:"$?;`);
-    });
+
+    for (let cmd of commands) {
+      if (!cmd) continue;
+      if (options?.echo) parsedCommands.push(`echo ${cmd};`);
+      parsedCommands.push(`${cmd};`);
+      if (options?.showStatusCode)
+        parsedCommands.push(`echo "STATUS_COMMAND_CODE:"$?;`);
+    }
+
     return parsedCommands;
   };
 
@@ -45,6 +62,8 @@ export const useShellRunner = (config?: { env?: Env }) => {
     let abort = false;
     setPipeline(workflow);
     setConsoleOutput('');
+    const output$ = observable(outputText);
+    let outputSubscription: Subscription | undefined;
 
     try {
       for (let i = 0; i < workflow.jobs.length; i++) {
@@ -57,7 +76,14 @@ export const useShellRunner = (config?: { env?: Env }) => {
           } else {
             setStepStatus(i, j, 'inProgress');
             const step = steps[j];
-            const { status } = await runScript(step.script);
+            outputSubscription = output$.subscribe((output) => {
+              setStepOutput(i, j, parseOutputText(output));
+            });
+            const { status } = await runScript(step.script, {
+              showStatusCode: true,
+              ...step.options,
+            });
+            outputSubscription.unsubscribe();
             if (status === 'error') abort = true;
             setStepStatus(i, j, status);
           }
@@ -66,10 +92,9 @@ export const useShellRunner = (config?: { env?: Env }) => {
 
       setPipeline('status', abort ? 'cancelled' : 'success');
     } catch (error) {
-      if (error instanceof Error) {
-        const errorMessage = error.message;
-        print(`${errorMessage}\nAn unknown error ocurred, process terminated.`);
-      }
+      console.error(error);
+    } finally {
+      outputSubscription?.unsubscribe?.();
     }
   };
 
@@ -85,27 +110,43 @@ export const useShellRunner = (config?: { env?: Env }) => {
   };
 
   /**
+   * Sets the pipeline step output.
+   */
+  const setStepOutput = (
+    jobIndex: number,
+    stepIndex: number,
+    output: string
+  ) => {
+    setPipeline(
+      'jobs',
+      jobIndex,
+      'steps',
+      stepIndex,
+      'output',
+      (prev) => `${prev || ''}\n${output}`
+    );
+  };
+
+  /**
    * It runs the script and also handles the console output
    * during its execution.
    */
-  const runScript = async (
-    script: string,
-    options?: { force?: boolean; onlyEcho?: boolean }
-  ) => {
-    const commands = buildCommands(script);
+  const runScript = async (script: string, options?: ScriptOptions) => {
+    mergeEnv(options?.env);
+    const commands = buildCommands(script, options);
     const result: { status: ProcessStatus } = { status: 'success' };
     let abort = false;
 
     for (let command of commands) {
-      await runCommand(`echo ${command}`);
-
       if (abort) {
         result.status = 'error';
         continue;
       }
 
-      if (options?.onlyEcho !== true) await runCommand(command);
+      await runCommand(command);
+
       if (options?.force !== true) abort = abortProcessOnError();
+      if (abort) result.status = 'error';
     }
 
     return result;

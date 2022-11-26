@@ -1,3 +1,9 @@
-import { WineEngine } from '@interfaces';
+import { Id, WineEngine } from '@interfaces';
 
-export type WineApp = { name: string; engine: WineEngine };
+export type WineApp = {
+  id?: Id;
+  name: string;
+  engine: WineEngine;
+  setupExecutablePath: string;
+  winetricksVerbs?: string[];
+};

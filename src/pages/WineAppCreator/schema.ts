@@ -2,6 +2,7 @@ import { yup } from '@utils';
 import { WineApp, SchemaOf } from '@interfaces';
 
 export const schema: SchemaOf<WineApp> = yup.object({
+  id: yup.mixed().optional(),
   name: yup.string().required(),
   engine: yup
     .object({
@@ -11,5 +12,5 @@ export const schema: SchemaOf<WineApp> = yup.object({
     })
     .required(),
   setupExecutablePath: yup.string().required(),
-  winetricks: yup.array(yup.string()),
+  winetricksVerbs: yup.array(yup.mixed()).optional(),
 });

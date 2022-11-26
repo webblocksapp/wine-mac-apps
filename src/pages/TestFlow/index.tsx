@@ -4,17 +4,21 @@ import { useWineApp } from '@utils';
 
 export const TestFlow: Component = () => {
   const wine = useWineApp({
-    appName: 'steam',
-    engine: 'WS11WineCX64Bit22.0.1',
+    name: 'steam',
+    engine: { version: 'WS11WineCX64Bit22.0.1', url: '' },
   });
 
   return (
     <div style="padding: 20px;">
       <ol>
         <li>
-          <Button onClick={wine.createWineApp}>Engine</Button>
+          <Button
+            onClick={() => wine.createWineApp({ setupExecutablePath: '' })}
+          >
+            Engine
+          </Button>
         </li>
-        <li>
+        {/* <li>
           <Button
             onClick={() =>
               wine.winetricks(['steam', 'dxvk_macos.verb'], {
@@ -25,7 +29,7 @@ export const TestFlow: Component = () => {
           >
             winetricks steam
           </Button>
-        </li>
+        </li> */}
         <li>
           <Button onClick={wine.winecfg}>winecfg</Button>
         </li>

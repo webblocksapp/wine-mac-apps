@@ -9,6 +9,7 @@ import {
   JSXElement,
   onCleanup,
   onMount,
+  Show,
   splitProps,
 } from 'solid-js';
 import './index.css';
@@ -17,11 +18,14 @@ export interface DialogProps
   extends JSX.DialogHtmlAttributes<HTMLDialogElement> {
   maxWidth?: DeviceSize;
   style?: JSX.CSSProperties;
+  hideClose?: boolean;
   onClose?: Function;
   onAccept?: Function;
   onCancel?: Function;
   acceptText?: string;
   cancelText?: string;
+  acceptDisabled?: boolean;
+  cancelDisabled?: boolean;
   content?: (args: { dialogId?: Id }) => JSXElement | string;
 }
 
@@ -89,13 +93,26 @@ export const Dialog: Component<DialogProps> = (props) => {
           ...local.style,
         }}
       >
-        <a aria-label="Close" class="close" onClick={close}></a>
+        <Show when={!props.hideClose}>
+          <a aria-label="Close" class="close" onClick={close}></a>
+        </Show>
         <Box>{local?.content?.({ dialogId: props.id })}</Box>
         <footer>
-          <Button variant="outline" color="secondary" onClick={onCancel}>
-            {props.cancelText || 'Cancel'}
-          </Button>
-          <Button variant="outline" onClick={onAccept}>
+          <Show when={props.onCancel}>
+            <Button
+              variant="outline"
+              color="secondary"
+              onClick={onCancel}
+              disabled={props.cancelDisabled}
+            >
+              {props.cancelText || 'Cancel'}
+            </Button>
+          </Show>
+          <Button
+            variant="outline"
+            onClick={onAccept}
+            disabled={props.acceptDisabled}
+          >
             {props.acceptText || 'Accept'}
           </Button>
         </footer>

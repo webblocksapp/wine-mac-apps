@@ -1,9 +1,10 @@
 import { Component, JSX } from 'solid-js';
+import './index.css';
 
 export interface CodeProps extends JSX.HTMLAttributes<HTMLElement> {}
 
 export const Code: Component<CodeProps> = (props) => (
-  <pre>
+  <pre class="code">
     <code {...props} />
   </pre>
 );

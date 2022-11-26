@@ -1,10 +1,12 @@
-import { mapFlags, useShellRunner } from '@utils';
-import { WineAppConfig } from '@interfaces';
+import { mapFlags, strReplacer, useShellRunner } from '@utils';
+import { Env, JobStep, WineAppConfig, WinetricksOptions } from '@interfaces';
 import {
-  createWineAppScript,
+  createWineAppFolderScript,
   extractWineEngineScript,
   generateWinePrefixScript,
+  runProgramScript,
   runWineCfgScript,
+  winetrickScript,
 } from '@scripts';
 import { useAppModel } from '@models';
 
@@ -20,7 +22,7 @@ export const useWineApp = (config: WineAppConfig) => {
     const WINE_BASE_FOLDER = `${HOME}/Wine`;
     const WINE_ENGINES_FOLDER = `${WINE_BASE_FOLDER}/engines`;
     const WINE_APPS_FOLDER = `${WINE_BASE_FOLDER}/apps`;
-    const WINE_APP_FOLDER = `${WINE_APPS_FOLDER}/${config.appName}`;
+    const WINE_APP_FOLDER = `${WINE_APPS_FOLDER}/${config.name}`;
     const WINE_APP_BIN_PATH = `${WINE_APP_FOLDER}/wine/bin`;
     const WINE_APP_EXPORT_PATH = `PATH="${WINE_APP_BIN_PATH}:$PATH"`;
     const WINE_ENGINE_VERSION = config.engine.version;
@@ -45,7 +47,12 @@ export const useWineApp = (config: WineAppConfig) => {
    * Creates a copy of the wine version from the engine
    * for the app to work standalone.
    */
-  const createWineApp = (options?: { winetricks?: string[] }) => {
+  const createWineApp = (options: {
+    setupExecutablePath: string;
+    exeFlags?: string;
+    winetricks?: { verbs?: string[]; options?: WinetricksOptions };
+    verbose?: boolean;
+  }) => {
     return runPipeline({
       name: 'Create wine app - Workflow',
       jobs: [
@@ -54,7 +61,8 @@ export const useWineApp = (config: WineAppConfig) => {
           steps: [
             {
               name: 'Creating wine app folder',
-              script: createWineAppScript,
+              script: createWineAppFolderScript,
+              options: { echo: true },
             },
             {
               name: 'Extracting wine engine',
@@ -63,6 +71,20 @@ export const useWineApp = (config: WineAppConfig) => {
             {
               name: 'Generating wine prefix',
               script: generateWinePrefixScript,
+            },
+            ...(options?.winetricks?.verbs?.length
+              ? generateWinetricksSteps(
+                  options.winetricks.verbs,
+                  options.winetricks.options
+                )
+              : []),
+            {
+              name: 'Running setup executable',
+              script: strReplacer<Env>(runProgramScript, {
+                EXE_PATH: options.setupExecutablePath,
+                EXE_FLAGS: options.exeFlags,
+              }),
+              options: { echo: true },
             },
           ],
         },
@@ -78,20 +100,52 @@ export const useWineApp = (config: WineAppConfig) => {
   };
 
   /**
-   * Runs winetricks
+   * Generates winetricks steps for pipeline.
    */
-  const winetricks = async (
+  const generateWinetricksSteps = (
     tricks: string[],
-    options?: { silent?: boolean; force?: boolean; onlyEcho?: boolean }
+    options?: WinetricksOptions
   ) => {
-    options = { silent: true, force: true, ...options };
-    const flags = mapFlags(options, { silent: '-q', force: '--force' });
+    options = { unattended: true, force: true, ...options };
+    const flags = mapFlags(options, {
+      unattended: '--unattended',
+      force: '--force',
+    });
+    const steps: JobStep[] = [];
 
     for (let trick of tricks) {
-      await runScript(
-        `{{WINE_APP_EXPORT_PATH}} WINEPREFIX={{WINE_APP_FOLDER}} WINE={{WINE_APP_BIN_PATH}}/wine32on64 winetricks ${trick} ${flags}`,
-        { force: true, onlyEcho: options?.onlyEcho }
-      );
+      steps.push({
+        name: `Running winetrick ${trick}`,
+        script: winetrickScript,
+        options: {
+          env: {
+            WINE_TRICK: trick,
+            WINE_TRICK_FLAGS: flags,
+          },
+          echo: options.echo,
+        },
+      });
+    }
+
+    return steps;
+  };
+
+  /**
+   * Runs winetricks
+   */
+  const winetricks = async (tricks: string[], options?: WinetricksOptions) => {
+    options = { unattended: true, force: true, ...options };
+    const flags = mapFlags(options, {
+      unattended: '-unattended',
+      force: '--force',
+    });
+
+    for (let trick of tricks) {
+      await runScript(winetrickScript, {
+        force: true,
+        echo: options?.echo,
+        env: { WINE_TRICK: trick, WINE_TRICK_FLAGS: flags },
+      });
     }
   };
 
@@ -101,14 +155,14 @@ export const useWineApp = (config: WineAppConfig) => {
   const runProgram = async (
     executablePath: string,
     exeFlags: string[] = [],
-    options?: { onlyEcho?: boolean }
+    options?: { echo?: boolean }
   ) => {
     exeFlags = exeFlags?.map?.((item) => `"${item}"`);
     await runScript(
       `{{WINE_APP_EXPORT_PATH}} WINEPREFIX={{WINE_APP_FOLDER}} exec wine32on64 "{{WINE_APP_FOLDER}}/${executablePath}" ${exeFlags.join(
         ' '
       )}`,
-      { onlyEcho: options?.onlyEcho }
+      { echo: options?.echo }
     );
   };
 

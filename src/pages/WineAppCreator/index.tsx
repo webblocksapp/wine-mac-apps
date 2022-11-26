@@ -1,4 +1,4 @@
-import { Component, createEffect } from 'solid-js';
+import { Component } from 'solid-js';
 import {
   Grid,
   Typography,
@@ -23,6 +23,7 @@ export const WineAppCreator: Component = () => {
   const submit = async (event: Event) => {
     event.preventDefault();
     try {
+      await formHandler.validateForm();
       await createWineApp();
     } catch (error) {
       console.error(error);
@@ -30,24 +31,24 @@ export const WineAppCreator: Component = () => {
   };
 
   const createWineApp = async () => {
+    const { name, engine, setupExecutablePath, winetricksVerbs } = formData();
     const { pipeline, ...rest } = useWineApp({
-      appName: 'Steam',
-      engine: {
-        url: 'https://mega.nz/file/VF4mSCpQ#UDC10env2AKKAEqqfv2Gbz8sk26mkwn1VNcAOL_nIi4',
-        version: 'WS11WineCX64Bit22.0.1',
-        id: 1,
-      },
+      name,
+      engine,
     });
 
     createDialog({
       content: ({ dialogId }) => (
         <PipelineViewer id={dialogId} pipeline={pipeline} />
       ),
+      hideClose: true,
     });
 
-    await rest.createWineApp();
-
-    console.log(rest.consoleOutput());
+    await rest.createWineApp({
+      setupExecutablePath,
+      winetricks: { verbs: winetricksVerbs },
+      verbose: true,
+    });
   };
 
   return (
@@ -76,7 +77,10 @@ export const WineAppCreator: Component = () => {
               />
             </Grid>
             <Grid item xs={12}>
-              <WinetricksSelector name="winetricks" formHandler={formHandler} />
+              <WinetricksSelector
+                name="winetricksVerbs"
+                formHandler={formHandler}
+              />
             </Grid>
             <Grid item xs={12}>
               <pre>
@@ -85,7 +89,9 @@ export const WineAppCreator: Component = () => {
             </Grid>
             <Grid item xs={12}>
               <Box display="flex" justifyContent="flex-end">
-                <Button type="submit">Create</Button>
+                <Button type="submit" disabled={formHandler.isFormInvalid()}>
+                  Create
+                </Button>
               </Box>
             </Grid>
           </Grid>
