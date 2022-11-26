@@ -51,6 +51,7 @@ export const PipelineViewer: Component<PipelineViewerProps> = (props) => {
                   <For each={job.steps}>
                     {(step, index) => (
                       <Accordion
+                        disabled={!step?.output?.match(/\S/)}
                         text={
                           <Box display="grid" gridTemplateColumns="110px 1fr">
                             <Box display="flex" alignItems="center">

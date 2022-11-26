@@ -218,7 +218,10 @@ export const WinetricksSelector: Component<WinetricksSelectorProps> = (
               {notFound(winetrickType) ? (
                 <></>
               ) : (
-                <Accordion text={capitalize(winetrickType)}>
+                <Accordion
+                  disabled={loading()}
+                  text={capitalize(winetrickType)}
+                >
                   <Grid container spacing={2}>
                     {loading() === true && <Box>Loading winetricks...</Box>}
                     {loading() === false && (

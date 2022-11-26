@@ -12,3 +12,16 @@ details.accordion > summary {
 details.accordion[open] {
   padding-bottom: 1rem;
 }
+
+.accordion.disabled summary {
+  cursor: default;
+}
+
+.accordion.disabled summary:focus {
+  color: inherit;
+}
+
+.accordion.disabled summary::after {
+  background-image: none;
+  animation: spinner 0.75s linear infinite;
+}
