@@ -1,6 +1,11 @@
-import { ChildProcess } from '@tauri-apps/api/shell';
+import {
+  Child,
+  ChildProcess,
+  Command,
+  EventEmitter,
+} from '@tauri-apps/api/shell';
 import { createSignal, observable } from 'solid-js';
-import { runScript as tauriRunScript, strReplacer } from '@utils';
+import { strReplacer } from '@utils';
 import {
   Env,
   Pipeline,
@@ -12,7 +17,7 @@ import { createStore } from 'solid-js/store';
 
 export const useShellRunner = (config?: { env?: Env }) => {
   const env = { ...config?.env };
-  const [childProcess, setChildProcess] = createSignal<ChildProcess>();
+  const [currentOutput, setCurrentOutput] = createSignal<string>('');
   const [consoleOutput, setConsoleOutput] = createSignal<string | undefined>(
     ''
   );
@@ -47,9 +52,11 @@ export const useShellRunner = (config?: { env?: Env }) => {
     for (let cmd of commands) {
       if (!cmd) continue;
       if (options?.echo) parsedCommands.push(`echo ${cmd};`);
-      parsedCommands.push(`${cmd};`);
-      if (options?.showStatusCode)
-        parsedCommands.push(`echo "STATUS_COMMAND_CODE:"$?;`);
+      parsedCommands.push(
+        `${cmd}; ${
+          options?.showStatusCode ? `echo "STATUS_COMMAND_CODE:"$?;` : ''
+        }`
+      );
     }
 
     return parsedCommands;
@@ -62,7 +69,7 @@ export const useShellRunner = (config?: { env?: Env }) => {
     let abort = false;
     setPipeline(workflow);
     setConsoleOutput('');
-    const output$ = observable(outputText);
+    const output$ = observable(currentOutput);
     let outputSubscription: Subscription | undefined;
 
     try {
@@ -77,11 +84,11 @@ export const useShellRunner = (config?: { env?: Env }) => {
             setStepStatus(i, j, 'inProgress');
             const step = steps[j];
             outputSubscription = output$.subscribe((output) => {
-              setStepOutput(i, j, parseOutputText(output));
+              setStepOutput(i, j, parseOutput(output));
             });
-            const { status } = await runScript(step.script, {
-              showStatusCode: true,
+            const { status } = await spawnScript(step.script, {
               ...step.options,
+              showStatusCode: true, //Not overridable
             });
             outputSubscription.unsubscribe();
             if (status === 'error') abort = true;
@@ -104,7 +111,7 @@ export const useShellRunner = (config?: { env?: Env }) => {
   const setStepStatus = (
     jobIndex: number,
     stepIndex: number,
-    status: ProcessStatus
+    status?: ProcessStatus
   ) => {
     setPipeline('jobs', jobIndex, 'steps', stepIndex, 'status', status);
   };
@@ -128,13 +135,48 @@ export const useShellRunner = (config?: { env?: Env }) => {
   };
 
   /**
-   * It runs the script and also handles the console output
-   * during its execution.
+   * It runs the script and outputs the console in realtime.
    */
-  const runScript = async (script: string, options?: ScriptOptions) => {
+  const spawnScript = (
+    script: string,
+    options?: ScriptOptions
+  ): Promise<{
+    child: Child;
+    stdout: EventEmitter<'data'>;
+    stderr: EventEmitter<'data'>;
+    status?: ProcessStatus;
+  }> => {
+    return handleScript('spawn', script, options);
+  };
+
+  /**
+   * It runs the script and outputs the console after it's executed.
+   */
+  const runScript = (
+    script: string,
+    options?: ScriptOptions
+  ): Promise<{
+    stdout: string;
+    stderr: string;
+    childProcess: ChildProcess;
+    status?: ProcessStatus;
+  }> => {
+    return handleScript('exec', script, options);
+  };
+
+  /**
+   * Handles the script according to the given action.
+   */
+  const handleScript = async (
+    action: 'spawn' | 'exec',
+    script: string,
+    options?: ScriptOptions
+  ) => {
+    setCurrentOutput('');
     mergeEnv(options?.env);
+
     const commands = buildCommands(script, options);
-    const result: { status: ProcessStatus } = { status: 'success' };
+    let result: any = { status: 'success' };
     let abort = false;
 
     for (let command of commands) {
@@ -143,7 +185,10 @@ export const useShellRunner = (config?: { env?: Env }) => {
         continue;
       }
 
-      await runCommand(command);
+      if (action === 'spawn')
+        result = { ...result, ...(await spawnCommand(command)) };
+      if (action === 'exec')
+        result = { ...result, ...(await execCommand(command)) };
 
       if (options?.force !== true) abort = abortProcessOnError();
       if (abort) result.status = 'error';
@@ -152,16 +197,45 @@ export const useShellRunner = (config?: { env?: Env }) => {
     return result;
   };
 
-  const runCommand = async (command: string) => {
-    setChildProcess(await tauriRunScript(command));
-    print(outputText());
+  /**
+   * Executes a command with tauri printing the output in realtime.
+   */
+  const spawnCommand = async (command: string) => {
+    const cmd = new Command('run-script', ['-c', command]);
+    cmd.on('error', (error) => print(error));
+    cmd.stdout.on('data', (data) => print(data));
+    cmd.stderr.on('data', (data) => print(data));
+
+    return new Promise<{
+      child: Child;
+      stdout: EventEmitter<'data'>;
+      stderr: EventEmitter<'data'>;
+    }>(async (resolve) => {
+      const child = await cmd.spawn();
+      cmd.on('close', () => {
+        resolve({ child, stdout: cmd.stdout, stderr: cmd.stderr });
+      });
+    });
+  };
+
+  /**
+   * Executes a command with tauri printing the output after its execution.
+   */
+  const execCommand = async (command: string) => {
+    const cmd = new Command('run-script', ['-c', command]);
+    const childProcess = await cmd.execute();
+    return {
+      stdout: childProcess.stdout,
+      stderr: childProcess.stderr,
+      childProcess,
+    };
   };
 
   /**
    * Abort a process when status code 1 (error).
    */
   const abortProcessOnError = () => {
-    if (outputText().match(/(STATUS_COMMAND_CODE):(1)/g)?.length) {
+    if (currentOutput().match(/(STATUS_COMMAND_CODE):(1)/g)?.length) {
       return true;
     }
 
@@ -172,44 +246,22 @@ export const useShellRunner = (config?: { env?: Env }) => {
    * Prints text at console output.
    */
   const print = (text: string) => {
+    setCurrentOutput(text);
     setConsoleOutput((prev) => `${prev}${text}`);
-  };
-
-  /**
-   * Gets the complete output text from the child process.
-   * (stdout and stderr)
-   */
-  const outputText = () => {
-    return `${stdout()}${stderr()}`;
   };
 
   /**
    * Formats output text of unnecessary visible data.
    */
-  const parseOutputText = (text: string = '') => {
+  const parseOutput = (text: string = '') => {
     return text.replace?.(/(STATUS_COMMAND_CODE):(\d)/g, '') || '';
-  };
-
-  /**
-   * Returns stout console output.
-   */
-  const stdout = () => {
-    return childProcess()?.stdout || '';
-  };
-
-  /**
-   * Returns stderr console output.
-   */
-  const stderr = () => {
-    return childProcess()?.stderr || '';
   };
 
   return {
     runPipeline,
-    consoleOutput: () => parseOutputText(consoleOutput()),
+    consoleOutput: () => parseOutput(consoleOutput()),
     pipeline,
+    spawnScript,
     runScript,
-    stdout,
-    stderr,
   };
 };

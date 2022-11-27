@@ -23,7 +23,12 @@ export const useWineApp = (config: WineAppConfig) => {
     const WINE_ENGINES_FOLDER = `${WINE_BASE_FOLDER}/engines`;
     const WINE_APPS_FOLDER = `${WINE_BASE_FOLDER}/apps`;
     const WINE_APP_FOLDER = `${WINE_APPS_FOLDER}/${config.name}`;
-    const WINE_APP_BIN_PATH = `${WINE_APP_FOLDER}/wine/bin`;
+    const WINE_APP_CONTENTS = `${WINE_APP_FOLDER}/Contents`;
+    const WINE_APP_SHARED_SUPPORT_PATH = `${WINE_APP_CONTENTS}/SharedSupport`;
+    const WINE_APP_ENGINE_LOGS_PATH = `${WINE_APP_SHARED_SUPPORT_PATH}/Logs`;
+    const WINE_APP_ENGINE_PATH = `${WINE_APP_SHARED_SUPPORT_PATH}/wine`;
+    const WINE_APP_PREFIX_PATH = `${WINE_APP_SHARED_SUPPORT_PATH}/prefix`;
+    const WINE_APP_BIN_PATH = `${WINE_APP_ENGINE_PATH}/bin`;
     const WINE_APP_EXPORT_PATH = `PATH="${WINE_APP_BIN_PATH}:$PATH"`;
     const WINE_ENGINE_VERSION = config.engine.version;
 
@@ -33,6 +38,10 @@ export const useWineApp = (config: WineAppConfig) => {
       WINE_ENGINES_FOLDER,
       WINE_APPS_FOLDER,
       WINE_APP_FOLDER,
+      WINE_APP_SHARED_SUPPORT_PATH,
+      WINE_APP_ENGINE_LOGS_PATH,
+      WINE_APP_ENGINE_PATH,
+      WINE_APP_PREFIX_PATH,
       WINE_APP_BIN_PATH,
       WINE_APP_EXPORT_PATH,
       WINE_ENGINE_VERSION,

@@ -83,11 +83,6 @@ export const WineAppCreator: Component = () => {
               />
             </Grid>
             <Grid item xs={12}>
-              <pre>
-                <code>{JSON.stringify(formHandler.formData(), null, 2)}</code>
-              </pre>
-            </Grid>
-            <Grid item xs={12}>
               <Box display="flex" justifyContent="flex-end">
                 <Button type="submit" disabled={formHandler.isFormInvalid()}>
                   Create
