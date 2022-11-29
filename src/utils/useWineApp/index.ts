@@ -4,14 +4,15 @@ import { useAppModel } from '@models';
 
 export const useWineApp = (config: WineAppConfig) => {
   const appModel = useAppModel();
-  const env = appModel.selectEnv();
+  const appEnv = appModel.selectEnv();
 
   /**
    * Initializes the env paths.
    */
   const initEnv = () => {
-    const HOME = env().HOME;
+    const HOME = appEnv().HOME;
     const WINE_BASE_FOLDER = `${HOME}/Wine`;
+    const WINE_LIBS_FOLDER = `${WINE_BASE_FOLDER}/libs`;
     const WINE_ENGINES_FOLDER = `${WINE_BASE_FOLDER}/engines`;
     const WINE_APPS_FOLDER = `${WINE_BASE_FOLDER}/apps`;
     const WINE_APP_FOLDER = `${WINE_APPS_FOLDER}/${config.name}`;
@@ -26,6 +27,7 @@ export const useWineApp = (config: WineAppConfig) => {
     return {
       HOME,
       WINE_BASE_FOLDER,
+      WINE_LIBS_FOLDER,
       WINE_ENGINES_FOLDER,
       WINE_APPS_FOLDER,
       WINE_APP_FOLDER,
@@ -50,11 +52,19 @@ export const useWineApp = (config: WineAppConfig) => {
     setupExecutablePath: string;
     exeFlags?: string;
     winetricks?: { verbs?: string[]; options?: WinetricksOptions };
+    dxvkEnabled?: boolean;
   }) => {
     const winetricksSteps = generateWinetricksSteps(
       options?.winetricks?.verbs,
       options?.winetricks?.options
     );
+
+    const dxvkStep: JobStep = {
+      name: 'Configuring DXVK',
+      bashScript: 'enableDxvk',
+      options: { force: true }, //Skips warning ./dxvk_macos.verb: No such file or directory,
+    };
+
     const { currentWorkflow, output, run } = buildPipeline({
       name: 'Create wine app - Workflow',
       jobs: [
@@ -73,6 +83,7 @@ export const useWineApp = (config: WineAppConfig) => {
               name: 'Generating wine prefix',
               bashScript: 'generateWinePrefix',
             },
+            ...(options?.dxvkEnabled ? [dxvkStep] : []),
             ...winetricksSteps,
             {
               name: 'Running setup executable',

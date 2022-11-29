@@ -112,7 +112,8 @@ export const Checkbox: Component<CheckboxProps> = (props) => {
   createEffect(() => {
     setStore(
       'checked',
-      local.formHandler?.getFieldValue?.(rest.name) == rest.value ||
+      (local.formHandler &&
+        local.formHandler?.getFieldValue?.(rest.name) == rest.value) ||
         (rest.value === undefined &&
           local.formHandler?.getFieldValue?.(rest.name)) ||
         local.checked

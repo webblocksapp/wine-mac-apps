@@ -17,7 +17,9 @@ export default defineConfig(() => {
       sourcemap: !!process.env.TAURI_DEBUG,
     },
     define: {
-      'process.env.bashPath': JSON.stringify(process.cwd() + '/src/bash/'),
+      'process.env.bashScriptsPath': JSON.stringify(
+        process.cwd() + '/src/bash/'
+      ),
     },
   };
 });

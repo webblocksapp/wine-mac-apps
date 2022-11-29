@@ -6,4 +6,5 @@ export type WineApp = {
   engine: WineEngine;
   setupExecutablePath: string;
   winetricksVerbs?: string[];
+  dxvkEnabled: boolean;
 };

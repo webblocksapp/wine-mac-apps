@@ -8,11 +8,14 @@ import {
   BashScript,
 } from '@interfaces';
 import { createStore } from 'solid-js/store';
+import { useAppModel } from '@models';
 
 type Cmd = Omit<Command, 'spawn' | 'execute'>;
 
 export const useShellRunner = (config?: CommandOptions) => {
-  const env = { ...config?.env };
+  const appModel = useAppModel();
+  const appEnv = appModel.selectEnv();
+  const env = { ...appEnv(), ...config?.env };
 
   /**
    * Adds envs to be replaced
@@ -182,7 +185,7 @@ export const useShellRunner = (config?: CommandOptions) => {
     const envVarsCmd = buildEnvVarsCmd();
     return new Command('run-script', [
       '-c',
-      `${envVarsCmd} sh ${process.env.bashPath}${fileName}.sh`,
+      `${envVarsCmd} sh ${process.env.bashScriptsPath}${fileName}.sh`,
     ]);
   };
 

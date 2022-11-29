@@ -11,6 +11,7 @@ export type Env = Partial<{
   WINE_APP_ENGINE_PATH: string;
   WINE_APP_SHARED_SUPPORT_PATH: string;
   WINE_APPS_FOLDER: string;
+  WINE_LIBS_FOLDER: string;
   WINE_BASE_FOLDER: string;
   WINE_ENGINE_VERSION: string;
   WINE_ENGINES_FOLDER: string;

@@ -10,13 +10,14 @@ import {
   Button,
   PipelineViewer,
   Box,
+  Checkbox,
+  Code,
 } from '@components';
 import { useFormHandler, useWineApp } from '@utils';
-import { WineApp } from '@interfaces';
-import { schema } from './schema';
+import { schema, Schema } from './schema';
 
 export const WineAppCreator: Component = () => {
-  const formHandler = useFormHandler<WineApp>(schema);
+  const formHandler = useFormHandler<Schema>(schema);
   const { formData } = formHandler;
   const { createDialog } = useDialogContext();
 
@@ -31,7 +32,8 @@ export const WineAppCreator: Component = () => {
   };
 
   const createWineApp = async () => {
-    const { name, engine, setupExecutablePath, winetricksVerbs } = formData();
+    const { name, engine, setupExecutablePath, winetricksVerbs, dxvkEnabled } =
+      formData();
     const { createWineApp } = useWineApp({
       name,
       engine,
@@ -40,6 +42,7 @@ export const WineAppCreator: Component = () => {
     const { currentWorkflow } = createWineApp({
       setupExecutablePath,
       winetricks: { verbs: winetricksVerbs },
+      dxvkEnabled,
     });
 
     createDialog({
@@ -76,7 +79,29 @@ export const WineAppCreator: Component = () => {
                 formHandler={formHandler}
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={12} md={6}>
+              <Checkbox
+                label="Use Winetricks"
+                name="useWinetricks"
+                display="switch"
+                formHandler={formHandler}
+                triggers={['winetricksVerbs']}
+              />
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <Checkbox
+                label="Enable DXVK"
+                checked
+                name="dxvkEnabled"
+                display="switch"
+                formHandler={formHandler}
+              />
+            </Grid>
+            <Grid
+              item
+              xs={12}
+              display={!formData().useWinetricks ? 'none' : undefined}
+            >
               <WinetricksSelector
                 name="winetricksVerbs"
                 formHandler={formHandler}
@@ -88,6 +113,9 @@ export const WineAppCreator: Component = () => {
                   Create
                 </Button>
               </Box>
+            </Grid>
+            <Grid item xs={12}>
+              <Code>{JSON.stringify(formData(), null, 2)}</Code>
             </Grid>
           </Grid>
         </form>

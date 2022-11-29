@@ -8,4 +8,5 @@ export type BashScript =
   | 'generateWinePrefix'
   | 'runProgram'
   | 'winecfg'
-  | 'winetrick';
+  | 'winetrick'
+  | 'enableDxvk';
