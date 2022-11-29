@@ -2,7 +2,7 @@ import { Winetrick } from '@interfaces';
 import { useShellRunner } from '@utils';
 
 export const useWinetrickApiClient = () => {
-  const { runScript } = useShellRunner();
+  const { executeScript } = useShellRunner();
   const mapResponse = (data: string = ''): Winetrick[] => {
     const mappedData: Winetrick[] = [];
     const rows = data.split('\n');
@@ -19,32 +19,32 @@ export const useWinetrickApiClient = () => {
   };
 
   const listApps = async () => {
-    const { stdout } = await runScript(`winetricks apps list`);
+    const { stdout } = await executeScript(`winetricks apps list`);
     return mapResponse(stdout);
   };
 
   const listBenchmarks = async () => {
-    const { stdout } = await runScript(`winetricks benchmarks list`);
+    const { stdout } = await executeScript(`winetricks benchmarks list`);
     return mapResponse(stdout);
   };
 
   const listDlls = async () => {
-    const { stdout } = await runScript(`winetricks dlls list`);
+    const { stdout } = await executeScript(`winetricks dlls list`);
     return mapResponse(stdout);
   };
 
   const listFonts = async () => {
-    const { stdout } = await runScript(`winetricks fonts list`);
+    const { stdout } = await executeScript(`winetricks fonts list`);
     return mapResponse(stdout);
   };
 
   const listGames = async () => {
-    const { stdout } = await runScript(`winetricks games list`);
+    const { stdout } = await executeScript(`winetricks games list`);
     return mapResponse(stdout);
   };
 
   const listSettings = async () => {
-    const { stdout } = await runScript(`winetricks settings list`);
+    const { stdout } = await executeScript(`winetricks settings list`);
     return mapResponse(stdout);
   };
 

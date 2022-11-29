@@ -1,5 +1,5 @@
 import { RouteDefinition } from '@solidjs/router';
-import { WineAppCreator } from '@pages';
+import { TestFlow, WineAppCreator } from '@pages';
 import { MainLayout } from '@layouts';
 
 export const routes: RouteDefinition[] = [

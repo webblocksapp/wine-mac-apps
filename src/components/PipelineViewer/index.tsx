@@ -1,4 +1,4 @@
-import { Id, Pipeline } from '@interfaces';
+import { Id, Workflow } from '@interfaces';
 import {
   Accordion,
   Box,
@@ -14,7 +14,7 @@ import { capitalize } from '@utils';
 
 export interface PipelineViewerProps {
   id?: Id;
-  pipeline: Pipeline;
+  workflow: Workflow;
 }
 
 export const PipelineViewer: Component<PipelineViewerProps> = (props) => {
@@ -22,9 +22,9 @@ export const PipelineViewer: Component<PipelineViewerProps> = (props) => {
 
   createEffect(() => {
     if (
-      props.pipeline.status === 'success' ||
-      props.pipeline.status === 'error' ||
-      props.pipeline.status === 'cancelled'
+      props.workflow.status === 'success' ||
+      props.workflow.status === 'error' ||
+      props.workflow.status === 'cancelled'
     ) {
       configDialog(props.id, { acceptDisabled: false });
     } else {
@@ -36,11 +36,11 @@ export const PipelineViewer: Component<PipelineViewerProps> = (props) => {
     <Grid container spacing={4}>
       <Grid item xs={12}>
         <Typography component="h4">
-          {capitalize(props.pipeline.name)}
+          {capitalize(props.workflow.name)}
         </Typography>
       </Grid>
       <Grid item xs={12}>
-        <For each={props.pipeline.jobs}>
+        <For each={props.workflow.jobs}>
           {(job) => (
             <Card>
               <Grid container spacing={4}>

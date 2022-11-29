@@ -8,9 +8,9 @@
     "esModuleInterop": true,
     "jsx": "preserve",
     "jsxImportSource": "solid-js",
-    "types": ["vite/client"],
     "noEmit": true,
     "isolatedModules": true,
+    "resolveJsonModule": true,
     "baseUrl": "./",
     "paths": {
       "@api-clients": ["src/api-clients"],
@@ -23,9 +23,9 @@
       "@models": ["src/models"],
       "@pages": ["src/pages"],
       "@routes": ["src/routes"],
-      "@scripts": ["src/scripts"],
       "@states": ["src/states"],
       "@utils": ["src/utils"]
-    }
+    },
+    "types": ["vite/client", "node", "@types/jest"]
   }
 }

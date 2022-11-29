@@ -1,13 +1,5 @@
-import { mapFlags, strReplacer, useShellRunner } from '@utils';
-import { Env, JobStep, WineAppConfig, WinetricksOptions } from '@interfaces';
-import {
-  createWineAppFolderScript,
-  extractWineEngineScript,
-  generateWinePrefixScript,
-  runProgramScript,
-  runWineCfgScript,
-  winetrickScript,
-} from '@scripts';
+import { useShellRunner } from '@utils';
+import { JobStep, WineAppConfig, WinetricksOptions } from '@interfaces';
 import { useAppModel } from '@models';
 
 export const useWineApp = (config: WineAppConfig) => {
@@ -25,11 +17,10 @@ export const useWineApp = (config: WineAppConfig) => {
     const WINE_APP_FOLDER = `${WINE_APPS_FOLDER}/${config.name}`;
     const WINE_APP_CONTENTS = `${WINE_APP_FOLDER}/Contents`;
     const WINE_APP_SHARED_SUPPORT_PATH = `${WINE_APP_CONTENTS}/SharedSupport`;
-    const WINE_APP_ENGINE_LOGS_PATH = `${WINE_APP_SHARED_SUPPORT_PATH}/Logs`;
+    const WINE_APP_LOGS_PATH = `${WINE_APP_SHARED_SUPPORT_PATH}/Logs`;
     const WINE_APP_ENGINE_PATH = `${WINE_APP_SHARED_SUPPORT_PATH}/wine`;
     const WINE_APP_PREFIX_PATH = `${WINE_APP_SHARED_SUPPORT_PATH}/prefix`;
     const WINE_APP_BIN_PATH = `${WINE_APP_ENGINE_PATH}/bin`;
-    const WINE_APP_EXPORT_PATH = `PATH="${WINE_APP_BIN_PATH}:$PATH"`;
     const WINE_ENGINE_VERSION = config.engine.version;
 
     return {
@@ -39,16 +30,15 @@ export const useWineApp = (config: WineAppConfig) => {
       WINE_APPS_FOLDER,
       WINE_APP_FOLDER,
       WINE_APP_SHARED_SUPPORT_PATH,
-      WINE_APP_ENGINE_LOGS_PATH,
+      WINE_APP_LOGS_PATH,
       WINE_APP_ENGINE_PATH,
       WINE_APP_PREFIX_PATH,
       WINE_APP_BIN_PATH,
-      WINE_APP_EXPORT_PATH,
       WINE_ENGINE_VERSION,
     };
   };
 
-  const { consoleOutput, runPipeline, runScript, pipeline } = useShellRunner({
+  const { buildPipeline, runBashScript } = useShellRunner({
     env: initEnv(),
   });
 
@@ -60,9 +50,12 @@ export const useWineApp = (config: WineAppConfig) => {
     setupExecutablePath: string;
     exeFlags?: string;
     winetricks?: { verbs?: string[]; options?: WinetricksOptions };
-    verbose?: boolean;
   }) => {
-    return runPipeline({
+    const winetricksSteps = generateWinetricksSteps(
+      options?.winetricks?.verbs,
+      options?.winetricks?.options
+    );
+    const { currentWorkflow, output, run } = buildPipeline({
       name: 'Create wine app - Workflow',
       jobs: [
         {
@@ -70,40 +63,45 @@ export const useWineApp = (config: WineAppConfig) => {
           steps: [
             {
               name: 'Creating wine app folder',
-              script: createWineAppFolderScript,
+              bashScript: 'createWineAppFolder',
             },
             {
               name: 'Extracting wine engine',
-              script: extractWineEngineScript,
+              bashScript: 'extractWineEngine',
             },
             {
               name: 'Generating wine prefix',
-              script: generateWinePrefixScript,
+              bashScript: 'generateWinePrefix',
             },
-            ...(options?.winetricks?.verbs?.length
-              ? generateWinetricksSteps(
-                  options.winetricks.verbs,
-                  options.winetricks.options
-                )
-              : []),
+            ...winetricksSteps,
             {
               name: 'Running setup executable',
-              script: strReplacer<Env>(runProgramScript, {
-                EXE_PATH: options.setupExecutablePath,
-                EXE_FLAGS: options.exeFlags,
-              }),
+              bashScript: 'runProgram',
+              options: {
+                env: {
+                  EXE_PATH: options.setupExecutablePath,
+                  EXE_FLAGS: options.exeFlags,
+                },
+              },
+            },
+            {
+              name: 'Bundling app',
+              bashScript: 'bundleApp',
             },
           ],
         },
       ],
     });
+
+    const runningProcess = run();
+    return { currentWorkflow, output, runningProcess };
   };
 
   /**
    * Opens winecfg ui.
    */
   const winecfg = async () => {
-    runScript(runWineCfgScript);
+    runBashScript('winecfg');
   };
 
   /**
@@ -111,19 +109,18 @@ export const useWineApp = (config: WineAppConfig) => {
    */
   const winetricksOptionsToFlags = (options?: WinetricksOptions) => {
     options = { unattended: true, force: true, ...options };
-    const flags = mapFlags(options, {
-      unattended: '--unattended',
-      force: '--force',
-    });
+    let flags = '';
+    if (options?.unattended) flags += 'unattended ';
+    if (options?.force) flags += 'force ';
 
-    return flags;
+    return `"${flags}"`;
   };
 
   /**
    * Generates winetricks steps for pipeline.
    */
   const generateWinetricksSteps = (
-    tricks: string[],
+    tricks: string[] = [],
     options?: WinetricksOptions
   ) => {
     const flags = winetricksOptionsToFlags(options);
@@ -132,7 +129,7 @@ export const useWineApp = (config: WineAppConfig) => {
     for (let trick of tricks) {
       steps.push({
         name: `Running winetrick ${trick}`,
-        script: winetrickScript,
+        bashScript: 'winetrick',
         options: {
           ...options,
           env: {
@@ -153,7 +150,7 @@ export const useWineApp = (config: WineAppConfig) => {
     const flags = winetricksOptionsToFlags(options);
 
     for (let trick of tricks) {
-      await runScript(winetrickScript, {
+      await runBashScript('winetrick', {
         ...options,
         force: true,
         env: { WINE_TRICK: trick, WINE_TRICK_FLAGS: flags },
@@ -166,24 +163,21 @@ export const useWineApp = (config: WineAppConfig) => {
    */
   const runProgram = async (
     executablePath: string,
-    exeFlags: string[] = [],
-    options?: { echo?: boolean }
+    exeFlags: string[] = []
   ) => {
     exeFlags = exeFlags?.map?.((item) => `"${item}"`);
-    await runScript(
-      `{{WINE_APP_EXPORT_PATH}} WINEPREFIX={{WINE_APP_FOLDER}} exec wine32on64 "{{WINE_APP_FOLDER}}/${executablePath}" ${exeFlags.join(
-        ' '
-      )}`,
-      { ...options }
-    );
+    await runBashScript('runProgram', {
+      env: {
+        EXE_PATH: executablePath,
+        exeFlags,
+      },
+    });
   };
 
   return {
     createWineApp,
     winecfg,
     winetricks,
-    consoleOutput,
-    pipeline,
     runProgram,
   };
 };

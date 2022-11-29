@@ -1,6 +1,6 @@
 import { Job, ProcessStatus } from '@interfaces';
 
-export type Pipeline = {
+export type Workflow = {
   name: string;
   jobs: Job[];
   status?: ProcessStatus;

@@ -32,22 +32,22 @@ export const WineAppCreator: Component = () => {
 
   const createWineApp = async () => {
     const { name, engine, setupExecutablePath, winetricksVerbs } = formData();
-    const { pipeline, ...rest } = useWineApp({
+    const { createWineApp } = useWineApp({
       name,
       engine,
     });
 
-    createDialog({
-      content: ({ dialogId }) => (
-        <PipelineViewer id={dialogId} pipeline={pipeline} />
-      ),
-      hideClose: true,
-    });
-
-    await rest.createWineApp({
+    const { currentWorkflow } = createWineApp({
       setupExecutablePath,
       winetricks: { verbs: winetricksVerbs },
-      verbose: true,
+    });
+
+    createDialog({
+      content: ({ dialogId }) => (
+        <PipelineViewer id={dialogId} workflow={currentWorkflow} />
+      ),
+      hideClose: true,
+      acceptText: 'Close',
     });
   };
 

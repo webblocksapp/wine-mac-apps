@@ -1,0 +1,1 @@
+mv $WINE_APP_FOLDER "$WINE_APP_FOLDER.app";
