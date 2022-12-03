@@ -1,4 +1,4 @@
-import { Component } from 'solid-js';
+import { Component, Show } from 'solid-js';
 import {
   Grid,
   Typography,
@@ -51,6 +51,7 @@ export const WineAppCreator: Component = () => {
       ),
       hideClose: true,
       acceptText: 'Close',
+      maxWidth: 'xxl',
     });
   };
 
@@ -97,25 +98,20 @@ export const WineAppCreator: Component = () => {
                 formHandler={formHandler}
               />
             </Grid>
-            <Grid
-              item
-              xs={12}
-              display={!formData().useWinetricks ? 'none' : undefined}
-            >
-              <WinetricksSelector
-                name="winetricksVerbs"
-                formHandler={formHandler}
-              />
-            </Grid>
+            <Show when={formData().useWinetricks}>
+              <Grid item xs={12}>
+                <WinetricksSelector
+                  name="winetricksVerbs"
+                  formHandler={formHandler}
+                />
+              </Grid>
+            </Show>
             <Grid item xs={12}>
               <Box display="flex" justifyContent="flex-end">
                 <Button type="submit" disabled={formHandler.isFormInvalid()}>
                   Create
                 </Button>
               </Box>
-            </Grid>
-            <Grid item xs={12}>
-              <Code>{JSON.stringify(formData(), null, 2)}</Code>
             </Grid>
           </Grid>
         </form>

@@ -1,48 +1,57 @@
 import { useShellRunner } from '@utils';
 import { JobStep, WineAppConfig, WinetricksOptions } from '@interfaces';
 import { useAppModel } from '@models';
+import { Select, useDialogContext } from '@components';
+import { withOwner } from '@hocs';
 
-export const useWineApp = (config: WineAppConfig) => {
+export const useWineApp = withOwner((config: WineAppConfig) => {
   const appModel = useAppModel();
   const appEnv = appModel.selectEnv();
+  const { createDialog } = useDialogContext();
+
+  const { buildPipeline, spawnBashScript, executeBashScript, mergeEnv } =
+    useShellRunner();
 
   /**
    * Initializes the env paths.
    */
-  const initEnv = () => {
+  const buildAppEnv = (appName: string) => {
     const HOME = appEnv().HOME;
-    const WINE_BASE_FOLDER = `${HOME}/Wine`;
-    const WINE_LIBS_FOLDER = `${WINE_BASE_FOLDER}/libs`;
-    const WINE_ENGINES_FOLDER = `${WINE_BASE_FOLDER}/engines`;
-    const WINE_APPS_FOLDER = `${WINE_BASE_FOLDER}/apps`;
-    const WINE_APP_FOLDER = `${WINE_APPS_FOLDER}/${config.name}`;
-    const WINE_APP_CONTENTS = `${WINE_APP_FOLDER}/Contents`;
-    const WINE_APP_SHARED_SUPPORT_PATH = `${WINE_APP_CONTENTS}/SharedSupport`;
+    const WINE_BASE_PATH = `${HOME}/Wine`;
+    const WINE_LIBS_PATH = `${WINE_BASE_PATH}/libs`;
+    const WINE_ENGINES_PATH = `${WINE_BASE_PATH}/engines`;
+    const WINE_APPS_PATH = `${WINE_BASE_PATH}/apps`;
+    const WINE_APP_PATH = `${WINE_APPS_PATH}/${appName}`;
+    const WINE_APP_CONTENTS_PATH = `${WINE_APP_PATH}/Contents`;
+    const WINE_APP_SHARED_SUPPORT_PATH = `${WINE_APP_CONTENTS_PATH}/SharedSupport`;
     const WINE_APP_LOGS_PATH = `${WINE_APP_SHARED_SUPPORT_PATH}/Logs`;
     const WINE_APP_ENGINE_PATH = `${WINE_APP_SHARED_SUPPORT_PATH}/wine`;
     const WINE_APP_PREFIX_PATH = `${WINE_APP_SHARED_SUPPORT_PATH}/prefix`;
+    const WINE_APP_DRIVE_C_PATH = `${WINE_APP_PREFIX_PATH}/drive_c`;
     const WINE_APP_BIN_PATH = `${WINE_APP_ENGINE_PATH}/bin`;
     const WINE_ENGINE_VERSION = config.engine.version;
 
-    return {
+    mergeEnv({
       HOME,
-      WINE_BASE_FOLDER,
-      WINE_LIBS_FOLDER,
-      WINE_ENGINES_FOLDER,
-      WINE_APPS_FOLDER,
-      WINE_APP_FOLDER,
+      WINE_BASE_PATH,
+      WINE_LIBS_PATH,
+      WINE_ENGINES_PATH,
+      WINE_APPS_PATH,
+      WINE_APP_PATH,
       WINE_APP_SHARED_SUPPORT_PATH,
       WINE_APP_LOGS_PATH,
       WINE_APP_ENGINE_PATH,
       WINE_APP_PREFIX_PATH,
+      WINE_APP_DRIVE_C_PATH,
       WINE_APP_BIN_PATH,
       WINE_ENGINE_VERSION,
-    };
+    });
   };
 
-  const { buildPipeline, runBashScript } = useShellRunner({
-    env: initEnv(),
-  });
+  /**
+   * Initializes app env variables
+   */
+  buildAppEnv(config.name);
 
   /**
    * Creates a copy of the wine version from the engine
@@ -71,33 +80,33 @@ export const useWineApp = (config: WineAppConfig) => {
         {
           name: 'Create wine app - Job',
           steps: [
-            {
-              name: 'Creating wine app folder',
-              bashScript: 'createWineAppFolder',
-            },
-            {
-              name: 'Extracting wine engine',
-              bashScript: 'extractWineEngine',
-            },
-            {
-              name: 'Generating wine prefix',
-              bashScript: 'generateWinePrefix',
-            },
-            ...(options?.dxvkEnabled ? [dxvkStep] : []),
-            ...winetricksSteps,
-            {
-              name: 'Running setup executable',
-              bashScript: 'runProgram',
-              options: {
-                env: {
-                  EXE_PATH: options.setupExecutablePath,
-                  EXE_FLAGS: options.exeFlags,
-                },
-              },
-            },
+            // {
+            //   name: 'Creating wine app folder',
+            //   fn: createWineAppFolder,
+            // },
+            // {
+            //   name: 'Extracting wine engine',
+            //   bashScript: 'extractWineEngine',
+            // },
+            // {
+            //   name: 'Generating wine prefix',
+            //   bashScript: 'generateWinePrefix',
+            // },
+            // ...(options?.dxvkEnabled ? [dxvkStep] : []),
+            // ...winetricksSteps,
+            // {
+            //   name: 'Running setup executable',
+            //   bashScript: 'runProgram',
+            //   options: {
+            //     env: {
+            //       EXE_PATH: options.setupExecutablePath,
+            //       EXE_FLAGS: options.exeFlags,
+            //     },
+            //   },
+            // },
             {
               name: 'Bundling app',
-              bashScript: 'bundleApp',
+              fn: bundleApp,
             },
           ],
         },
@@ -109,10 +118,50 @@ export const useWineApp = (config: WineAppConfig) => {
   };
 
   /**
+   * Logic for creating the wine application folder.
+   */
+  const createWineAppFolder = async () => {
+    const { stdout } = await executeBashScript('buildAppPath');
+    const appName = stdout.split('/').pop();
+    appName && appName !== config.name && buildAppEnv(appName);
+    return spawnBashScript('createWineAppFolder');
+  };
+
+  /**
+   * Bundles the app with main executable
+   */
+  const bundleApp = async () => {
+    const executable = await selectExecutable();
+    return spawnBashScript('bundleApp');
+  };
+
+  /**
+   * Application executable selector.
+   */
+  const selectExecutable = async () => {
+    const { stdout } = await executeBashScript('listAppExecutables');
+    const executables =
+      stdout.split('\n').map((item) => ({ value: item, label: item })) || [];
+
+    console.log(1111);
+    createDialog({
+      content: () => (
+        <>
+          <Select
+            label="Executable"
+            placeholder="Select an executable"
+            options={executables}
+          />
+        </>
+      ),
+    });
+  };
+
+  /**
    * Opens winecfg ui.
    */
   const winecfg = async () => {
-    runBashScript('winecfg');
+    spawnBashScript('winecfg');
   };
 
   /**
@@ -161,7 +210,7 @@ export const useWineApp = (config: WineAppConfig) => {
     const flags = winetricksOptionsToFlags(options);
 
     for (let trick of tricks) {
-      await runBashScript('winetrick', {
+      await spawnBashScript('winetrick', {
         ...options,
         force: true,
         env: { WINE_TRICK: trick, WINE_TRICK_FLAGS: flags },
@@ -177,7 +226,7 @@ export const useWineApp = (config: WineAppConfig) => {
     exeFlags: string[] = []
   ) => {
     exeFlags = exeFlags?.map?.((item) => `"${item}"`);
-    await runBashScript('runProgram', {
+    await spawnBashScript('runProgram', {
       env: {
         EXE_PATH: executablePath,
         exeFlags,
@@ -191,4 +240,4 @@ export const useWineApp = (config: WineAppConfig) => {
     winetricks,
     runProgram,
   };
-};
+});

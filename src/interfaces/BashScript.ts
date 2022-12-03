@@ -1,7 +1,10 @@
 export type BashScript =
   | 'tests/printHelloWorld'
   | 'tests/scriptWithError'
+  | 'tests/beepDialog'
+  | 'tests/pipe'
   | 'tests/sum'
+  | 'buildAppPath'
   | 'bundleApp'
   | 'createWineAppFolder'
   | 'extractWineEngine'
@@ -9,4 +12,5 @@ export type BashScript =
   | 'runProgram'
   | 'winecfg'
   | 'winetrick'
-  | 'enableDxvk';
+  | 'enableDxvk'
+  | 'listAppExecutables';

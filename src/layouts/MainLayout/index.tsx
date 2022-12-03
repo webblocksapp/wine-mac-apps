@@ -12,19 +12,12 @@ export const MainLayout: Component = () => {
             <TreeMenu
               menu={[
                 {
-                  text: 'Item 1',
-                  children: [
-                    { text: 'Item 1-1' },
-                    {
-                      text: 'Item 1-2',
-                      children: [
-                        { text: 'Item 1-2-1' },
-                        { text: 'Item 1-2-2' },
-                        { text: 'Item 1-2-3' },
-                      ],
-                    },
-                    { text: 'Item 1-3' },
-                  ],
+                  text: 'Create App',
+                  route: '/',
+                },
+                {
+                  text: 'Test flow',
+                  route: '/test',
                 },
               ]}
             />

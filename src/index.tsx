@@ -1,6 +1,6 @@
 import { Router } from '@solidjs/router';
 import { render } from 'solid-js/web';
-import { DialogProvider } from '@components';
+import { DialogProvider, Owner } from '@components';
 import { App } from './App';
 import './index.css';
 
@@ -8,7 +8,9 @@ render(
   () => (
     <Router>
       <DialogProvider>
-        <App />
+        <Owner>
+          <App />
+        </Owner>
       </DialogProvider>
     </Router>
   ),

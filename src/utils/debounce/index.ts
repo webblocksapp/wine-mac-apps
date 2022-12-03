@@ -4,11 +4,10 @@ export const debounce = <F extends (...args: any[]) => any>(
 ) => {
   let timeout: NodeJS.Timeout;
 
-  return (...args: Parameters<F>) => {
+  return function (this: any, ...args: Parameters<F>) {
     clearTimeout(timeout);
-
     timeout = setTimeout(() => {
-      func.apply(null, args);
+      func.apply(this, args);
     }, wait);
   };
 };

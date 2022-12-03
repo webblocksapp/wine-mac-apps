@@ -6,11 +6,10 @@ import {
   Workflow,
   ScriptOptions,
   BashScript,
+  Cmd,
 } from '@interfaces';
 import { createStore } from 'solid-js/store';
 import { useAppModel } from '@models';
-
-type Cmd = Omit<Command, 'spawn' | 'execute'>;
 
 export const useShellRunner = (config?: CommandOptions) => {
   const appModel = useAppModel();
@@ -48,16 +47,21 @@ export const useShellRunner = (config?: CommandOptions) => {
             setCurrentWorkflow('jobs', i, 'steps', j, 'status', 'inProgress');
             const step = steps[j];
 
-            if (step.bashScript === undefined && step.script === undefined)
+            if (
+              step.bashScript === undefined &&
+              step.script === undefined &&
+              step.fn === undefined
+            )
               continue;
+
+            setCurrentWorkflow('jobs', i, 'steps', j, 'output', '');
 
             let runningProcesses = [
               step.script && (await spawnScript(step.script, step.options)),
               step.bashScript &&
-                (await runBashScript(step.bashScript, step.options)),
+                (await spawnBashScript(step.bashScript, step.options)),
+              step.fn && (await step.fn()),
             ];
-
-            setCurrentWorkflow('jobs', i, 'steps', j, 'output', '');
 
             for (let runningProcess of runningProcesses) {
               if (!runningProcess) continue;
@@ -127,9 +131,9 @@ export const useShellRunner = (config?: CommandOptions) => {
   };
 
   /**
-   * Runs bash script .sh file.
+   * Spawns bash script .sh file.
    */
-  const runBashScript = async (
+  const spawnBashScript = async (
     fileName: BashScript,
     options?: ScriptOptions
   ) => {
@@ -137,6 +141,16 @@ export const useShellRunner = (config?: CommandOptions) => {
     const child = await cmd.spawn();
 
     return { cmd: cmd as Cmd, child };
+  };
+
+  /**
+   * Executes bash script .sh file.
+   */
+  const executeBashScript = async (
+    fileName: BashScript,
+    options?: ScriptOptions
+  ) => {
+    return runBashScriptCommand(fileName, { env: options?.env }).execute();
   };
 
   /**
@@ -191,7 +205,9 @@ export const useShellRunner = (config?: CommandOptions) => {
 
   return {
     buildPipeline,
-    runBashScript,
+    spawnBashScript,
+    executeBashScript,
     executeScript,
+    mergeEnv,
   };
 };

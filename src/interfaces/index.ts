@@ -2,6 +2,7 @@ export * from './AppState';
 export * from './BashScript';
 export * from './BorderProps';
 export * from './BorderScale';
+export * from './Cmd';
 export * from './ColSize';
 export * from './CommandOptions';
 export * from './CommonObject';

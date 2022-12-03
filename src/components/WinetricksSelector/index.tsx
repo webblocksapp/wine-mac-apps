@@ -5,7 +5,6 @@ import {
   createSignal,
   createUniqueId,
   For,
-  onMount,
   splitProps,
 } from 'solid-js';
 import {

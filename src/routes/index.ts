@@ -6,6 +6,9 @@ export const routes: RouteDefinition[] = [
   {
     path: '/',
     component: MainLayout,
-    children: [{ path: '', component: WineAppCreator }],
+    children: [
+      { path: '', component: WineAppCreator },
+      { path: 'test', component: TestFlow },
+    ],
   },
 ];

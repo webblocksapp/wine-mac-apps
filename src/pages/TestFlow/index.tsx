@@ -37,6 +37,20 @@ export const TestFlow: Component = () => {
     console.log(pipeline.output());
   };
 
+  const callback = async () => {
+    const { runBashScript } = shell;
+    const { cmd, child } = await runBashScript('tests/pipe');
+
+    cmd.stdout.on('data', async (data) => {
+      console.log(data);
+    });
+    cmd.stderr.on('data', (data) => console.log(data));
+    cmd.on('error', (data) => console.log(data));
+    cmd.on('close', (data) => console.log('Closed', data));
+    await child.write('A\n');
+    await child.write('B\n');
+  };
+
   const buttons = [
     {
       name: 'tests/printHelloWorld',
@@ -122,6 +136,11 @@ export const TestFlow: Component = () => {
         });
       },
     },
+    {
+      name: 'Beep Dialog',
+      script: 'tests/beepDialog',
+      fn: runBashScript,
+    },
   ];
 
   return (
@@ -140,6 +159,9 @@ export const TestFlow: Component = () => {
           </Grid>
         )}
       </For>
+      <Grid item>
+        <Button onClick={callback}>Callback</Button>
+      </Grid>
     </Grid>
   );
 };
