@@ -4,6 +4,8 @@ export type Env = Partial<{
   EXE_FLAGS: string;
   EXE_PATH: string;
   HOME: string;
+  SCRIPTS_PATH: string;
+  WINE_APP_NAME: string;
   WINE_BASE_PATH: string;
   WINE_LIBS_PATH: string;
   WINE_ENGINES_PATH: string;

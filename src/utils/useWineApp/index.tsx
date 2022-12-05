@@ -1,13 +1,13 @@
 import { useShellRunner } from '@utils';
 import { JobStep, WineAppConfig, WinetricksOptions } from '@interfaces';
 import { useAppModel } from '@models';
-import { Select, useDialogContext } from '@components';
+import { Select, SelectProps, useDialogContext } from '@components';
 import { withOwner } from '@hocs';
+import { createSignal } from 'solid-js';
 
-export const useWineApp = withOwner((config: WineAppConfig) => {
+export const useWineApp = (config: WineAppConfig) => {
   const appModel = useAppModel();
   const appEnv = appModel.selectEnv();
-  const { createDialog } = useDialogContext();
 
   const { buildPipeline, spawnBashScript, executeBashScript, mergeEnv } =
     useShellRunner();
@@ -17,11 +17,12 @@ export const useWineApp = withOwner((config: WineAppConfig) => {
    */
   const buildAppEnv = (appName: string) => {
     const HOME = appEnv().HOME;
+    const WINE_APP_NAME = appName;
     const WINE_BASE_PATH = `${HOME}/Wine`;
     const WINE_LIBS_PATH = `${WINE_BASE_PATH}/libs`;
     const WINE_ENGINES_PATH = `${WINE_BASE_PATH}/engines`;
     const WINE_APPS_PATH = `${WINE_BASE_PATH}/apps`;
-    const WINE_APP_PATH = `${WINE_APPS_PATH}/${appName}`;
+    const WINE_APP_PATH = `${WINE_APPS_PATH}/${WINE_APP_NAME}`;
     const WINE_APP_CONTENTS_PATH = `${WINE_APP_PATH}/Contents`;
     const WINE_APP_SHARED_SUPPORT_PATH = `${WINE_APP_CONTENTS_PATH}/SharedSupport`;
     const WINE_APP_LOGS_PATH = `${WINE_APP_SHARED_SUPPORT_PATH}/Logs`;
@@ -33,6 +34,7 @@ export const useWineApp = withOwner((config: WineAppConfig) => {
 
     mergeEnv({
       HOME,
+      WINE_APP_NAME,
       WINE_BASE_PATH,
       WINE_LIBS_PATH,
       WINE_ENGINES_PATH,
@@ -131,31 +133,58 @@ export const useWineApp = withOwner((config: WineAppConfig) => {
    * Bundles the app with main executable
    */
   const bundleApp = async () => {
-    const executable = await selectExecutable();
-    return spawnBashScript('bundleApp');
+    // const executable = await selectExecutable();
+    const { cmd, child } = await spawnBashScript('bundleApp');
+    cmd.stdout.on('data', (data) => {});
+    return { cmd, child };
   };
 
   /**
    * Application executable selector.
    */
-  const selectExecutable = async () => {
+  const selectExecutable = withOwner(async () => {
+    const { createDialog, configDialog } = useDialogContext();
     const { stdout } = await executeBashScript('listAppExecutables');
     const executables =
-      stdout.split('\n').map((item) => ({ value: item, label: item })) || [];
+      stdout
+        .split('\n')
+        .map((item) => ({ value: item, label: item.split('/').pop() || '' })) ||
+      [];
 
-    console.log(1111);
-    createDialog({
-      content: () => (
-        <>
-          <Select
-            label="Executable"
-            placeholder="Select an executable"
-            options={executables}
-          />
-        </>
-      ),
+    return await new Promise<string>((resolve) => {
+      createDialog({
+        content: ({ dialogId }) => {
+          const [executablePath, setExecutablePath] = createSignal('');
+
+          const onInput: SelectProps['onInput'] = (event) => {
+            setExecutablePath(event.value);
+            configDialog(dialogId, {
+              acceptDisabled: !Boolean(executablePath()),
+            });
+          };
+
+          const onClose = () => {
+            resolve(executablePath());
+          };
+
+          configDialog(dialogId, { onClose });
+
+          return (
+            <>
+              <Select
+                label="Executable"
+                placeholder="Select an executable"
+                options={executables}
+                onInput={onInput}
+                value={executablePath()}
+              />
+            </>
+          );
+        },
+        acceptText: 'Select',
+      });
     });
-  };
+  });
 
   /**
    * Opens winecfg ui.
@@ -240,4 +269,4 @@ export const useWineApp = withOwner((config: WineAppConfig) => {
     winetricks,
     runProgram,
   };
-});
+};

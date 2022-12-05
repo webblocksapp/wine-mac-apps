@@ -14,7 +14,11 @@ import { useAppModel } from '@models';
 export const useShellRunner = (config?: CommandOptions) => {
   const appModel = useAppModel();
   const appEnv = appModel.selectEnv();
-  const env = { ...appEnv(), ...config?.env };
+  const env = {
+    SCRIPTS_PATH: process.env.bashScriptsPath,
+    ...appEnv(),
+    ...config?.env,
+  };
 
   /**
    * Adds envs to be replaced

@@ -32,7 +32,11 @@ export interface SelectProps
   options?: Array<SelectableOption>;
   placeholder?: string;
   triggers?: string[];
-  onInput?: (event: { currentTarget: HTMLLIElement; target: Element }) => void;
+  onInput?: (event: {
+    value?: any;
+    currentTarget: HTMLLIElement;
+    target: Element;
+  }) => void;
   onBlur?: (event: { currentTarget: HTMLElement }) => void;
 }
 
@@ -90,16 +94,14 @@ export const Select: Component<SelectProps> = (props) => {
    */
   const onInput: SelectProps['onInput'] = (event) => {
     //Form handler prop sets and validate the value onInput.
-    local.formHandler?.setFieldValue?.(
-      local.name,
-      mapSelectedOption(event?.currentTarget.getAttribute('data-value')),
-      {
-        htmlElement: event.currentTarget,
-        validateOn: ['input'],
-      }
-    );
+    const value = event?.currentTarget.getAttribute('data-value');
+    local.formHandler?.setFieldValue?.(local.name, mapSelectedOption(value), {
+      htmlElement: event.currentTarget,
+      validateOn: ['input'],
+    });
 
     //onInput prop is preserved
+    event.value = value;
     local?.onInput?.(event);
     detailsRef?.removeAttribute('open');
 
