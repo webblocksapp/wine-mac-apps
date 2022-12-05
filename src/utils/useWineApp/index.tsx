@@ -82,30 +82,30 @@ export const useWineApp = (config: WineAppConfig) => {
         {
           name: 'Create wine app - Job',
           steps: [
-            {
-              name: 'Creating wine app folder',
-              fn: createWineAppFolder,
-            },
-            {
-              name: 'Extracting wine engine',
-              bashScript: 'extractWineEngine',
-            },
-            {
-              name: 'Generating wine prefix',
-              bashScript: 'generateWinePrefix',
-            },
-            ...(options?.dxvkEnabled ? [dxvkStep] : []),
-            ...winetricksSteps,
-            {
-              name: 'Running setup executable',
-              bashScript: 'runProgram',
-              options: {
-                env: {
-                  EXE_PATH: options.setupExecutablePath,
-                  EXE_FLAGS: options.exeFlags,
-                },
-              },
-            },
+            // {
+            //   name: 'Creating wine app folder',
+            //   fn: createWineAppFolder,
+            // },
+            // {
+            //   name: 'Extracting wine engine',
+            //   bashScript: 'extractWineEngine',
+            // },
+            // {
+            //   name: 'Generating wine prefix',
+            //   bashScript: 'generateWinePrefix',
+            // },
+            // ...(options?.dxvkEnabled ? [dxvkStep] : []),
+            // ...winetricksSteps,
+            // {
+            //   name: 'Running setup executable',
+            //   bashScript: 'runProgram',
+            //   options: {
+            //     env: {
+            //       EXE_PATH: options.setupExecutablePath,
+            //       EXE_FLAGS: options.exeFlags,
+            //     },
+            //   },
+            // },
             {
               name: 'Bundling app',
               fn: bundleApp,
@@ -133,9 +133,9 @@ export const useWineApp = (config: WineAppConfig) => {
    * Bundles the app with main executable
    */
   const bundleApp = async () => {
-    // const executable = await selectExecutable();
+    const executable = await selectExecutable();
     const { cmd, child } = await spawnBashScript('bundleApp');
-    cmd.stdout.on('data', (data) => {});
+    child.write(`${executable}\n`);
     return { cmd, child };
   };
 
@@ -146,10 +146,10 @@ export const useWineApp = (config: WineAppConfig) => {
     const { createDialog, configDialog } = useDialogContext();
     const { stdout } = await executeBashScript('listAppExecutables');
     const executables =
-      stdout
-        .split('\n')
-        .map((item) => ({ value: item, label: item.split('/').pop() || '' })) ||
-      [];
+      stdout.split('\n').map((item) => ({
+        value: item.split('SharedSupport/prefix').pop() || '',
+        label: item.split('/').pop() || '',
+      })) || [];
 
     return await new Promise<string>((resolve) => {
       createDialog({

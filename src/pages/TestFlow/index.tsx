@@ -12,9 +12,12 @@ export const TestFlow: Component = () => {
   const shell = useShellRunner();
   const { createDialog } = useDialogContext();
 
-  const runBashScript = async (script: BashScript, options?: ScriptOptions) => {
-    const { runBashScript } = shell;
-    const { cmd } = await runBashScript(script, options);
+  const spawnBashScript = async (
+    script: BashScript,
+    options?: ScriptOptions
+  ) => {
+    const { spawnBashScript } = shell;
+    const { cmd } = await spawnBashScript(script, options);
     cmd.stdout.on('data', (data) => console.log(data));
     cmd.stderr.on('data', (data) => console.log(data));
     cmd.on('close', (data) => console.log(data));
@@ -38,8 +41,8 @@ export const TestFlow: Component = () => {
   };
 
   const callback = async () => {
-    const { runBashScript } = shell;
-    const { cmd, child } = await runBashScript('tests/pipe');
+    const { spawnBashScript } = shell;
+    const { cmd, child } = await spawnBashScript('tests/pipe');
 
     cmd.stdout.on('data', async (data) => {
       console.log(data);
@@ -55,12 +58,12 @@ export const TestFlow: Component = () => {
     {
       name: 'tests/printHelloWorld',
       script: 'printHelloWorld',
-      fn: runBashScript,
+      fn: spawnBashScript,
     },
     {
       name: 'tests/scriptWithError',
       script: 'scriptWithError',
-      fn: runBashScript,
+      fn: spawnBashScript,
     },
     {
       name: 'winetricks apps list',
@@ -129,7 +132,7 @@ export const TestFlow: Component = () => {
       name: 'winetrick',
       script: 'winetrick',
       fn: () => {
-        runBashScript('winetrick', {
+        spawnBashScript('winetrick', {
           env: {
             WINE_APP_BIN_PATH: '--force',
           },
@@ -139,7 +142,7 @@ export const TestFlow: Component = () => {
     {
       name: 'Beep Dialog',
       script: 'tests/beepDialog',
-      fn: runBashScript,
+      fn: spawnBashScript,
     },
   ];
 
