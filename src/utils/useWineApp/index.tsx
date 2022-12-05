@@ -18,12 +18,12 @@ export const useWineApp = (config: WineAppConfig) => {
   const buildAppEnv = (appName: string) => {
     const HOME = appEnv().HOME;
     const WINE_APP_NAME = appName;
-    const WINE_BASE_ABS_PATH = `${HOME}/Wine`;
-    const WINE_LIBS_ABS_PATH = `${WINE_BASE_ABS_PATH}/libs`;
-    const WINE_ENGINES_ABS_PATH = `${WINE_BASE_ABS_PATH}/engines`;
-    const WINE_APPS_ABS_PATH = `${WINE_BASE_ABS_PATH}/apps`;
-    const WINE_APP_ABS_PATH = `${WINE_APPS_ABS_PATH}/${WINE_APP_NAME}`;
-    const WINE_APP_CONTENTS_PATH = `/Contents`;
+    const WINE_BASE_PATH = `${HOME}/Wine`;
+    const WINE_LIBS_PATH = `${WINE_BASE_PATH}/libs`;
+    const WINE_ENGINES_PATH = `${WINE_BASE_PATH}/engines`;
+    const WINE_APPS_PATH = `${WINE_BASE_PATH}/apps`;
+    const WINE_APP_PATH = `${WINE_APPS_PATH}/${WINE_APP_NAME}`;
+    const WINE_APP_CONTENTS_PATH = `${WINE_APP_PATH}/Contents`;
     const WINE_APP_SHARED_SUPPORT_PATH = `${WINE_APP_CONTENTS_PATH}/SharedSupport`;
     const WINE_APP_LOGS_PATH = `${WINE_APP_SHARED_SUPPORT_PATH}/Logs`;
     const WINE_APP_ENGINE_PATH = `${WINE_APP_SHARED_SUPPORT_PATH}/wine`;
@@ -35,11 +35,11 @@ export const useWineApp = (config: WineAppConfig) => {
     mergeEnv({
       HOME,
       WINE_APP_NAME,
-      WINE_BASE_ABS_PATH,
-      WINE_LIBS_ABS_PATH,
-      WINE_ENGINES_ABS_PATH,
-      WINE_APPS_ABS_PATH,
-      WINE_APP_ABS_PATH,
+      WINE_BASE_PATH,
+      WINE_LIBS_PATH,
+      WINE_ENGINES_PATH,
+      WINE_APPS_PATH,
+      WINE_APP_PATH,
       WINE_APP_SHARED_SUPPORT_PATH,
       WINE_APP_LOGS_PATH,
       WINE_APP_ENGINE_PATH,

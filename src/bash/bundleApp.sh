@@ -1,5 +1,4 @@
 . "${SCRIPTS_PATH}cdWineApp.sh";
-
 MACOS_FOLDER="$PWD/Contents/MacOS"
 EXEC_FILE="$WINE_APP_NAME"
 read

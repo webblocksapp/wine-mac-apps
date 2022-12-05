@@ -6,11 +6,11 @@ export type Env = Partial<{
   HOME: string;
   SCRIPTS_PATH: string;
   WINE_APP_NAME: string;
-  WINE_BASE_ABS_PATH: string;
-  WINE_LIBS_ABS_PATH: string;
-  WINE_ENGINES_ABS_PATH: string;
-  WINE_APPS_ABS_PATH: string;
-  WINE_APP_ABS_PATH: any;
+  WINE_BASE_PATH: string;
+  WINE_LIBS_PATH: string;
+  WINE_ENGINES_PATH: string;
+  WINE_APPS_PATH: string;
+  WINE_APP_PATH: any;
   WINE_APP_SHARED_SUPPORT_PATH: string;
   WINE_APP_LOGS_PATH: string;
   WINE_APP_ENGINE_PATH: string;
