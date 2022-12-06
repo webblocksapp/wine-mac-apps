@@ -1,4 +1,4 @@
-import { useShellRunner } from '@utils';
+import { getRaw, useShellRunner } from '@utils';
 import { JobStep, WineAppConfig, WinetricksOptions } from '@interfaces';
 import { useAppModel } from '@models';
 import { Select, SelectProps, useDialogContext } from '@components';
@@ -133,10 +133,33 @@ export const useWineApp = (config: WineAppConfig) => {
    * Bundles the app with main executable
    */
   const bundleApp = async () => {
+    const infoPlist = await buildInfoPlist();
     const executable = await selectExecutable();
     const { cmd, child } = await spawnBashScript('bundleApp');
+    child.write(`${infoPlist}\n`);
     child.write(`${executable}\n`);
     return { cmd, child };
+  };
+
+  /**
+   * Builds info plist file
+   */
+  const buildInfoPlist = async (
+    args: {
+      CFBundleExecutable?: string;
+      CFBundleIconFile?: string;
+    } = {}
+  ) => {
+    args = {
+      CFBundleExecutable: 'winemacapp',
+      CFBundleIconFile: 'winemacapp.ics',
+      ...args,
+    };
+    let infoPlist = await getRaw('info.plist.stub');
+    for (let [key, value] of Object.entries(args)) {
+      infoPlist = infoPlist.replace(new RegExp(`{{${key}}}`, 'g'), value);
+    }
+    return infoPlist.replace(/\n/g, '');
   };
 
   /**

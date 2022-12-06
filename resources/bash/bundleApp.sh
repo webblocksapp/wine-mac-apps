@@ -1,10 +1,21 @@
-MACOS_FOLDER="$WINE_APP_PATH/Contents/MacOS"
-EXEC_FILE="$WINE_APP_NAME"
+#Creates info.plist file
+read
+INFO_PLIST="$REPLY"
+CONTENTS_PATH="$WINE_APP_PATH/Contents"
+cd $CONTENTS_PATH
+
+cat <<EOM > "Info.plist"
+$INFO_PLIST
+EOM
+
+#Creates launcher file
+MACOS_PATH="$CONTENTS_PATH/MacOS"
+EXEC_FILE="winemacapp"
 read
 EXE_PATH=$REPLY
 
-mkdir $MACOS_FOLDER
-cd $MACOS_FOLDER
+mkdir $MACOS_PATH
+cd $MACOS_PATH
 
 cat <<EOM > $EXEC_FILE
 #!/bin/sh
@@ -23,4 +34,4 @@ chmod +x $EXEC_FILE
 
 cd ../../..
 
-mv $WINE_APP_NAME "$WINE_APP_NAME.app"
+#mv $WINE_APP_NAME "$WINE_APP_NAME.app"

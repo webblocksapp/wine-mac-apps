@@ -2,6 +2,7 @@ import { Component, createEffect, createSignal, Show } from 'solid-js';
 import { useRoutes } from '@solidjs/router';
 import { routes } from '@routes';
 import { useAppModel, useWineEngineModel, useWinetrickModel } from '@models';
+import { getRaw } from '@utils';
 
 export const App: Component = () => {
   const appModel = useAppModel();

@@ -18,7 +18,7 @@ export default defineConfig(() => {
     },
     define: {
       'process.env.bashScriptsPath': JSON.stringify(
-        process.cwd() + '/src/bash/'
+        process.cwd() + '/resources/bash/'
       ),
     },
   };
