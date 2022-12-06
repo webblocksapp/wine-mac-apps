@@ -82,30 +82,30 @@ export const useWineApp = (config: WineAppConfig) => {
         {
           name: 'Create wine app - Job',
           steps: [
-            // {
-            //   name: 'Creating wine app folder',
-            //   fn: createWineAppFolder,
-            // },
-            // {
-            //   name: 'Extracting wine engine',
-            //   bashScript: 'extractWineEngine',
-            // },
-            // {
-            //   name: 'Generating wine prefix',
-            //   bashScript: 'generateWinePrefix',
-            // },
-            // ...(options?.dxvkEnabled ? [dxvkStep] : []),
-            // ...winetricksSteps,
-            // {
-            //   name: 'Running setup executable',
-            //   bashScript: 'runProgram',
-            //   options: {
-            //     env: {
-            //       EXE_PATH: options.setupExecutablePath,
-            //       EXE_FLAGS: options.exeFlags,
-            //     },
-            //   },
-            // },
+            {
+              name: 'Creating wine app folder',
+              fn: createWineAppFolder,
+            },
+            {
+              name: 'Extracting wine engine',
+              bashScript: 'extractWineEngine',
+            },
+            {
+              name: 'Generating wine prefix',
+              bashScript: 'generateWinePrefix',
+            },
+            ...(options?.dxvkEnabled ? [dxvkStep] : []),
+            ...winetricksSteps,
+            {
+              name: 'Running setup executable',
+              bashScript: 'runProgram',
+              options: {
+                env: {
+                  EXE_PATH: options.setupExecutablePath,
+                  EXE_FLAGS: options.exeFlags,
+                },
+              },
+            },
             {
               name: 'Bundling app',
               fn: bundleApp,
