@@ -1,11 +1,16 @@
 import { getRaw, useShellRunner } from '@utils';
-import { JobStep, WineAppConfig, WinetricksOptions } from '@interfaces';
+import {
+  JobStep,
+  WineApp,
+  WineAppExecutable,
+  WinetricksOptions,
+} from '@interfaces';
 import { useAppModel } from '@models';
 import { Select, SelectProps, useDialogContext } from '@components';
 import { withOwner } from '@hocs';
 import { createSignal } from 'solid-js';
 
-export const useWineApp = (config: WineAppConfig) => {
+export const useWineApp = () => {
   const appModel = useAppModel();
   const appEnv = appModel.selectEnv();
 
@@ -15,9 +20,9 @@ export const useWineApp = (config: WineAppConfig) => {
   /**
    * Initializes the env paths.
    */
-  const buildAppEnv = (appName: string) => {
+  const buildAppEnv = (config: WineApp) => {
     const HOME = appEnv().HOME;
-    const WINE_APP_NAME = appName;
+    const WINE_APP_NAME = config.name;
     const WINE_BASE_PATH = `${HOME}/Wine`;
     const WINE_LIBS_PATH = `${WINE_BASE_PATH}/libs`;
     const WINE_ENGINES_PATH = `${WINE_BASE_PATH}/engines`;
@@ -51,23 +56,16 @@ export const useWineApp = (config: WineAppConfig) => {
   };
 
   /**
-   * Initializes app env variables
-   */
-  buildAppEnv(config.name);
-
-  /**
    * Creates a copy of the wine version from the engine
    * for the app to work standalone.
    */
-  const createWineApp = (options: {
-    setupExecutablePath: string;
-    exeFlags?: string;
-    winetricks?: { verbs?: string[]; options?: WinetricksOptions };
-    dxvkEnabled?: boolean;
-  }) => {
+  const create = (config: WineApp) => {
+    //Initializes app env variables
+    buildAppEnv(config);
+
     const winetricksSteps = generateWinetricksSteps(
-      options?.winetricks?.verbs,
-      options?.winetricks?.options
+      config?.winetricks?.verbs,
+      config?.winetricks?.options
     );
 
     const dxvkStep: JobStep = {
@@ -84,7 +82,7 @@ export const useWineApp = (config: WineAppConfig) => {
           steps: [
             {
               name: 'Creating wine app folder',
-              fn: createWineAppFolder,
+              fn: () => createWineAppFolder(config),
             },
             {
               name: 'Extracting wine engine',
@@ -94,21 +92,20 @@ export const useWineApp = (config: WineAppConfig) => {
               name: 'Generating wine prefix',
               bashScript: 'generateWinePrefix',
             },
-            ...(options?.dxvkEnabled ? [dxvkStep] : []),
+            ...(config?.dxvkEnabled ? [dxvkStep] : []),
             ...winetricksSteps,
             {
               name: 'Running setup executable',
               bashScript: 'runProgram',
               options: {
                 env: {
-                  EXE_PATH: options.setupExecutablePath,
-                  EXE_FLAGS: options.exeFlags,
+                  EXE_PATH: config.setupExecutablePath,
                 },
               },
             },
             {
               name: 'Bundling app',
-              fn: bundleApp,
+              fn: () => bundleApp(config),
             },
           ],
         },
@@ -122,22 +119,27 @@ export const useWineApp = (config: WineAppConfig) => {
   /**
    * Logic for creating the wine application folder.
    */
-  const createWineAppFolder = async () => {
+  const createWineAppFolder = async (config: WineApp) => {
     const { stdout } = await executeBashScript('buildAppPath');
     const appName = stdout.split('/').pop();
-    appName && appName !== config.name && buildAppEnv(appName);
+    appName &&
+      appName !== config.name &&
+      buildAppEnv({ ...config, name: appName });
     return spawnBashScript('createWineAppFolder');
   };
 
   /**
    * Bundles the app with main executable
    */
-  const bundleApp = async () => {
+  const bundleApp = async (config: WineApp) => {
     const infoPlist = await buildInfoPlist();
     const executable = await selectExecutable();
     const { cmd, child } = await spawnBashScript('bundleApp');
+    const { addExecutable, getConfigAsString } = configFileHandler(config);
+    addExecutable(executable);
     child.write(`${infoPlist}\n`);
-    child.write(`${executable}\n`);
+    child.write(`${getConfigAsString()}\n`);
+    child.write(`${executable.path}\n`);
     return { cmd, child };
   };
 
@@ -155,11 +157,32 @@ export const useWineApp = (config: WineAppConfig) => {
       CFBundleIconFile: 'winemacapp.ics',
       ...args,
     };
+
     let infoPlist = await getRaw('info.plist.stub');
+
     for (let [key, value] of Object.entries(args)) {
       infoPlist = infoPlist.replace(new RegExp(`{{${key}}}`, 'g'), value);
     }
+
     return infoPlist.replace(/\n/g, '');
+  };
+
+  /**
+   * Builds final application config file
+   */
+  const configFileHandler = (config: WineApp) => {
+    config = JSON.parse(JSON.stringify(config));
+
+    const addExecutable = (executable: WineAppExecutable) => {
+      config.executables.push(executable);
+    };
+
+    const getConfigAsString = () => JSON.stringify(config);
+
+    return {
+      addExecutable,
+      getConfigAsString,
+    };
   };
 
   /**
@@ -174,7 +197,7 @@ export const useWineApp = (config: WineAppConfig) => {
         label: item.split('/').pop() || '',
       })) || [];
 
-    return await new Promise<string>((resolve) => {
+    return await new Promise<WineAppExecutable>((resolve) => {
       createDialog({
         content: ({ dialogId }) => {
           const [executablePath, setExecutablePath] = createSignal('');
@@ -187,7 +210,7 @@ export const useWineApp = (config: WineAppConfig) => {
           };
 
           const onClose = () => {
-            resolve(executablePath());
+            resolve({ path: executablePath(), main: true, flags: '' });
           };
 
           configDialog(dialogId, { onClose });
@@ -287,7 +310,7 @@ export const useWineApp = (config: WineAppConfig) => {
   };
 
   return {
-    createWineApp,
+    create,
     winecfg,
     winetricks,
     runProgram,

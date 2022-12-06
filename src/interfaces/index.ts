@@ -35,7 +35,7 @@ export * from './Style';
 export * from './Subscription';
 export * from './TypographyComponent';
 export * from './WineApp';
-export * from './WineAppConfig';
+export * from './WineAppExecutable';
 export * from './WineEngine';
 export * from './WineEngineState';
 export * from './Winetrick';

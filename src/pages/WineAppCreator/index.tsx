@@ -11,13 +11,13 @@ import {
   PipelineViewer,
   Box,
   Checkbox,
-  Code,
 } from '@components';
 import { useFormHandler, useWineApp } from '@utils';
 import { schema, Schema } from './schema';
 
 export const WineAppCreator: Component = () => {
   const formHandler = useFormHandler<Schema>(schema);
+  const wineApp = useWineApp();
   const { formData } = formHandler;
   const { createDialog } = useDialogContext();
 
@@ -32,18 +32,7 @@ export const WineAppCreator: Component = () => {
   };
 
   const createWineApp = async () => {
-    const { name, engine, setupExecutablePath, winetricksVerbs, dxvkEnabled } =
-      formData();
-    const { createWineApp } = useWineApp({
-      name,
-      engine,
-    });
-
-    const { currentWorkflow } = createWineApp({
-      setupExecutablePath,
-      winetricks: { verbs: winetricksVerbs },
-      dxvkEnabled,
-    });
+    const { currentWorkflow } = wineApp.create(formData());
 
     createDialog({
       content: ({ dialogId }) => (
@@ -86,7 +75,7 @@ export const WineAppCreator: Component = () => {
                 name="useWinetricks"
                 display="switch"
                 formHandler={formHandler}
-                triggers={['winetricksVerbs']}
+                triggers={['winetricks']}
               />
             </Grid>
             <Grid item xs={12} md={6}>
@@ -101,7 +90,7 @@ export const WineAppCreator: Component = () => {
             <Show when={formData().useWinetricks}>
               <Grid item xs={12}>
                 <WinetricksSelector
-                  name="winetricksVerbs"
+                  name="winetricks.verbs"
                   formHandler={formHandler}
                 />
               </Grid>

@@ -3,6 +3,15 @@ import { WineApp, SchemaOf } from '@interfaces';
 
 export type Schema = WineApp & { useWinetricks: boolean };
 
+const winetricksSchema = (opts: { minVerbs: number }) =>
+  yup.object({
+    verbs: yup.array(yup.string().required()).min(opts.minVerbs),
+    options: yup.object({
+      unattended: yup.boolean().default(true),
+      force: yup.boolean().default(true),
+    }),
+  });
+
 export const schema: SchemaOf<Schema> = yup.object({
   id: yup.mixed().optional(),
   name: yup.string().required(),
@@ -16,7 +25,17 @@ export const schema: SchemaOf<Schema> = yup.object({
   setupExecutablePath: yup.string().required(),
   useWinetricks: yup.boolean().required(),
   dxvkEnabled: yup.boolean().required(),
-  winetricksVerbs: yup
-    .array(yup.mixed())
-    .when('useWinetricks', { is: true, then: yup.array(yup.mixed()).min(1) }),
+  winetricks: winetricksSchema({ minVerbs: 0 }).when('useWinetricks', {
+    is: true,
+    then: winetricksSchema({ minVerbs: 1 }),
+  }),
+  executables: yup
+    .array(
+      yup.object({
+        path: yup.string().required(),
+        main: yup.boolean().required(),
+        flags: yup.string().optional(),
+      })
+    )
+    .default([]),
 });

@@ -8,6 +8,13 @@ cat <<EOM > "Info.plist"
 $INFO_PLIST
 EOM
 
+#Creates config.json file
+read
+CONFIG_JSON="$REPLY"
+cat <<EOM > "config.json"
+$CONFIG_JSON
+EOM
+
 #Creates launcher file
 MACOS_PATH="$CONTENTS_PATH/MacOS"
 EXEC_FILE="winemacapp"
