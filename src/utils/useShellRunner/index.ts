@@ -15,7 +15,6 @@ export const useShellRunner = (config?: CommandOptions) => {
   const appModel = useAppModel();
   const appEnv = appModel.selectEnv();
   const env = {
-    SCRIPTS_PATH: process.env.bashScriptsPath,
     ...appEnv(),
     ...config?.env,
   };
@@ -203,7 +202,7 @@ export const useShellRunner = (config?: CommandOptions) => {
     const envVarsCmd = buildEnvVarsCmd();
     return new Command('run-script', [
       '-c',
-      `${envVarsCmd} sh ${process.env.bashScriptsPath}${fileName}.sh`,
+      `${envVarsCmd} sh ${appEnv().BASH_SCRIPTS_PATH}/${fileName}.sh`,
     ]);
   };
 

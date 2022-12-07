@@ -2,7 +2,7 @@ import { createStore } from 'solid-js/store';
 import { AppState } from '@interfaces';
 
 const [store, setStore] = createStore<AppState>({
-  env: { HOME: '', BASH_SCRIPTS_PATH: process.env.bashScriptsPath || '' },
+  env: { HOME: '', BASH_SCRIPTS_PATH: '', STUBS_PATH: '' },
   initializingEnv: false,
 });
 

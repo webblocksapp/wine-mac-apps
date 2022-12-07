@@ -41,4 +41,4 @@ chmod +x $EXEC_FILE
 
 cd ../../..
 
-#mv $WINE_APP_NAME "$WINE_APP_NAME.app"
+mv $WINE_APP_NAME "$WINE_APP_NAME.app"

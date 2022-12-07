@@ -3,15 +3,27 @@
     windows_subsystem = "windows"
 )]
 
-// Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
-#[tauri::command]
-fn greet(name: &str) -> String {
-    format!("Hello, {}! You've been greeted from Rust!", name)
+use tauri::Manager;
+use std::env;
+
+// the payload type must implement `Serialize` and `Clone`.
+#[derive(Clone, serde::Serialize)]
+struct Payload {
+  message: String,
 }
 
 fn main() {
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![greet])
+        .setup(|app| {
+            let _app = app.handle();            
+            app.listen_global("app-mounted", move |_| {                                                
+                for argument in env::args() {
+                    println!("{argument}");
+                }
+                _app.emit_all("event-name", Payload { message: "Tauri is awesome!".into() }).unwrap();
+            });          
+            Ok(())
+        })        
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

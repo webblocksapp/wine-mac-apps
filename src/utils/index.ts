@@ -1,6 +1,5 @@
 export * from './capitalize';
 export * from './debounce';
-export * from './getRaw';
 export * from './parseSize';
 export * from './pxToRem';
 export * from './strReplacer';

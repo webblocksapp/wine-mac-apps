@@ -1,4 +1,4 @@
-import { getRaw, useShellRunner } from '@utils';
+import { useShellRunner } from '@utils';
 import {
   JobStep,
   WineApp,
@@ -9,6 +9,7 @@ import { useAppModel } from '@models';
 import { Select, SelectProps, useDialogContext } from '@components';
 import { withOwner } from '@hocs';
 import { createSignal } from 'solid-js';
+import { readTextFile } from '@tauri-apps/api/fs';
 
 export const useWineApp = () => {
   const appModel = useAppModel();
@@ -158,7 +159,9 @@ export const useWineApp = () => {
       ...args,
     };
 
-    let infoPlist = await getRaw('info.plist.stub');
+    let infoPlist = await readTextFile(
+      `${appEnv().STUBS_PATH}/info.plist.stub`
+    );
 
     for (let [key, value] of Object.entries(args)) {
       infoPlist = infoPlist.replace(new RegExp(`{{${key}}}`, 'g'), value);

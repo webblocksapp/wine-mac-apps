@@ -1,5 +1,5 @@
 import { useAppState } from '@states';
-import { homeDir } from '@tauri-apps/api/path';
+import { homeDir, resolveResource } from '@tauri-apps/api/path';
 
 export const useAppModel = () => {
   const appState = useAppState();
@@ -7,7 +7,11 @@ export const useAppModel = () => {
   const initEnv = async () => {
     try {
       appState.initializingEnv(true);
-      appState.initEnv({ HOME: (await homeDir()).replace(/\/$/, '') });
+      appState.initEnv({
+        HOME: (await homeDir()).replace(/\/$/, ''),
+        BASH_SCRIPTS_PATH: await resolveResource('bash'),
+        STUBS_PATH: await resolveResource('stubs'),
+      });
     } finally {
       appState.initializingEnv(false);
     }

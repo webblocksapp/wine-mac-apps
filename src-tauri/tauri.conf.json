@@ -7,13 +7,14 @@
     "withGlobalTauri": false
   },
   "package": {
-    "productName": "wine-mac-apps",
+    "productName": "WineMacApps",
     "version": "0.0.0"
   },
   "tauri": {
     "allowlist": {
       "fs": {
-        "all": true
+        "all": true,
+        "scope": ["$RESOURCE/bash/*", "$RESOURCE/stubs/*"]
       },
       "dialog": {
         "all": true
@@ -47,7 +48,7 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "identifier": "com.tauri.dev",
+      "identifier": "com.wine-mac-apps.prod",
       "longDescription": "",
       "macOS": {
         "entitlements": null,
@@ -56,7 +57,7 @@
         "providerShortName": null,
         "signingIdentity": null
       },
-      "resources": [],
+      "resources": ["bash/*", "stubs/*"],
       "shortDescription": "",
       "targets": "all",
       "windows": {
@@ -64,6 +65,17 @@
         "digestAlgorithm": "sha256",
         "timestampUrl": ""
       }
+    },
+    "cli": {
+      "args": [
+        {
+          "name": "type",
+          "short": "t",
+          "takesValue": true,
+          "multiple": true,
+          "possibleValues": ["foo", "bar"]
+        }
+      ]
     },
     "security": {
       "csp": null
@@ -76,7 +88,7 @@
         "fullscreen": false,
         "height": 800,
         "resizable": true,
-        "title": "wine-mac-apps",
+        "title": "WineMacApps",
         "width": 1280
       }
     ]
