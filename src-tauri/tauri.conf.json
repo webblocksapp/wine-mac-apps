@@ -31,6 +31,9 @@
             "args": [{ "validator": "-c" }, { "validator": "(.*?)" }]
           }
         ]
+      },
+      "window": {
+        "all": true
       }
     },
     "bundle": {
@@ -69,7 +72,7 @@
     "cli": {
       "args": [
         {
-          "name": "type",
+          "name": "testx",
           "short": "t",
           "takesValue": true,
           "multiple": true,
@@ -83,14 +86,6 @@
     "updater": {
       "active": false
     },
-    "windows": [
-      {
-        "fullscreen": false,
-        "height": 800,
-        "resizable": true,
-        "title": "WineMacApps",
-        "width": 1280
-      }
-    ]
+    "windows": []
   }
 }
