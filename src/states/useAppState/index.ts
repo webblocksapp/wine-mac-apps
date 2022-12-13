@@ -4,10 +4,21 @@ import { AppState } from '@interfaces';
 const [store, setStore] = createStore<AppState>({
   env: { HOME: '', BASH_SCRIPTS_PATH: '', STUBS_PATH: '' },
   initializingEnv: false,
+  cmdArgs: {
+    config: {
+      engine: { url: '', version: '' },
+      dxvkEnabled: false,
+      executables: [],
+      name: '',
+      setupExecutablePath: '',
+      winetricks: { options: {}, verbs: [] },
+    },
+    url: '/',
+  },
 });
 
 export const useAppState = () => {
-  const initEnv = (env: typeof store.env) => {
+  const initEnv = (env: AppState['env']) => {
     setStore('env', env);
   };
 
@@ -15,5 +26,9 @@ export const useAppState = () => {
     setStore('initializingEnv', flag);
   };
 
-  return { initEnv, initializingEnv, store };
+  const setCmdArgs = (cmdArgs: AppState['cmdArgs']) => {
+    setStore('cmdArgs', cmdArgs);
+  };
+
+  return { initEnv, initializingEnv, setCmdArgs, store };
 };

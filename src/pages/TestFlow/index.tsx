@@ -7,10 +7,13 @@ import {
   ScriptOptions,
   Workflow,
 } from '@interfaces';
+import { useAppModel } from '@models';
 
 export const TestFlow: Component = () => {
   const shell = useShellRunner();
   const { createDialog } = useDialogContext();
+  const appModel = useAppModel();
+  const cmdArgs = appModel.selectCmdArgs();
 
   const spawnBashScript = async (
     script: BashScript,
@@ -164,6 +167,11 @@ export const TestFlow: Component = () => {
       </For>
       <Grid item>
         <Button onClick={callback}>Callback</Button>
+      </Grid>
+      <Grid item>
+        <pre>
+          <code>{JSON.stringify(cmdArgs(), null, 2)}</code>
+        </pre>
       </Grid>
     </Grid>
   );

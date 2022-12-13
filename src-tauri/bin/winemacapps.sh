@@ -2,6 +2,7 @@
 
 # Set default values for the arguments
 config="{}"
+url="/"
 
 winemacapps() {
   # Parse the command line arguments
@@ -14,6 +15,11 @@ winemacapps() {
         shift
         shift
         ;;
+      --url)
+        url=$2
+        shift
+        shift
+        ;;
       *)
         echo "Unknown option: $key"
         exit 1
@@ -21,7 +27,7 @@ winemacapps() {
     esac
   done
 
-  echo -e "{\n\t\"config\": $config\n}"
+  echo -e "{\n\t\"config\": $config,\n\t\"url\":\"$url\"\n\t}"
 }
 
 winemacapps "$@"

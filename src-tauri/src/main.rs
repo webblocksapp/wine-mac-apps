@@ -2,13 +2,13 @@
 
 use std::process::{ Command, Stdio };
 use std::io::{ BufRead, BufReader };
-use serde_json::{ from_str };
+use serde_json;
 use serde::Deserialize;
-use tauri::Manager;
+use tauri::{ Manager, WindowEvent };
 
 #[derive(Clone, serde::Serialize)]
 struct Payload {
-  message: String,
+  data: String,
 }
 
 #[derive(Deserialize, Debug)]
@@ -19,6 +19,7 @@ struct Config {
 #[derive(Deserialize, Debug)]
 struct CmdArgs {
   config: Config,
+  url: String,
 }
 
 fn main() {
@@ -50,21 +51,41 @@ fn main() {
             let stdout = String::from_utf8(output.stdout).unwrap();
             let stderr = String::from_utf8(output.stderr).unwrap();
             let mut window_id: String = "".to_string();
+            let mut window_url: String = "".to_string();
+            let mut cmd_args: String = "".to_string();
 
             if stderr != "" {
               println!("{stderr}");
             } else {
-              let json: CmdArgs = from_str(stdout.as_str()).unwrap();
+              let stodout_str = stdout.as_str();
+              let json: CmdArgs = serde_json::from_str(stodout_str).unwrap();
               window_id = json.config.id;
+              window_url = json.url;
+              cmd_args = stodout_str.to_string();
             }
 
-            let window = &handle.get_window(window_id.as_str());
+            let window = handle.get_window(window_id.as_str());
             if let None = window {
               tauri::WindowBuilder
-                ::new(&handle, window_id, tauri::WindowUrl::App("/".into()))
+                ::new(&handle, &window_id, tauri::WindowUrl::App(window_url.into()))
                 .build()
                 .unwrap();
             }
+
+            let window = handle.get_window(window_id.as_str()).unwrap();
+            let mut window_ = window.clone();
+            let window_id = window.listen("mounted", move |_| {
+              println!("App Mounted");
+              window_.emit("cmd-args", Payload { data: cmd_args.to_string().into() }).unwrap();
+            });
+
+            window_ = window.clone();
+            window.on_window_event(move |event| {
+              if let WindowEvent::Destroyed = event {
+                println!("Window destroyed");
+                window_.unlisten(window_id);
+              }
+            })
           });
       });
       Ok(())
