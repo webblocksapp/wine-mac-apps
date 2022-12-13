@@ -20,6 +20,7 @@ import {
   withSpacing,
 } from '@hocs';
 import { withPosition } from 'src/hocs/withPosition';
+import { withClass } from 'src/hocs/withClass';
 
 export interface BaseBoxProps
   extends Omit<JSX.HTMLAttributes<HTMLDivElement>, 'style' | 'classList'> {}
@@ -42,9 +43,11 @@ export const Box: Component<BoxProps> = withPosition(
         withDisplay(
           withGrid(
             withFlex(
-              withSpacing((props: BaseBoxProps) => (
-                <div {...props}>{props.children}</div>
-              ))
+              withSpacing(
+                withClass((props: BaseBoxProps) => {
+                  return <div {...props}>{props.children}</div>;
+                })
+              )
             )
           )
         )

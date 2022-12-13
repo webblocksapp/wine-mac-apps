@@ -21,7 +21,7 @@ details.accordion[open] {
   color: inherit;
 }
 
-.accordion.disabled summary::after {
+.accordion.disabled summary::after,
+.accordion.not-expandable summary::after {
   background-image: none;
-  animation: spinner 0.75s linear infinite;
 }

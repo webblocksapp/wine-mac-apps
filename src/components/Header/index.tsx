@@ -1,5 +1,5 @@
 import { Component, JSXElement } from 'solid-js';
-import { Box, List, ListItem, Typography } from '@components';
+import { Box, Typography } from '@components';
 
 export interface HeaderProps {
   headerText?: string;
@@ -9,6 +9,7 @@ export interface HeaderProps {
 export const Header: Component = () => {
   return (
     <Box
+      class="header"
       display="flex"
       justifyContent="space-between"
       alignItems="center"

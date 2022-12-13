@@ -33,6 +33,7 @@ input:not([type='checkbox'], [type='radio'], [type='range']) {
 
 :root {
   --invalid-color: #b71c1c;
+  --header-height: 70px;
 }
 
 h1,

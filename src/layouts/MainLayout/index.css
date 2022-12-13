@@ -1,0 +1,15 @@
+.header {
+  position: sticky;
+  top: 0;
+  height: var(--header-height);
+  z-index: 1020;
+  background-color: var(--background-color);
+}
+
+.sidebar {
+  position: sticky;
+  top: var(--header-height);
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: calc(100vh - var(--header-height));
+}

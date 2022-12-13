@@ -1,7 +1,3 @@
-.tree-menu li {
-  padding: 1rem 0;
-}
-
 .tree-menu ul > li {
   padding: 0.2rem 0;
 }
@@ -9,6 +5,15 @@
 .tree-menu li > details > summary {
   padding: 1rem 0px;
   margin-bottom: 0;
+}
+
+.tree-menu summary > a {
+  text-decoration: none;
+  color: var(--muted-color);
+}
+
+.tree-menu summary > a.active {
+  color: var(--color);
 }
 
 .tree-menu li ul details {

@@ -5,6 +5,7 @@ export interface AccordionProps
   extends JSX.DetailsHtmlAttributes<HTMLDetailsElement> {
   text: JSXElement | string;
   disabled?: boolean;
+  expandable?: boolean;
 }
 
 export const Accordion: Component<AccordionProps> = (props) => {
@@ -14,10 +15,11 @@ export const Accordion: Component<AccordionProps> = (props) => {
     'classList',
     'disabled',
     'onClick',
+    'expandable',
   ]);
 
   const onClick: AccordionProps['onClick'] = (event) => {
-    if (props.disabled) {
+    if (props.disabled || props.expandable === false) {
       event.preventDefault();
       return;
     }
@@ -36,6 +38,7 @@ export const Accordion: Component<AccordionProps> = (props) => {
         ...local.classList,
         accordion: true,
         disabled: local.disabled,
+        'not-expandable': local.expandable === false,
       }}
       onClick={onClick}
     >

@@ -1,6 +1,6 @@
-import { Component, For, Match, Show, Switch } from 'solid-js';
+import { Component, For, Show } from 'solid-js';
 import { MenuItem } from '@interfaces';
-import { NavLink } from '@solidjs/router';
+import { NavLink, useNavigate } from '@solidjs/router';
 import { Accordion, List, ListItem } from '@components';
 import './index.css';
 
@@ -9,6 +9,12 @@ export interface TreeMenuProps {
 }
 
 export const TreeMenu: Component<TreeMenuProps> = (props) => {
+  const navigate = useNavigate();
+
+  const onClick = (route: string) => {
+    navigate(route);
+  };
+
   return (
     <List classList={{ 'tree-menu': true }}>
       <For each={props.menu}>
@@ -18,6 +24,7 @@ export const TreeMenu: Component<TreeMenuProps> = (props) => {
               text={
                 <Show fallback={item.text} when={item.route}>
                   <NavLink
+                    onClick={[onClick, item.route]}
                     href={item.route || ''}
                     target={item.external ? 'blank' : undefined}
                   >
@@ -25,6 +32,7 @@ export const TreeMenu: Component<TreeMenuProps> = (props) => {
                   </NavLink>
                 </Show>
               }
+              expandable={Boolean(item.children?.length)}
             >
               <TreeMenu menu={item.children} />
             </Accordion>
