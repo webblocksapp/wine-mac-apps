@@ -6,8 +6,7 @@ import {
   WinetricksOptions,
 } from '@interfaces';
 import { useAppModel } from '@models';
-import { Select, SelectProps, useDialogContext } from '@components';
-import { withOwner } from '@hocs';
+import { Select, SelectProps, useDialogContext, withOwner } from '@shared';
 import { createSignal } from 'solid-js';
 import { readTextFile } from '@tauri-apps/api/fs';
 

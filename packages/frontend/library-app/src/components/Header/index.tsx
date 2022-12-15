@@ -1,5 +1,5 @@
 import { Component, JSXElement } from 'solid-js';
-import { Box, Typography } from '@components';
+import { Box, Typography } from '@shared';
 
 export interface HeaderProps {
   headerText?: string;

@@ -1,5 +1,5 @@
-import { Box, BoxProps } from '@components';
-import { Component, splitProps } from 'solid-js';
+import { Box, BoxProps } from '@shared';
+import { Component } from 'solid-js';
 
 export interface SidebarProps extends BoxProps {}
 

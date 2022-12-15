@@ -1,5 +1,8 @@
 {
   "compilerOptions": {
+    "baseUrl": "./",
+    "declaration": true,
+    "emitDeclarationOnly": true,
     "strict": true,
     "outDir": "dist",
     "removeComments": false,
@@ -10,6 +13,18 @@
     "esModuleInterop": true,
     "jsx": "preserve",
     "jsxImportSource": "solid-js",
-    "isolatedModules": true
+    "isolatedModules": true,
+    "paths": {
+      "@components": ["src/components"],
+      "@constants": ["src/constants"],
+      "@hocs": ["src/hocs"],
+      "@imgs/*": ["src/public/imgs/*"],
+      "@interfaces": ["src/interfaces"],
+      "@utils": ["src/utils"]
+    },
+    "types": ["node"]
+  },
+  "tsc-alias": {
+    "verbose": true
   }
 }

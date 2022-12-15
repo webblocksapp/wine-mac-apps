@@ -14,9 +14,10 @@ import {
   CheckboxesProps,
   Grid,
   TextInput,
-} from '@components';
+  capitalize,
+  debounce,
+} from '@shared';
 import { useWinetrickModel } from '@models';
-import { capitalize, debounce } from '@utils';
 import { createStore } from 'solid-js/store';
 import { WinetrickType } from '@interfaces';
 

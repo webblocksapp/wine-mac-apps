@@ -2,13 +2,19 @@ import { defineConfig } from 'tsup';
 
 export default defineConfig({
   entry: ['src/**'],
-  format: ['cjs', 'esm'],
+  format: ['esm'],
   clean: true,
   bundle: false,
   dts: true,
-  outExtension({ format }) {
+  outExtension() {
     return {
-      js: format === 'esm' ? '.jsx' : `.${format}x`,
+      js: '.jsx',
     };
+  },
+  esbuildOptions(options) {
+    options.assetNames = 'public/[name]';
+  },
+  loader: {
+    '.svg': 'file',
   },
 });

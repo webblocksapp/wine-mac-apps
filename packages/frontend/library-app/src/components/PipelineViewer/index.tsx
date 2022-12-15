@@ -1,6 +1,8 @@
-import { Id, Workflow } from '@interfaces';
+import { Workflow } from '@interfaces';
 import {
+  Id,
   Accordion,
+  capitalize,
   Box,
   Card,
   Code,
@@ -8,9 +10,8 @@ import {
   ProcessStatusIcon,
   Typography,
   useDialogContext,
-} from '@components';
+} from '@shared';
 import { Component, createEffect, For } from 'solid-js';
-import { capitalize } from '@utils';
 
 export interface PipelineViewerProps {
   id?: Id;

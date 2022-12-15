@@ -16,9 +16,9 @@ export interface BaseGridProps extends CssProps {
   xl?: ColSize;
   xxl?: ColSize;
 }
-export interface GridProps extends BaseGridProps, DisplayProps {}
+export interface IGridProps extends BaseGridProps, DisplayProps {}
 
-export const Grid: Component<GridProps> = withDisplay(
+export const Grid: Component<IGridProps> = withDisplay(
   (props: BaseGridProps) => (
     <div
       classList={{

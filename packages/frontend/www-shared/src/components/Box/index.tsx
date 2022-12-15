@@ -18,9 +18,9 @@ import {
   withShadow,
   withSizing,
   withSpacing,
+  withPosition,
+  withClass,
 } from '@hocs';
-import { withPosition } from 'src/hocs/withPosition';
-import { withClass } from 'src/hocs/withClass';
 
 export interface BaseBoxProps
   extends Omit<JSX.HTMLAttributes<HTMLDivElement>, 'style' | 'classList'> {}

@@ -1,4 +1,4 @@
-import { Component, JSX, mergeProps, splitProps } from 'solid-js';
+import { Component, JSX, splitProps } from 'solid-js';
 
 export interface ListProps extends JSX.OlHTMLAttributes<HTMLUListElement> {
   bullet?: boolean;

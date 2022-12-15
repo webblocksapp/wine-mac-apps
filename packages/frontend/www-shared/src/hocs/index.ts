@@ -1,4 +1,5 @@
 export * from './withBorder';
+export * from './withClass';
 export * from './withDisplay';
 export * from './withFlex';
 export * from './withGrid';

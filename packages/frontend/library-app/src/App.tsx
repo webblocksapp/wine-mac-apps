@@ -32,5 +32,5 @@ export const App: Component = () => {
 
   appSetup();
 
-  return <Show when={!loading()}>{<Accordion text="XXXX" />}</Show>;
+  return <Show when={!loading()}>{<Accordion text="XXX" />}</Show>;
 };

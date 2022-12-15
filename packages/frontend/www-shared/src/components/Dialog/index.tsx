@@ -15,7 +15,10 @@ import {
 import './index.css';
 
 export interface DialogProps
-  extends JSX.DialogHtmlAttributes<HTMLDialogElement> {
+  extends Omit<
+    JSX.DialogHtmlAttributes<HTMLDialogElement>,
+    'onClose' | 'onCancel'
+  > {
   maxWidth?: DeviceSize;
   style?: JSX.CSSProperties;
   hideClose?: boolean;
