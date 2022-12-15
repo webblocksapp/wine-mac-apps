@@ -4,6 +4,7 @@ import { routes } from '@routes';
 import { useAppModel, useWineEngineModel, useWinetrickModel } from '@models';
 import { appWindow } from '@tauri-apps/api/window';
 import { CmdArgs, EventPayload } from '@interfaces';
+import { Accordion } from '@shared';
 
 export const App: Component = () => {
   const appModel = useAppModel();
@@ -31,5 +32,5 @@ export const App: Component = () => {
 
   appSetup();
 
-  return <Show when={!loading()}>{useRoutes(routes)}</Show>;
+  return <Show when={!loading()}>{<Accordion text="XXXX" />}</Show>;
 };

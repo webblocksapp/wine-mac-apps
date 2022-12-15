@@ -1,0 +1,32 @@
+{
+  "name": "www-shared",
+  "description": "",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "main": "index.cjsx",
+  "module": "index.jsx",
+  "types": "index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./index.jsx",
+      "require": "./index.cjsx"
+    }
+  },
+  "scripts": {
+    "build": "tsup && tsc-alias && yarn copy",
+    "copy": "cp package.json dist && cp README.md dist",
+    "link-lib": "yarn build && cd dist && yarn link",
+    "unlink-lib": "cd dist && yarn unlink"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "solid-js": "^1.6.5",
+    "tsc-alias": "^1.6.11",
+    "tsup": "^6.5.0",
+    "typescript": "^4.6.4",
+    "yup": "^0.32.11"
+  }
+}

@@ -1,0 +1,27 @@
+details.accordion {
+  padding: 0;
+}
+
+details.accordion > summary {
+  padding-bottom: 1rem;
+  margin-bottom: 0rem !important;
+  display: flex;
+  justify-content: space-between;
+}
+
+details.accordion[open] {
+  padding-bottom: 1rem;
+}
+
+.accordion.disabled summary {
+  cursor: default;
+}
+
+.accordion.disabled summary:focus {
+  color: inherit;
+}
+
+.accordion.disabled summary::after,
+.accordion.not-expandable summary::after {
+  background-image: none;
+}
