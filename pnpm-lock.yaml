@@ -3,7 +3,10 @@ lockfileVersion: 5.4
 importers:
 
   .:
-    specifiers: {}
+    specifiers:
+      args-parser: ^1.3.0
+    devDependencies:
+      args-parser: 1.3.0
 
   apps/library-app:
     specifiers:
@@ -2311,6 +2314,10 @@ packages:
     resolution: {integrity: sha512-o5Roy6tNG4SL/FOkCAN6RzjiakZS25RLYFrcMttJqbdd8BWrnA+fGz57iN5Pb06pvBGvl5gQ0B48dJlslXvoTg==}
     dependencies:
       sprintf-js: 1.0.3
+    dev: true
+
+  /args-parser/1.3.0:
+    resolution: {integrity: sha512-If3Zi4BSjlQIJ9fgAhSiKi0oJtgMzSqh0H4wvl7XSeO16FKx7QqaHld8lZeEajPX7y1C5qKKeNgyrfyvmjmjUQ==}
     dev: true
 
   /array-union/2.1.0:

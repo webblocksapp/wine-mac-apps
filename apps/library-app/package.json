@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "vite build",
     "serve": "vite preview",
-    "tauri": "tauri"
+    "tauri": "tauri",
+    "app-build": "tauri build && node ../../scripts/fixAppResources.mjs"
   },
   "license": "MIT",
   "devDependencies": {
