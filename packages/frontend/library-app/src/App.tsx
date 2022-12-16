@@ -1,10 +1,9 @@
-import { Component, createEffect, createSignal, onMount, Show } from 'solid-js';
+import { Component, createEffect, createSignal, Show } from 'solid-js';
 import { useRoutes } from '@solidjs/router';
 import { routes } from '@routes';
 import { useAppModel, useWineEngineModel, useWinetrickModel } from '@models';
 import { appWindow } from '@tauri-apps/api/window';
 import { CmdArgs, EventPayload } from '@interfaces';
-import { ProcessStatusIcon } from '@shared';
 
 export const App: Component = () => {
   const appModel = useAppModel();
@@ -32,5 +31,5 @@ export const App: Component = () => {
 
   appSetup();
 
-  return <Show when={!loading()}>{<ProcessStatusIcon />}</Show>;
+  return <Show when={!loading()}>{useRoutes(routes)}</Show>;
 };

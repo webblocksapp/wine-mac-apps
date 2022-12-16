@@ -1,5 +1,5 @@
-import { yup } from '@utils';
-import { WineApp, SchemaOf } from '@interfaces';
+import { yup, SchemaOf } from '@shared';
+import { WineApp } from '@interfaces';
 
 export type Schema = WineApp & { useWinetricks: boolean };
 

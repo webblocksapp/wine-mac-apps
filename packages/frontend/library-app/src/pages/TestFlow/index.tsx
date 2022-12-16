@@ -1,5 +1,6 @@
 import { Component, For } from 'solid-js';
-import { Button, Grid, PipelineViewer, useDialogContext } from '@components';
+import { Button, Grid, useDialogContext } from '@shared';
+import { PipelineViewer } from '@components';
 import { useShellRunner } from '@utils';
 import {
   BashScript,

@@ -2,11 +2,11 @@ import { Component, JSXElement } from 'solid-js';
 import { Box, Typography } from '@shared';
 
 export interface HeaderProps {
-  headerText?: string;
+  primaryText?: string;
   logo?: JSXElement;
 }
 
-export const Header: Component = () => {
+export const Header: Component<HeaderProps> = (props) => {
   return (
     <Box
       class="header"
@@ -18,7 +18,7 @@ export const Header: Component = () => {
     >
       <Box display="flex" alignItems="center">
         <Box></Box>
-        <Typography component="h6">Wine Mac Apps</Typography>
+        <Typography component="h6">{props.primaryText}</Typography>
       </Box>
     </Box>
   );

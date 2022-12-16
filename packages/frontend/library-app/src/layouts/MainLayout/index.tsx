@@ -1,4 +1,5 @@
-import { Box, Header, Sidebar, TreeMenu } from '@components';
+import { Box, TreeMenu } from '@shared';
+import { Header, Sidebar } from '@components';
 import { Outlet } from '@solidjs/router';
 import { Component } from 'solid-js';
 import './index.css';
@@ -6,7 +7,7 @@ import './index.css';
 export const MainLayout: Component = () => {
   return (
     <Box display="grid" gridTemplateRows="auto 1fr" fullHeight>
-      <Header />
+      <Header primaryText="Wine Mac Apps" />
       <Box display="grid" gridTemplateColumns="300px 1fr">
         <Sidebar pr={4}>
           <TreeMenu

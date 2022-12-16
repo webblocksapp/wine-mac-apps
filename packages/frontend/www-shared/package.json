@@ -31,7 +31,6 @@
     "solid-form-handler": "^1.0.0-alpha.5",
     "solid-js": "^1.6.5",
     "tsc-alias": "^1.8.2",
-    "tsup": "^6.5.0",
     "typescript": "^4.6.4",
     "yup": "^0.32.11"
   }

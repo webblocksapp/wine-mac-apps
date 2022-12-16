@@ -3,16 +3,19 @@ import {
   Grid,
   Typography,
   TextInput,
+  useDialogContext,
+  Button,
+  Box,
+  Checkbox,
+  useFormHandler,
+} from '@shared';
+import {
   FilePathInput,
   WinetricksSelector,
   WineEngineSelector,
-  useDialogContext,
-  Button,
   PipelineViewer,
-  Box,
-  Checkbox,
 } from '@components';
-import { useFormHandler, useWineApp } from '@utils';
+import { useWineApp } from '@utils';
 import { schema, Schema } from './schema';
 
 export const WineAppCreator: Component = () => {
