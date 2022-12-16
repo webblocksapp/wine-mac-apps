@@ -15,12 +15,12 @@
     "jsxImportSource": "solid-js",
     "isolatedModules": true,
     "paths": {
-      "@components": ["src/components"],
-      "@constants": ["src/constants"],
-      "@hocs": ["src/hocs"],
-      "@imgs/*": ["src/public/imgs/*"],
-      "@interfaces": ["src/interfaces"],
-      "@utils": ["src/utils"]
+      "@components": ["./src/components"],
+      "@constants": ["./src/constants"],
+      "@hocs": ["./src/hocs"],
+      "@imgs": ["./src/assets/imgs"],
+      "@interfaces": ["./src/interfaces"],
+      "@utils": ["./src/utils"]
     },
     "types": ["node"]
   },

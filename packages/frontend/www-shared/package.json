@@ -13,7 +13,8 @@
     }
   },
   "scripts": {
-    "build": "node esbuild.config.js && tsc-alias && cp package.json README.md dist",
+    "build": "node esbuild.config.js && yarn resolve-aliases && cp package.json README.md dist",
+    "resolve-aliases": "tsc-alias && tsc-alias -r ./scripts/imgsAliasReplacer.cjs",
     "copy": "cp package.json README.md dist",
     "link-lib": "yarn build && cd dist && yarn link",
     "unlink-lib": "cd dist && yarn unlink"
