@@ -7,8 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "serve": "vite preview",
-    "tauri": "tauri",
-    "link-www-shared": "yarn link www-shared"
+    "tauri": "tauri"
   },
   "license": "MIT",
   "devDependencies": {
@@ -39,6 +38,7 @@
     "bootstrap": "^5.2.2",
     "solid-form-handler": "^1.0.0-alpha.5",
     "solid-js": "^1.6.2",
+    "www-shared": "workspace:*",
     "yup": "^0.32.11"
   }
 }

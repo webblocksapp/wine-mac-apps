@@ -4,7 +4,15 @@ import viteTsConfigPaths from 'vite-tsconfig-paths';
 
 export default defineConfig(() => {
   return {
-    plugins: [solidPlugin(), viteTsConfigPaths()],
+    plugins: [
+      solidPlugin(),
+      viteTsConfigPaths({
+        projects: [
+          './tsconfig.json',
+          '../../packages/www-shared/tsconfig.json',
+        ],
+      }),
+    ],
     clearScreen: false,
     server: {
       port: 1420,
