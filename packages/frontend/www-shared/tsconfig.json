@@ -18,7 +18,7 @@
       "@components": ["./src/components"],
       "@constants": ["./src/constants"],
       "@hocs": ["./src/hocs"],
-      "@imgs": ["./src/assets/imgs"],
+      "@imgs": ["./public/imgs"],
       "@interfaces": ["./src/interfaces"],
       "@utils": ["./src/utils"]
     },

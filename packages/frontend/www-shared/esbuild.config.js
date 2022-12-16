@@ -2,6 +2,7 @@ import { dtsPlugin } from 'esbuild-plugin-d.ts';
 import { globPlugin } from 'esbuild-plugin-glob';
 import { build } from 'esbuild';
 import { clean } from 'esbuild-plugin-clean';
+import { copy } from 'esbuild-plugin-copy';
 
 build({
   entryPoints: ['src/**/*'],
@@ -14,11 +15,8 @@ build({
       patterns: ['./dist/*'],
     }),
     globPlugin(),
+    copy({ assets: [{ from: './public/**/*', to: './public' }] }),
   ],
-  loader: {
-    '.png': 'file',
-    '.svg': 'file',
-  },
   outbase: './',
   outExtension: { '.js': '.jsx' },
 });
