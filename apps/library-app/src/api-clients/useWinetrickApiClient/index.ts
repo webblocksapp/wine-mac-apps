@@ -1,8 +1,10 @@
 import { Winetrick } from '@interfaces';
 import { useShellRunner } from '@utils';
+import { resolveResource } from '@tauri-apps/api/path';
 
 export const useWinetrickApiClient = () => {
   const { executeScript } = useShellRunner();
+
   const mapResponse = (data: string = ''): Winetrick[] => {
     const mappedData: Winetrick[] = [];
     const rows = data.split('\n');
@@ -19,32 +21,34 @@ export const useWinetrickApiClient = () => {
   };
 
   const listApps = async () => {
-    const { stdout } = await executeScript(`winetricks apps list`);
-    return mapResponse(stdout);
+    return runWinetricks('apps list');
   };
 
   const listBenchmarks = async () => {
-    const { stdout } = await executeScript(`winetricks benchmarks list`);
-    return mapResponse(stdout);
+    return runWinetricks('benchmarks list');
   };
 
   const listDlls = async () => {
-    const { stdout } = await executeScript(`winetricks dlls list`);
-    return mapResponse(stdout);
+    return runWinetricks('dlls list');
   };
 
   const listFonts = async () => {
-    const { stdout } = await executeScript(`winetricks fonts list`);
-    return mapResponse(stdout);
+    return runWinetricks('fonts list');
   };
 
   const listGames = async () => {
-    const { stdout } = await executeScript(`winetricks games list`);
-    return mapResponse(stdout);
+    return runWinetricks('games list');
   };
 
-  const listSettings = async () => {
-    const { stdout } = await executeScript(`winetricks settings list`);
+  const listSettings = () => {
+    return runWinetricks('settings list');
+  };
+
+  const runWinetricks = async (cmd: string) => {
+    const WINETRICKS_PATH = await resolveResource('bash');
+    const { stdout } = await executeScript(
+      `${WINETRICKS_PATH}/winetricks.sh ${cmd}`
+    );
     return mapResponse(stdout);
   };
 

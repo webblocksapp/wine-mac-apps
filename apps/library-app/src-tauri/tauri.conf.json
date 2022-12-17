@@ -14,7 +14,7 @@
     "allowlist": {
       "fs": {
         "all": true,
-        "scope": ["$RESOURCE/bash/*", "$RESOURCE/stubs/*", "$RESOURCE/bin/*", "$RESOURCE/*"]
+        "scope": ["$RESOURCE/stubs/*", "$RESOURCE/bin/*", "$RESOURCE/*"]
       },
       "dialog": {
         "all": true

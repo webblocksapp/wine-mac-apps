@@ -1,12 +1,11 @@
 details.accordion {
   padding: 0;
+  margin-bottom: 0;
 }
 
 details.accordion > summary {
-  padding-bottom: 1rem;
+  padding: 1rem 0px;
   margin-bottom: 0rem !important;
-  display: flex;
-  justify-content: space-between;
 }
 
 details.accordion[open] {

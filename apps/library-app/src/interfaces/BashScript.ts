@@ -13,4 +13,5 @@ export type BashScript =
   | 'winecfg'
   | 'winetrick'
   | 'enableDxvk'
-  | 'listAppExecutables';
+  | 'listAppExecutables'
+  | 'dirname';

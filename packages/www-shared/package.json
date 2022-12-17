@@ -13,6 +13,7 @@
     }
   },
   "scripts": {
+    "build:watch": "watch 'pnpm build' src",
     "build": "node esbuild.config.js && pnpm resolve-aliases && cp package.json README.md dist",
     "resolve-aliases": "tsc-alias && tsc-alias -r ./scripts/imgsAliasReplacer.cjs",
     "copy": "cp package.json README.md dist"
@@ -30,6 +31,7 @@
     "solid-js": "^1.6.5",
     "tsc-alias": "^1.8.2",
     "typescript": "^4.6.4",
+    "watch": "^1.0.2",
     "yup": "^0.32.11"
   }
 }
