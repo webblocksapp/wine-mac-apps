@@ -1,5 +1,4 @@
 import { Component, JSXElement } from 'solid-js';
-import '@picocss/pico/css/pico.css';
 import './index.css';
 
 export interface ThemeProviderProps {

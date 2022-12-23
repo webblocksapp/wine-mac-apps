@@ -1,0 +1,31 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "jsx": "preserve",
+    "jsxImportSource": "solid-js",
+    "types": ["vite/client"],
+    "noEmit": true,
+    "isolatedModules": true,
+    "baseUrl": "./",
+    "paths": {
+      "@api-clients": ["src/api-clients"],
+      "@components": ["src/components"],
+      "@constants": ["src/constants"],
+      "@hocs": ["src/hocs"],
+      "@imgs/*": ["src/public/imgs/*"],
+      "@interfaces": ["src/interfaces"],
+      "@layouts": ["src/layouts"],
+      "@models": ["src/models"],
+      "@pages": ["src/pages"],
+      "@routes": ["src/routes"],
+      "@shared": ["node_modules/www-shared"],
+      "@states": ["src/states"],
+      "@utils": ["src/utils"]
+    }
+  }
+}

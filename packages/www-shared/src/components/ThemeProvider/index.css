@@ -1,3 +1,7 @@
+@import '@picocss/pico/css/pico.css';
+@import 'bootstrap/dist/css/bootstrap-grid.min.css';
+@import 'bootstrap/dist/css/bootstrap-utilities.min.css';
+
 input:not([type='checkbox'], [type='radio']),
 select,
 textarea,

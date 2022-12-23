@@ -8,6 +8,35 @@ importers:
     devDependencies:
       args-parser: 1.3.0
 
+  apps/config-app:
+    specifiers:
+      '@picocss/pico': ^1.5.6
+      '@solidjs/router': ^0.5.0
+      '@tauri-apps/api': ^1.2.0
+      '@tauri-apps/cli': ^1.2.2
+      '@types/node': ^18.7.10
+      bootstrap: ^5.2.2
+      solid-js: ^1.6.2
+      typescript: ^4.7.4
+      vite: ^4.0.0
+      vite-plugin-solid: ^2.3.0
+      vite-tsconfig-paths: ^3.5.2
+      www-shared: workspace:*
+    dependencies:
+      '@picocss/pico': 1.5.6
+      '@solidjs/router': 0.5.1_solid-js@1.6.5
+      '@tauri-apps/api': 1.2.0
+      bootstrap: 5.2.3
+      solid-js: 1.6.5
+      www-shared: link:../../packages/www-shared
+    devDependencies:
+      '@tauri-apps/cli': 1.2.2
+      '@types/node': 18.11.15
+      typescript: 4.9.4
+      vite: 4.0.3_@types+node@18.11.15
+      vite-plugin-solid: 2.5.0_solid-js@1.6.5+vite@4.0.3
+      vite-tsconfig-paths: 3.6.0_vite@4.0.3
+
   apps/library-app:
     specifiers:
       '@babel/core': ^7.20.5
@@ -77,6 +106,7 @@ importers:
       '@solidjs/router': ^0.5.1
       '@types/node': ^18.11.15
       babel-preset-solid: ^1.6.2
+      bootstrap: ^5.2.2
       esbuild: ^0.16.7
       esbuild-node-externals: ^1.6.0
       esbuild-plugin-babel: ^0.2.3
@@ -90,16 +120,16 @@ importers:
       typescript: ^4.6.4
       watch: ^1.0.2
       yup: ^0.32.11
-    dependencies:
-      '@picocss/pico': 1.5.6
     devDependencies:
       '@babel/core': 7.20.5
       '@babel/plugin-transform-runtime': 7.19.6_@babel+core@7.20.5
       '@babel/preset-env': 7.20.2_@babel+core@7.20.5
       '@babel/preset-typescript': 7.18.6_@babel+core@7.20.5
+      '@picocss/pico': 1.5.6
       '@solidjs/router': 0.5.1_solid-js@1.6.5
       '@types/node': 18.11.15
       babel-preset-solid: 1.6.3_@babel+core@7.20.5
+      bootstrap: 5.2.3
       esbuild: 0.16.7
       esbuild-node-externals: 1.6.0_esbuild@0.16.7
       esbuild-plugin-babel: 0.2.3_@babel+core@7.20.5
@@ -1948,7 +1978,6 @@ packages:
 
   /@picocss/pico/1.5.6:
     resolution: {integrity: sha512-9R+OdtMuHijKa7AQKBrng/1Q/Cd3BnEigYJXmOxI10Eka2qGGDa4b0hua8UeYu01BTtAiO70K7CQuHffU4YXGA==}
-    dev: false
 
   /@sinclair/typebox/0.24.51:
     resolution: {integrity: sha512-1P1OROm/rdubP5aFDSZQILU0vrLCJ4fvHt6EoqHEM+2D/G5MK3bIaymUKLit8Js9gbns5UyJnkP/TZROLw4tUA==}
@@ -2542,7 +2571,6 @@ packages:
     resolution: {integrity: sha512-cEKPM+fwb3cT8NzQZYEu4HilJ3anCrWqh3CHAok1p9jXqMPsPTBhU25fBckEJHJ/p+tTxTFTsFQGM+gaHpi3QQ==}
     peerDependencies:
       '@popperjs/core': ^2.11.6
-    dev: false
 
   /brace-expansion/1.1.11:
     resolution: {integrity: sha512-iCuPHDFgrHX7H2vEI/5xpz07zSHB00TpugqhmYtVmMO6518mCuRMoOYFldEBl0g187ufozdaHgWKcYFb61qGiA==}
@@ -5152,6 +5180,14 @@ packages:
       fsevents: 2.3.2
     dev: true
 
+  /rollup/3.8.1:
+    resolution: {integrity: sha512-4yh9eMW7byOroYcN8DlF9P/2jCpu6txVIHjEqquQVSx7DI0RgyCCN3tjrcy4ra6yVtV336aLBB3v2AarYAxePQ==}
+    engines: {node: '>=14.18.0', npm: '>=8.0.0'}
+    hasBin: true
+    optionalDependencies:
+      fsevents: 2.3.2
+    dev: true
+
   /run-parallel/1.2.0:
     resolution: {integrity: sha512-5l4VyZR86LZ/lDxZTR6jqL8AFE2S0IFLMP26AbjsLVADxHdhB/c0GUsH+y39UfCi3dzz8OlQuPmnaJOMoDHQBA==}
     dependencies:
@@ -5736,6 +5772,24 @@ packages:
       - supports-color
     dev: true
 
+  /vite-plugin-solid/2.5.0_solid-js@1.6.5+vite@4.0.3:
+    resolution: {integrity: sha512-VneGd3RyFJvwaiffsqgymeMaofn0IzQLPwDzafTV2f1agoWeeJlk5VrI5WqT9BTtLe69vNNbCJWqLhHr9fOdDw==}
+    peerDependencies:
+      solid-js: ^1.3.17 || ^1.4.0 || ^1.5.0 || ^1.6.0
+      vite: ^3.0.0 || ^4.0.0
+    dependencies:
+      '@babel/core': 7.20.5
+      '@babel/preset-typescript': 7.18.6_@babel+core@7.20.5
+      babel-preset-solid: 1.6.3_@babel+core@7.20.5
+      merge-anything: 5.1.4
+      solid-js: 1.6.5
+      solid-refresh: 0.4.1_solid-js@1.6.5
+      vite: 4.0.3_@types+node@18.11.15
+      vitefu: 0.2.3_vite@4.0.3
+    transitivePeerDependencies:
+      - supports-color
+    dev: true
+
   /vite-tsconfig-paths/3.6.0_vite@3.2.5:
     resolution: {integrity: sha512-UfsPYonxLqPD633X8cWcPFVuYzx/CMNHAjZTasYwX69sXpa4gNmQkR0XCjj82h7zhLGdTWagMjC1qfb9S+zv0A==}
     peerDependencies:
@@ -5746,6 +5800,20 @@ packages:
       recrawl-sync: 2.2.3
       tsconfig-paths: 4.1.1
       vite: 3.2.5_@types+node@18.11.15
+    transitivePeerDependencies:
+      - supports-color
+    dev: true
+
+  /vite-tsconfig-paths/3.6.0_vite@4.0.3:
+    resolution: {integrity: sha512-UfsPYonxLqPD633X8cWcPFVuYzx/CMNHAjZTasYwX69sXpa4gNmQkR0XCjj82h7zhLGdTWagMjC1qfb9S+zv0A==}
+    peerDependencies:
+      vite: '>2.0.0-0'
+    dependencies:
+      debug: 4.3.4
+      globrex: 0.1.2
+      recrawl-sync: 2.2.3
+      tsconfig-paths: 4.1.1
+      vite: 4.0.3_@types+node@18.11.15
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -5784,6 +5852,40 @@ packages:
       fsevents: 2.3.2
     dev: true
 
+  /vite/4.0.3_@types+node@18.11.15:
+    resolution: {integrity: sha512-HvuNv1RdE7deIfQb8mPk51UKjqptO/4RXZ5yXSAvurd5xOckwS/gg8h9Tky3uSbnjYTgUm0hVCet1cyhKd73ZA==}
+    engines: {node: ^14.18.0 || >=16.0.0}
+    hasBin: true
+    peerDependencies:
+      '@types/node': '>= 14'
+      less: '*'
+      sass: '*'
+      stylus: '*'
+      sugarss: '*'
+      terser: ^5.4.0
+    peerDependenciesMeta:
+      '@types/node':
+        optional: true
+      less:
+        optional: true
+      sass:
+        optional: true
+      stylus:
+        optional: true
+      sugarss:
+        optional: true
+      terser:
+        optional: true
+    dependencies:
+      '@types/node': 18.11.15
+      esbuild: 0.16.7
+      postcss: 8.4.20
+      resolve: 1.22.1
+      rollup: 3.8.1
+    optionalDependencies:
+      fsevents: 2.3.2
+    dev: true
+
   /vitefu/0.2.3_vite@3.2.5:
     resolution: {integrity: sha512-75l7TTuU8isAhz1QFtNKjDkqjxvndfMC1AfIMjJ0ZQ59ZD0Ow9QOIsJJX16Wv9PS8f+zMzp6fHy5cCbKG/yVUQ==}
     peerDependencies:
@@ -5793,6 +5895,17 @@ packages:
         optional: true
     dependencies:
       vite: 3.2.5_@types+node@18.11.15
+    dev: true
+
+  /vitefu/0.2.3_vite@4.0.3:
+    resolution: {integrity: sha512-75l7TTuU8isAhz1QFtNKjDkqjxvndfMC1AfIMjJ0ZQ59ZD0Ow9QOIsJJX16Wv9PS8f+zMzp6fHy5cCbKG/yVUQ==}
+    peerDependencies:
+      vite: ^3.0.0 || ^4.0.0
+    peerDependenciesMeta:
+      vite:
+        optional: true
+    dependencies:
+      vite: 4.0.3_@types+node@18.11.15
     dev: true
 
   /w3c-hr-time/1.0.2:
