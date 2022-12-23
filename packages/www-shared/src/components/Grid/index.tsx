@@ -1,6 +1,6 @@
 import { Component, JSXElement } from 'solid-js';
 import { SpacingScale, ColSize, CssProps, DisplayProps } from '@interfaces';
-import { withDisplay } from '@hocs';
+import { withClass, withDisplay } from '@hocs';
 
 export interface BaseGridProps extends CssProps {
   children?: JSXElement;
@@ -18,8 +18,8 @@ export interface BaseGridProps extends CssProps {
 }
 export interface IGridProps extends BaseGridProps, DisplayProps {}
 
-export const Grid: Component<IGridProps> = withDisplay(
-  (props: BaseGridProps) => (
+export const Grid: Component<IGridProps> = withClass(
+  withDisplay((props: BaseGridProps) => (
     <div
       classList={{
         ...props.classList,
@@ -117,5 +117,5 @@ export const Grid: Component<IGridProps> = withDisplay(
     >
       {props.children}
     </div>
-  )
+  ))
 );

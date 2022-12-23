@@ -18,5 +18,6 @@ export * from './Owner';
 export * from './ProcessStatusIcon';
 export * from './Select';
 export * from './TextInput';
+export * from './ThemeProvider';
 export * from './TreeMenu';
 export * from './Typography';

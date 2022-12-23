@@ -49,6 +49,7 @@ export const Dialog: Component<DialogProps> = (props) => {
   const dialogContext = useDialogContext();
   const body = document.getElementsByTagName('body')[0];
   const [open, setOpen] = createSignal(true);
+  let dialogRef: HTMLDialogElement | undefined;
 
   const close = () => {
     props?.onClose?.();
@@ -83,11 +84,17 @@ export const Dialog: Component<DialogProps> = (props) => {
     if (dialogs.length <= 1) body.style.overflow = 'auto';
   });
 
+  createEffect(() => {
+    open() === true
+      ? dialogRef?.setAttribute('open', 'true')
+      : dialogRef?.removeAttribute('open');
+  });
+
   return (
     <dialog
       {...rest}
+      ref={dialogRef}
       classList={{ ...local.classList, dialog: true, 'dialog-component': true }}
-      open={open()}
     >
       <article
         style={{

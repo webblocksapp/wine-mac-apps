@@ -1,4 +1,5 @@
-import { Component, JSX, JSXElement, splitProps } from 'solid-js';
+import { Box } from '@components';
+import { Component, JSX, JSXElement, Show, splitProps } from 'solid-js';
 import './index.css';
 
 export interface AccordionProps
@@ -42,7 +43,14 @@ export const Accordion: Component<AccordionProps> = (props) => {
       }}
       onClick={onClick}
     >
-      <summary>{local.text}</summary>
+      <summary>
+        <Box display="flex" alignItems="center" justifyContent="space-between">
+          {local.text}
+          <Show when={local.expandable !== false && local.disabled !== true}>
+            <Box class="icon"></Box>
+          </Show>
+        </Box>
+      </summary>
       {props.children}
     </details>
   );

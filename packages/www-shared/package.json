@@ -5,24 +5,33 @@
   "files": [
     "dist"
   ],
-  "main": "dist/src/index.jsx",
-  "types": "dist/src/index.d.ts",
+  "main": "dist/index.jsx",
+  "types": "dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/src/index.jsx"
+      "import": "./dist/index.jsx"
+    },
+    "./dist/index.css": {
+      "import": "./dist/index.css"
     }
   },
   "scripts": {
+    "build": "node esbuild.config.js && pnpm resolve-aliases",
     "build:watch": "watch 'pnpm build' src",
-    "build": "node esbuild.config.js && pnpm resolve-aliases && cp package.json README.md dist",
-    "resolve-aliases": "tsc-alias && tsc-alias -r ./scripts/imgsAliasReplacer.cjs",
-    "copy": "cp package.json README.md dist"
+    "resolve-aliases": "tsc-alias && tsc-alias -r ./scripts/imgsAliasReplacer.cjs"
   },
   "license": "MIT",
   "devDependencies": {
+    "@babel/core": "^7.20.5",
+    "@babel/plugin-transform-runtime": "^7.19.6",
+    "@babel/preset-env": "^7.20.2",
+    "@babel/preset-typescript": "^7.18.6",
     "@solidjs/router": "^0.5.1",
     "@types/node": "^18.11.15",
+    "babel-preset-solid": "^1.6.2",
     "esbuild": "^0.16.7",
+    "esbuild-node-externals": "^1.6.0",
+    "esbuild-plugin-babel": "^0.2.3",
     "esbuild-plugin-clean": "^1.0.1",
     "esbuild-plugin-copy": "^2.0.1",
     "esbuild-plugin-d.ts": "^1.1.0",
@@ -33,5 +42,8 @@
     "typescript": "^4.6.4",
     "watch": "^1.0.2",
     "yup": "^0.32.11"
+  },
+  "dependencies": {
+    "@picocss/pico": "^1.5.6"
   }
 }
