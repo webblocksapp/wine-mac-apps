@@ -1,17 +1,19 @@
 import { Router } from '@solidjs/router';
 import { render } from 'solid-js/web';
-import { DialogProvider, Owner } from '@shared';
+import { DialogProvider, Owner, ThemeProvider } from '@shared';
 import { App } from './App';
 import './index.css';
 
 render(
   () => (
     <Router>
-      <DialogProvider>
-        <Owner>
-          <App />
-        </Owner>
-      </DialogProvider>
+      <ThemeProvider>
+        <DialogProvider>
+          <Owner>
+            <App />
+          </Owner>
+        </DialogProvider>
+      </ThemeProvider>
     </Router>
   ),
   document.getElementById('root') as HTMLElement

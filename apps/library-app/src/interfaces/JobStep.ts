@@ -1,4 +1,5 @@
-import { BashScript, ProcessStatus, ScriptOptions, Cmd } from '@interfaces';
+import { BashScript, ScriptOptions, Cmd } from '@interfaces';
+import { ProcessStatus } from '@shared';
 import { Child } from '@tauri-apps/api/shell';
 
 export type JobStep = {

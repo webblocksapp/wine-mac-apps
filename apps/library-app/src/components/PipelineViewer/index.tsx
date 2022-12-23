@@ -34,7 +34,7 @@ export const PipelineViewer: Component<PipelineViewerProps> = (props) => {
   });
 
   return (
-    <Grid container spacing={4}>
+    <Grid class="pipeline-viewer" container spacing={4}>
       <Grid item xs={12}>
         <Typography component="h4">
           {capitalize(props.workflow.name)}
@@ -53,6 +53,7 @@ export const PipelineViewer: Component<PipelineViewerProps> = (props) => {
                     {(step, index) => (
                       <Accordion
                         disabled={!step?.output?.match(/\S/)}
+                        expandable={Boolean(step.output)}
                         text={
                           <Box display="grid" gridTemplateColumns="110px 1fr">
                             <Box display="flex" alignItems="center">
@@ -61,7 +62,11 @@ export const PipelineViewer: Component<PipelineViewerProps> = (props) => {
                               </Box>
                               <Typography>Step {index() + 1}:</Typography>
                             </Box>
-                            <Box display="flex" alignItems="center">
+                            <Box
+                              display="flex"
+                              alignItems="center"
+                              justifyContent="space-between"
+                            >
                               <Typography>{step.name}</Typography>
                             </Box>
                           </Box>
