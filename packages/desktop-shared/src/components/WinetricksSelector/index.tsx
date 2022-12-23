@@ -16,7 +16,7 @@ import {
   TextInput,
   capitalize,
   debounce,
-} from '@shared';
+} from 'www-shared';
 import { useWinetrickModel } from '@models';
 import { createStore } from 'solid-js/store';
 import { WinetrickType } from '@interfaces';

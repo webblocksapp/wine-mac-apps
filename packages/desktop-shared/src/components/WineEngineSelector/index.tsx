@@ -1,5 +1,5 @@
 import { Component, createEffect, createSignal } from 'solid-js';
-import { Select, SelectProps, SelectableOption, Id } from '@shared';
+import { Select, SelectProps, SelectableOption, Id } from 'www-shared';
 import { WineEngine } from '@interfaces';
 import { useWineEngineModel } from '@models';
 

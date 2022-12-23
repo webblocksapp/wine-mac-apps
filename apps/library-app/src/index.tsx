@@ -1,6 +1,6 @@
 import { Router } from '@solidjs/router';
 import { render } from 'solid-js/web';
-import { DialogProvider, Owner, ThemeProvider } from '@shared';
+import { DialogProvider, Owner, ThemeProvider } from 'www-shared';
 import { App } from './App';
 import './index.css';
 

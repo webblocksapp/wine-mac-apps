@@ -1,4 +1,4 @@
-import { CommonObject } from '@interfaces';
+import { CommonObject } from 'www-shared';
 
 export type Env = Partial<{
   EXE_FLAGS: string;

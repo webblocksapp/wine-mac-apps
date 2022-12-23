@@ -16,6 +16,7 @@ importers:
       '@tauri-apps/cli': ^1.2.2
       '@types/node': ^18.7.10
       bootstrap: ^5.2.2
+      desktop-shared: workspace:*
       solid-js: ^1.6.2
       typescript: ^4.7.4
       vite: ^4.0.0
@@ -27,6 +28,7 @@ importers:
       '@solidjs/router': 0.5.1_solid-js@1.6.5
       '@tauri-apps/api': 1.2.0
       bootstrap: 5.2.3
+      desktop-shared: link:../../packages/desktop-shared
       solid-js: 1.6.5
       www-shared: link:../../packages/www-shared
     devDependencies:
@@ -53,6 +55,7 @@ importers:
       babel-loader: ^9.1.0
       babel-preset-solid: ^1.6.2
       bootstrap: ^5.2.2
+      desktop-shared: workspace:*
       jest: ^28.1.0
       jest-environment-jsdom: ^28.1.0
       solid-form-handler: ^1.0.0-alpha.5
@@ -71,6 +74,7 @@ importers:
       '@solidjs/router': 0.5.1_solid-js@1.6.5
       '@tauri-apps/api': 1.2.0
       bootstrap: 5.2.3
+      desktop-shared: link:../../packages/desktop-shared
       solid-form-handler: 1.0.0-alpha.5_solid-js@1.6.5+yup@0.32.11
       solid-js: 1.6.5
       www-shared: link:../../packages/www-shared
@@ -95,6 +99,42 @@ importers:
       vite: 3.2.5_@types+node@18.11.15
       vite-plugin-solid: 2.5.0_solid-js@1.6.5+vite@3.2.5
       vite-tsconfig-paths: 3.6.0_vite@3.2.5
+
+  packages/desktop-shared:
+    specifiers:
+      '@picocss/pico': ^1.5.6
+      '@tauri-apps/api': ^1.2.0
+      bootstrap: ^5.2.2
+      esbuild: ^0.16.7
+      esbuild-node-externals: ^1.6.0
+      esbuild-plugin-clean: ^1.0.1
+      esbuild-plugin-copy: ^2.0.1
+      esbuild-plugin-d.ts: ^1.1.0
+      esbuild-plugin-glob: ^2.2.0
+      solid-form-handler: ^1.0.0-alpha.5
+      solid-js: ^1.6.5
+      tsc-alias: ^1.8.2
+      typescript: ^4.6.4
+      watch: ^1.0.2
+      www-shared: workspace:*
+      yup: ^0.32.11
+    devDependencies:
+      '@picocss/pico': 1.5.6
+      '@tauri-apps/api': 1.2.0
+      bootstrap: 5.2.3
+      esbuild: 0.16.7
+      esbuild-node-externals: 1.6.0_esbuild@0.16.7
+      esbuild-plugin-clean: 1.0.1_esbuild@0.16.7
+      esbuild-plugin-copy: 2.0.1_esbuild@0.16.7
+      esbuild-plugin-d.ts: 1.1.0_typescript@4.9.4
+      esbuild-plugin-glob: 2.2.0_esbuild@0.16.7
+      solid-form-handler: 1.0.0-alpha.5_solid-js@1.6.5+yup@0.32.11
+      solid-js: 1.6.5
+      tsc-alias: 1.8.2
+      typescript: 4.9.4
+      watch: 1.0.2
+      www-shared: link:../www-shared
+      yup: 0.32.11
 
   packages/www-shared:
     specifiers:
@@ -2005,7 +2045,6 @@ packages:
   /@tauri-apps/api/1.2.0:
     resolution: {integrity: sha512-lsI54KI6HGf7VImuf/T9pnoejfgkNoXveP14pVV7XarrQ46rOejIVJLFqHI9sRReJMGdh2YuCoI3cc/yCWCsrw==}
     engines: {node: '>= 14.6.0', npm: '>= 6.6.0', yarn: '>= 1.19.1'}
-    dev: false
 
   /@tauri-apps/cli-darwin-arm64/1.2.2:
     resolution: {integrity: sha512-W+Cp2weUMlvmGkRJeUjypbz9Lpl6o98xkgKAtobZSum5SNwpsBQfawJTESakNoD+FXyVg/snIk5sRdHge+tAaA==}

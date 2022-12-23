@@ -10,7 +10,7 @@ import {
   ProcessStatusIcon,
   Typography,
   useDialogContext,
-} from '@shared';
+} from 'www-shared';
 import { Component, createEffect, For } from 'solid-js';
 
 export interface PipelineViewerProps {

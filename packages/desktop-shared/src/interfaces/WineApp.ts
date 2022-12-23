@@ -1,9 +1,5 @@
-import {
-  Id,
-  WineAppExecutable,
-  WineEngine,
-  WinetricksOptions,
-} from '@interfaces';
+import { WineAppExecutable, WineEngine, WinetricksOptions } from '@interfaces';
+import { Id } from 'www-shared';
 
 export type WineApp = {
   id?: Id;

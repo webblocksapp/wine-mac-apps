@@ -1,31 +1,33 @@
 {
   "compilerOptions": {
+    "baseUrl": "./",
+    "declaration": true,
+    "emitDeclarationOnly": true,
     "strict": true,
+    "outDir": "dist",
+    "removeComments": false,
     "target": "ESNext",
     "module": "ESNext",
-    "moduleResolution": "Node",
+    "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "jsx": "preserve",
     "jsxImportSource": "solid-js",
-    "noEmit": true,
     "isolatedModules": true,
-    "resolveJsonModule": true,
-    "baseUrl": "./",
     "paths": {
       "@api-clients": ["src/api-clients"],
       "@components": ["src/components"],
       "@constants": ["src/constants"],
       "@hocs": ["src/hocs"],
-      "@imgs/*": ["src/public/imgs/*"],
+      "@imgs/*": ["public/imgs/*"],
       "@interfaces": ["src/interfaces"],
-      "@layouts": ["src/layouts"],
       "@models": ["src/models"],
-      "@pages": ["src/pages"],
-      "@routes": ["src/routes"],
       "@states": ["src/states"],
       "@utils": ["src/utils"]
     },
-    "types": ["vite/client", "node", "@types/jest"]
+    "types": ["node"]
+  },
+  "tsc-alias": {
+    "verbose": true
   }
 }

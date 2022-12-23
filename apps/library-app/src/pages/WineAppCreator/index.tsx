@@ -8,14 +8,14 @@ import {
   Box,
   Checkbox,
   useFormHandler,
-} from '@shared';
+} from 'www-shared';
 import {
   FilePathInput,
   WinetricksSelector,
   WineEngineSelector,
   PipelineViewer,
-} from '@components';
-import { useWineApp } from '@utils';
+  useWineApp,
+} from 'desktop-shared';
 import { schema, Schema } from './schema';
 
 export const WineAppCreator: Component = () => {

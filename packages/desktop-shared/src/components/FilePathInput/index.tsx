@@ -1,5 +1,5 @@
 import { Component, mergeProps, splitProps } from 'solid-js';
-import { Box, TextInput, TextInputProps, Button } from '@shared';
+import { Box, TextInput, TextInputProps, Button } from 'www-shared';
 import { createStore } from 'solid-js/store';
 import { open } from '@tauri-apps/api/dialog';
 import './index.css';

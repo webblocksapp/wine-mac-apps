@@ -11,7 +11,6 @@ export * from './JobStep';
 export * from './ScriptOptions';
 export * from './ShellProcess';
 export * from './ShellRunner';
-export * from './Subscription';
 export * from './WineApp';
 export * from './WineAppExecutable';
 export * from './WineEngine';

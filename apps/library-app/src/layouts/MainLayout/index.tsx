@@ -1,4 +1,4 @@
-import { Box, TreeMenu } from '@shared';
+import { Box, TreeMenu } from 'www-shared';
 import { Header, Sidebar } from '@components';
 import { Outlet } from '@solidjs/router';
 import { Component } from 'solid-js';

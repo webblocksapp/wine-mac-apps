@@ -60,7 +60,7 @@
         "providerShortName": null,
         "signingIdentity": null
       },
-      "resources": ["../../../packages/bash/*", "stubs/*", "bin/*"],
+      "resources": ["../../../packages/app-resources/bash/*", "stubs/*", "bin/*"],
       "shortDescription": "",
       "targets": "all",
       "windows": {

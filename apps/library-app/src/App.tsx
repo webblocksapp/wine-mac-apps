@@ -1,9 +1,14 @@
 import { Component, createEffect, createSignal, Show } from 'solid-js';
 import { useRoutes } from '@solidjs/router';
 import { routes } from '@routes';
-import { useAppModel, useWineEngineModel, useWinetrickModel } from '@models';
+import {
+  CmdArgs,
+  EventPayload,
+  useAppModel,
+  useWineEngineModel,
+  useWinetrickModel,
+} from 'desktop-shared';
 import { appWindow } from '@tauri-apps/api/window';
-import { CmdArgs, EventPayload } from '@interfaces';
 
 export const App: Component = () => {
   const appModel = useAppModel();

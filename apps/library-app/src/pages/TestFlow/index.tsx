@@ -1,14 +1,14 @@
 import { Component, For } from 'solid-js';
-import { Button, Grid, useDialogContext } from '@shared';
-import { PipelineViewer } from '@components';
-import { useShellRunner } from '@utils';
+import { Button, Grid, useDialogContext } from 'www-shared';
 import {
+  PipelineViewer,
+  useShellRunner,
   BashScript,
   CommandOptions,
   ScriptOptions,
   Workflow,
-} from '@interfaces';
-import { useAppModel } from '@models';
+  useAppModel,
+} from 'desktop-shared';
 
 export const TestFlow: Component = () => {
   const shell = useShellRunner();
