@@ -11,6 +11,7 @@ export const withGrid = <T,>(BaseComponent: Component<T>) => {
           'grid-template-rows': props.gridTemplateRows,
           'grid-area': props.gridArea,
           'grid-template-areas': props.gridTemplateAreas,
+          'column-gap': props.columnGap,
           ...props.style,
         }}
       />

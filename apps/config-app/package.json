@@ -24,6 +24,7 @@
     "@tauri-apps/api": "^1.2.0",
     "bootstrap": "^5.2.2",
     "desktop-shared": "workspace:*",
+    "solid-icons": "^1.0.4",
     "solid-js": "^1.6.2",
     "www-shared": "workspace:*"
   }

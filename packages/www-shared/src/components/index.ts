@@ -10,6 +10,7 @@ export * from './DialogProvider';
 export * from './FormHelperText';
 export * from './FormLabel';
 export * from './Grid';
+export * from './IconButton';
 export * from './Image';
 export * from './List';
 export * from './ListItem';

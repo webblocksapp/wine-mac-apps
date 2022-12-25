@@ -1,6 +1,6 @@
 import { Outlet } from '@solidjs/router';
 import { Component } from 'solid-js';
-import { Box } from '@shared';
+import { Box } from 'www-shared';
 
 export const MainLayout: Component = () => {
   return (

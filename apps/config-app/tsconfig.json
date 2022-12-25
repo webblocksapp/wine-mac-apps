@@ -23,7 +23,6 @@
       "@models": ["src/models"],
       "@pages": ["src/pages"],
       "@routes": ["src/routes"],
-      "@shared": ["node_modules/www-shared", "node_modules/desktop-shared"],
       "@states": ["src/states"],
       "@utils": ["src/utils"]
     }
