@@ -2,9 +2,9 @@ import { WineApp, useAppState as useBaseAppState } from 'desktop-shared';
 import { AppState } from '@interfaces';
 import { createStore } from 'solid-js/store';
 
+const baseAppState = useBaseAppState();
 const [store, setStore] = createStore<AppState>({
-  env: { BASH_SCRIPTS_PATH: '', HOME: '', STUBS_PATH: '' },
-  initializingEnv: false,
+  ...baseAppState.store,
   config: {
     name: '',
     engine: { url: '', version: '' },
@@ -21,8 +21,6 @@ const [store, setStore] = createStore<AppState>({
 });
 
 export const useAppState = () => {
-  const baseAppState = useBaseAppState();
-
   const initConfig = (data: WineApp) => {
     setStore('config', (prev) => ({ ...prev, ...data }));
   };

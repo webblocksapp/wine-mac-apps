@@ -22,7 +22,7 @@
       "@interfaces": ["src/interfaces"],
       "@utils": ["src/utils"]
     },
-    "types": ["node"]
+    "types": ["node", "vite/client"]
   },
   "tsc-alias": {
     "verbose": true

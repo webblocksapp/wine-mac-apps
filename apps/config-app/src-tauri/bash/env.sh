@@ -1,19 +1,20 @@
 # Initializes the environment variables which contains
 # the path locations for running wine.
-initEnv() {
+env() {
   mode=$1
-  dir=$(dirname "$0")
-  cd $dir;
   
   case $mode in
-    dev)
+    development)
       # In dev mode the current script is located at
       # /apps/config-app/src-tauri/target/debug/bash
-      cd ../../../../packages/app-contents
+      dir=$PWD
+      cd $dir;
+      cd ../../../packages/app-contents
     ;;
-    prod)
+    production)
       # In prod mode the current script is located at
       # /WineApp.app/Config.app/Contents/Resources
+      dir=$(dirname "$0")
       cd ../../../packages/app-contents
     ;;
     *)
@@ -31,4 +32,4 @@ initEnv() {
   export WINE_APP_DRIVE_C=$WINE_APP_PREFIX_PATH/drive_c
 }
 
-initEnv "$@"
+env "$@"

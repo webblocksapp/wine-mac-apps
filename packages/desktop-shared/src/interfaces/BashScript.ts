@@ -10,7 +10,6 @@ export type BashScript =
   | 'extractWineEngine'
   | 'generateWinePrefix'
   | 'loadDylibs'
-  | 'wineAppContentsPath'
   | 'runProgram'
   | 'winecfg'
   | 'winetrick'

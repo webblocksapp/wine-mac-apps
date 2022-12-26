@@ -25,7 +25,7 @@
       "@states": ["src/states"],
       "@utils": ["src/utils"]
     },
-    "types": ["node"]
+    "types": ["node", "vite/client"]
   },
   "tsc-alias": {
     "verbose": true

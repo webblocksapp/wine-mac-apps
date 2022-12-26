@@ -10,6 +10,7 @@ import {
 } from '@interfaces';
 import { createStore } from 'solid-js/store';
 import { useAppModel } from '@models';
+import { APP_MODE } from 'www-shared';
 
 export const useShellRunner = (config?: CommandOptions) => {
   const appModel = useAppModel();
@@ -189,12 +190,22 @@ export const useShellRunner = (config?: CommandOptions) => {
   };
 
   /**
+   * Builds the env source by using the env.sh script.
+   */
+  const ENV_SOURCE = appEnv().ENV_SH
+    ? `source ${appEnv().ENV_SH} ${APP_MODE} && `
+    : '';
+
+  /**
    * Tauri command for running a shell script.
    */
   const runShellScriptCommand = (script: string, options?: CommandOptions) => {
     mergeEnv(options?.env);
     const envVarsCmd = buildEnvVarsCmd();
-    return new Command('run-script', ['-c', `${envVarsCmd} ${script}`]);
+    return new Command('run-script', [
+      '-c',
+      `${ENV_SOURCE}${envVarsCmd} ${script}`,
+    ]);
   };
 
   /**
@@ -206,11 +217,12 @@ export const useShellRunner = (config?: CommandOptions) => {
   ) => {
     mergeEnv(options?.env);
     const envVarsCmd = buildEnvVarsCmd();
+
     return new Command('run-script', [
       '-c',
-      `${envVarsCmd} sh ${appEnv().BASH_SCRIPTS_PATH}/${fileName}.sh ${
-        options?.args
-      }`,
+      `${ENV_SOURCE}${envVarsCmd} sh ${
+        appEnv().BASH_SCRIPTS_PATH
+      }/${fileName}.sh ${options?.args}`,
     ]);
   };
 

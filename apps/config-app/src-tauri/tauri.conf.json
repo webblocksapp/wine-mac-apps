@@ -14,7 +14,7 @@
     "allowlist": {
       "fs": {
         "all": true,
-        "scope": ["$RESOURCE/data/*", "$RESOURCE/*"]
+        "scope": ["$RESOURCE/data/*", "$RESOURCE/bash/*", "$RESOURCE/*"]
       },
       "path": {
         "all": true
