@@ -1,1 +1,1 @@
-export * from './useAppConfigModel';
+export * from './useAppModel';

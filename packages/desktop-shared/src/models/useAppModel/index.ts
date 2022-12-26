@@ -1,4 +1,3 @@
-import { CmdArgs } from '@interfaces';
 import { useAppState } from '@states';
 import { homeDir, resolveResource } from '@tauri-apps/api/path';
 
@@ -18,10 +17,6 @@ export const useAppModel = () => {
     }
   };
 
-  const setCmdArgs = (cmdArgs: CmdArgs) => {
-    appState.setCmdArgs(cmdArgs);
-  };
-
   const selectEnv = () => {
     return () => appState.store.env;
   };
@@ -30,15 +25,9 @@ export const useAppModel = () => {
     return () => appState.store.initializingEnv;
   };
 
-  const selectCmdArgs = () => {
-    return () => appState.store.cmdArgs;
-  };
-
   return {
     initEnv,
     selectEnv,
-    setCmdArgs,
     selectInitializingEnv,
-    selectCmdArgs,
   };
 };

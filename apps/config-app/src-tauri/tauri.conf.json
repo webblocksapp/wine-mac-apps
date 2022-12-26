@@ -14,10 +14,20 @@
     "allowlist": {
       "fs": {
         "all": true,
-        "scope": ["$RESOURCE/data/*"]
+        "scope": ["$RESOURCE/data/*", "$RESOURCE/*"]
       },
       "path": {
         "all": true
+      },
+      "shell": {
+        "all": true,
+        "scope": [
+          {
+            "name": "run-script",
+            "cmd": "sh",
+            "args": [{ "validator": "-c" }, { "validator": "(.*?)" }]
+          }
+        ]
       }
     },
     "bundle": {
@@ -35,7 +45,7 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "identifier": "com.tauri.dev",
+      "identifier": "config-app.tauri.prod",
       "longDescription": "",
       "macOS": {
         "entitlements": null,
@@ -44,7 +54,10 @@
         "providerShortName": null,
         "signingIdentity": null
       },
-      "resources": [],
+      "resources": [
+        "../../../packages/app-contents/Resources/bash/*",
+        "bash/*"
+      ],
       "shortDescription": "",
       "targets": "all",
       "windows": {

@@ -1,15 +1,15 @@
 import { Component, createSignal, Show } from 'solid-js';
 import { useRoutes } from '@solidjs/router';
 import { routes } from '@routes';
-import { useAppConfigModel } from '@models';
+import { useAppModel } from '@models';
 
 export const App: Component = () => {
-  const appConfigModel = useAppConfigModel();
+  const appModel = useAppModel();
   const [loading, setLoading] = createSignal(true);
 
   const init = async () => {
     setLoading(true);
-    await Promise.all([appConfigModel.read()]);
+    await Promise.all([appModel.initEnv(), appModel.initConfig()]);
     setLoading(false);
   };
 

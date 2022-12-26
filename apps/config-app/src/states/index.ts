@@ -1,1 +1,1 @@
-export * from './useAppConfigState';
+export * from './useAppState';

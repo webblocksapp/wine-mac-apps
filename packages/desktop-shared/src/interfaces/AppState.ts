@@ -1,5 +1,3 @@
-import { WineApp } from '@interfaces';
-
 export type AppState = {
   env: {
     HOME: string;
@@ -7,8 +5,4 @@ export type AppState = {
     STUBS_PATH: string;
   };
   initializingEnv: boolean;
-  cmdArgs: {
-    config: WineApp;
-    url: string;
-  };
 };

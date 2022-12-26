@@ -1,3 +1,3 @@
 import { Env } from '@interfaces';
 
-export type CommandOptions = { env?: Env; flags?: string };
+export type CommandOptions = { env?: Env; args?: string };

@@ -138,7 +138,7 @@ export const useShellRunner = (config?: CommandOptions) => {
    */
   const spawnBashScript = async (
     fileName: BashScript,
-    options?: ScriptOptions
+    options?: ScriptOptions<BashScript>
   ) => {
     const cmd = runBashScriptCommand(fileName, { env: options?.env });
     const child = await cmd.spawn();
@@ -151,9 +151,12 @@ export const useShellRunner = (config?: CommandOptions) => {
    */
   const executeBashScript = async (
     fileName: BashScript,
-    options?: ScriptOptions
+    options?: ScriptOptions<BashScript>
   ) => {
-    return runBashScriptCommand(fileName, { env: options?.env }).execute();
+    return runBashScriptCommand(fileName, {
+      env: options?.env,
+      args: parseArgs(options?.args),
+    }).execute();
   };
 
   /**
@@ -197,13 +200,35 @@ export const useShellRunner = (config?: CommandOptions) => {
   /**
    * Tauri command for running a shell script file located at bash folder.
    */
-  const runBashScriptCommand = (fileName: string, options?: CommandOptions) => {
+  const runBashScriptCommand = (
+    fileName: string,
+    options: CommandOptions = { args: '' }
+  ) => {
     mergeEnv(options?.env);
     const envVarsCmd = buildEnvVarsCmd();
     return new Command('run-script', [
       '-c',
-      `${envVarsCmd} sh ${appEnv().BASH_SCRIPTS_PATH}/${fileName}.sh`,
+      `${envVarsCmd} sh ${appEnv().BASH_SCRIPTS_PATH}/${fileName}.sh ${
+        options?.args
+      }`,
     ]);
+  };
+
+  /**
+   * Stringifies cmd args
+   */
+  const parseArgs = (args: any) => {
+    let str: string = '';
+
+    if (typeof args === 'object') {
+      for (let [key, value] of Object.entries(args)) {
+        str += `${key} ${value} `;
+      }
+    } else if (typeof args === 'string') {
+      str = args;
+    }
+
+    return str;
   };
 
   return {
