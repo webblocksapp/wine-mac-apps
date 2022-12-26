@@ -16,6 +16,7 @@ export * from './WineApp';
 export * from './WineAppExecutable';
 export * from './WineEngine';
 export * from './WineEngineState';
+export * from './WineTool';
 export * from './Winetrick';
 export * from './WinetrickState';
 export * from './WinetrickType';

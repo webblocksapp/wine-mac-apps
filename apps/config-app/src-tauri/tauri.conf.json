@@ -14,7 +14,7 @@
     "allowlist": {
       "fs": {
         "all": true,
-        "scope": ["$RESOURCE/data/*", "$RESOURCE/bash/*", "$RESOURCE/*"]
+        "scope": ["$RESOURCE/data/*", "$RESOURCE/bash/*"]
       },
       "path": {
         "all": true
@@ -54,10 +54,7 @@
         "providerShortName": null,
         "signingIdentity": null
       },
-      "resources": [
-        "../../../packages/app-contents/Resources/bash/*",
-        "bash/*"
-      ],
+      "resources": ["bash/*"],
       "shortDescription": "",
       "targets": "all",
       "windows": {
