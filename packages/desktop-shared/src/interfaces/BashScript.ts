@@ -7,9 +7,12 @@ export type BashScript =
   | 'extractWineEngine'
   | 'listAppExecutables'
   | 'loadDylibs'
+  | 'regedit'
   | 'runProgram'
   | 'taskmgr'
+  | 'uninstaller'
   | 'wine'
   | 'wineboot'
   | 'winecfg'
+  | 'winefile'
   | 'winetrick';

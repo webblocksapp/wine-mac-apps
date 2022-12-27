@@ -70,15 +70,7 @@
       }
     },
     "cli": {
-      "args": [
-        {
-          "name": "testx",
-          "short": "t",
-          "takesValue": true,
-          "multiple": true,
-          "possibleValues": ["foo", "bar"]
-        }
-      ]
+      "args": []
     },
     "security": {
       "csp": null

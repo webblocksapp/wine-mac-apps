@@ -1,4 +1,4 @@
-import { Component, For } from 'solid-js';
+import { Component, For, JSXElement } from 'solid-js';
 import { IconButton, Grid, Typography } from 'www-shared';
 import {
   FaSolidGear,
@@ -6,30 +6,38 @@ import {
   FaSolidBarsProgress,
   FaSolidCode,
   FaSolidTrashCan,
+  FaSolidFile,
 } from 'solid-icons/fa';
-import { useShellRunner, WineTool } from 'desktop-shared';
+import { useWineApp, WineTool } from 'desktop-shared';
 import { createStore } from 'solid-js/store';
 
 export const WineTools: Component = () => {
-  const shell = useShellRunner();
+  const wineApp = useWineApp();
   const [store, setStore] = createStore({
     winecfg: { running: false },
     regedit: { running: false },
     taskmgr: { running: false },
     cmd: { running: false },
     uninstaller: { running: false },
+    winefile: { running: false },
   });
 
   const runWineTool = async (tool: WineTool) => {
     setStore(tool, 'running', true);
-    const { cmd } = await shell.spawnBashScript(tool);
+    const { cmd } = await wineApp[tool]();
     cmd.on('close', () => {
       setStore(tool, 'running', false);
     });
     cmd.stderr.on('data', (data) => console.error(data));
+    cmd.stdout.on('data', (data) => console.log(data));
   };
 
-  const items = [
+  const items: Array<{
+    name: string;
+    icon: JSXElement;
+    tool: WineTool;
+    runWineTool: (tool: WineTool) => Promise<void>;
+  }> = [
     {
       name: 'Wine Config',
       icon: <FaSolidGear />,
@@ -53,6 +61,12 @@ export const WineTools: Component = () => {
       name: 'Uninstaller',
       icon: <FaSolidTrashCan />,
       tool: 'uninstaller',
+      runWineTool,
+    },
+    {
+      name: 'File Explorer',
+      icon: <FaSolidFile />,
+      tool: 'winefile',
       runWineTool,
     },
   ];

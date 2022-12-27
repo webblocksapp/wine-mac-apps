@@ -2,20 +2,26 @@
 # the path locations for running wine.
 env() {
   mode=$1
-  dir=$PWD
+  # Gets the folder path of shell scripts.
+  dir=$(dirname "${BASH_SOURCE[0]}")
+  export WINE_APP_SCRIPTS_PATH=$dir
   
+  # Shell scripts folder is the current directory used as reference
+  # to start creating the paths for the rest of folders.
+  cd $dir;
+  
+  # Current directory is changed according to environment mode.
   if [ $mode == "development" ]
   then
     # In dev mode the current script is located at
-    # /apps/config-app/src-tauri/target/debug/bash
-    export WINE_APP_SCRIPTS_PATH="$dir/bash"
-    cd ../../../packages/app-contents
+    # /root/apps/config-app/src-tauri/target/debug/bash
+    # app-contents simulates a WineApp.app
+    cd ../../../../../../packages/app-contents
   elif [ $mode == "production" ]
   then
     # In prod mode the current script is located at
-    # /WineApp.app/Config.app/Contents/Resources
-    export WINE_APP_SCRIPTS_PATH="$dir/bash"
-    cd ../../../packages/app-contents
+    # /WineApp.app/Config.app/Contents/Resources/bash
+    cd ../../../../Contents
   else
     echo "Invalid mode"
     exit 1;

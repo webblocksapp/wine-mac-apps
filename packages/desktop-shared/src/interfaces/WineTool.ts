@@ -3,4 +3,5 @@ export type WineTool =
   | 'regedit'
   | 'taskmgr'
   | 'cmd'
+  | 'winefile'
   | 'uninstaller';

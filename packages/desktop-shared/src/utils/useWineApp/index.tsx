@@ -237,8 +237,43 @@ export const useWineApp = () => {
   /**
    * Opens winecfg ui.
    */
-  const winecfg = async () => {
-    spawnBashScript('winecfg');
+  const winecfg = () => {
+    return spawnBashScript('winecfg');
+  };
+
+  /**
+   * Opens registry editor ui.
+   */
+  const regedit = () => {
+    return spawnBashScript('regedit');
+  };
+
+  /**
+   * Opens task manager ui.
+   */
+  const taskmgr = () => {
+    return spawnBashScript('regedit');
+  };
+
+  /**
+   * Opens windows command line.
+   */
+  const cmd = () => {
+    return spawnBashScript('cmd');
+  };
+
+  /**
+   * Opens programs uninstaller ui.
+   */
+  const uninstaller = () => {
+    return spawnBashScript('uninstaller');
+  };
+
+  /**
+   * Opens programs uninstaller ui.
+   */
+  const winefile = () => {
+    return spawnBashScript('winefile');
   };
 
   /**
@@ -314,6 +349,11 @@ export const useWineApp = () => {
   return {
     create,
     winecfg,
+    regedit,
+    taskmgr,
+    cmd,
+    uninstaller,
+    winefile,
     winetricks,
     runProgram,
   };
