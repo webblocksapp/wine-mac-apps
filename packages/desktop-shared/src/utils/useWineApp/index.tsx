@@ -90,7 +90,7 @@ export const useWineApp = () => {
             },
             {
               name: 'Generating wine prefix',
-              bashScript: 'generateWinePrefix',
+              bashScript: 'wineboot',
             },
             ...(config?.dxvkEnabled ? [dxvkStep] : []),
             ...winetricksSteps,
