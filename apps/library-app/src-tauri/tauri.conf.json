@@ -14,7 +14,12 @@
     "allowlist": {
       "fs": {
         "all": true,
-        "scope": ["$RESOURCE/stubs/*", "$RESOURCE/bin/*", "$RESOURCE/*"]
+        "scope": [
+          "$RESOURCE/stubs/*",
+          "$RESOURCE/bin/*",
+          "$RESOURCE/bash/*",
+          "$RESOURCE/compressed/*"
+        ]
       },
       "dialog": {
         "all": true
@@ -60,7 +65,7 @@
         "providerShortName": null,
         "signingIdentity": null
       },
-      "resources": ["../../../packages/app-resources/bash/*", "stubs/*", "bin/*"],
+      "resources": ["bash/*", "stubs/*", "bin/*"],
       "shortDescription": "",
       "targets": "all",
       "windows": {
