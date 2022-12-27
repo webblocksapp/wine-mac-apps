@@ -65,7 +65,7 @@
         "providerShortName": null,
         "signingIdentity": null
       },
-      "resources": ["bash/*", "stubs/*", "bin/*"],
+      "resources": ["bash/*", "stubs/*", "compressed/*"],
       "shortDescription": "",
       "targets": "all",
       "windows": {

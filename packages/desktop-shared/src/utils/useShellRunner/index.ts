@@ -204,7 +204,7 @@ export const useShellRunner = (config?: CommandOptions) => {
     const envVarsCmd = buildEnvVarsCmd();
     return new Command('run-script', [
       '-c',
-      `${ENV_SOURCE}${envVarsCmd} ${script}`,
+      `${envVarsCmd} ${ENV_SOURCE} ${script}`,
     ]);
   };
 
@@ -220,7 +220,7 @@ export const useShellRunner = (config?: CommandOptions) => {
 
     return new Command('run-script', [
       '-c',
-      `${ENV_SOURCE}${envVarsCmd} sh ${
+      `${envVarsCmd} ${ENV_SOURCE} sh ${
         appEnv().BASH_SCRIPTS_PATH
       }/${fileName}.sh ${options?.args}`,
     ]);

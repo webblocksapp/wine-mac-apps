@@ -3,12 +3,16 @@
 env() {
   mode=$1
   # Gets the folder path of shell scripts.
-  dir=$(dirname "${BASH_SOURCE[0]}")
-  export WINE_APP_SCRIPTS_PATH=$dir
+  # If no scripts path is given, it takes by default the script folder.
+  if test -z "$WINE_APP_SCRIPTS_PATH"
+  then
+    dir=$(dirname "${BASH_SOURCE[0]}")
+    export WINE_APP_SCRIPTS_PATH=$dir
+  fi
   
   # Shell scripts folder is the current directory used as reference
   # to start creating the paths for the rest of folders.
-  cd $dir;
+  cd $WINE_APP_SCRIPTS_PATH;
   
   # Current directory is changed according to environment mode.
   if [ $mode == "development" ]

@@ -2,7 +2,7 @@ export type BashScript =
   | 'buildAppPath'
   | 'bundleApp'
   | 'cmd'
-  | 'createWineAppFolder'
+  | 'scaffoldApp'
   | 'enableDxvk'
   | 'extractWineEngine'
   | 'listAppExecutables'

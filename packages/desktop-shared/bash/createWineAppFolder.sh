@@ -1,4 +1,0 @@
-mkdir -p $WINE_APP_PATH;
-mkdir -p $WINE_APP_LOGS_PATH;
-mkdir -p $WINE_APP_ENGINE_PATH;
-mkdir -p $WINE_APP_PREFIX_PATH;

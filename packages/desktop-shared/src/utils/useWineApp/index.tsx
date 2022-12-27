@@ -23,34 +23,18 @@ export const useWineApp = () => {
   const buildAppEnv = (config: WineApp) => {
     const HOME = appEnv().HOME;
     const WINE_APP_NAME = config.name;
-    const WINE_BASE_PATH = `${HOME}/Wine`;
-    const WINE_LIBS_PATH = `${WINE_BASE_PATH}/libs`;
-    const WINE_ENGINES_PATH = `${WINE_BASE_PATH}/engines`;
-    const WINE_APPS_PATH = `${WINE_BASE_PATH}/apps`;
-    const WINE_APP_PATH = `${WINE_APPS_PATH}/${WINE_APP_NAME}`;
-    const WINE_APP_CONTENTS_PATH = `${WINE_APP_PATH}/Contents`;
-    const WINE_APP_SHARED_SUPPORT_PATH = `${WINE_APP_CONTENTS_PATH}/SharedSupport`;
-    const WINE_APP_LOGS_PATH = `${WINE_APP_SHARED_SUPPORT_PATH}/Logs`;
-    const WINE_APP_ENGINE_PATH = `${WINE_APP_SHARED_SUPPORT_PATH}/wine`;
-    const WINE_APP_PREFIX_PATH = `${WINE_APP_SHARED_SUPPORT_PATH}/prefix`;
-    const WINE_APP_DRIVE_C_PATH = `${WINE_APP_PREFIX_PATH}/drive_c`;
-    const WINE_APP_BIN_PATH = `${WINE_APP_ENGINE_PATH}/bin`;
     const WINE_ENGINE_VERSION = config.engine.version;
+    // const WINE_APP_CONTENTS_PATH = `${WINE_APP_PATH}/Contents`;
+    // const WINE_APP_SHARED_SUPPORT_PATH = `${WINE_APP_CONTENTS_PATH}/SharedSupport`;
+    // const WINE_APP_LOGS_PATH = `${WINE_APP_SHARED_SUPPORT_PATH}/Logs`;
+    // const WINE_APP_ENGINE_PATH = `${WINE_APP_SHARED_SUPPORT_PATH}/wine`;
+    // const WINE_APP_PREFIX_PATH = `${WINE_APP_SHARED_SUPPORT_PATH}/prefix`;
+    // const WINE_APP_DRIVE_C_PATH = `${WINE_APP_PREFIX_PATH}/drive_c`;
+    // const WINE_APP_BIN_PATH = `${WINE_APP_ENGINE_PATH}/bin`;
 
     mergeEnv({
       HOME,
       WINE_APP_NAME,
-      WINE_BASE_PATH,
-      WINE_LIBS_PATH,
-      WINE_ENGINES_PATH,
-      WINE_APPS_PATH,
-      WINE_APP_PATH,
-      WINE_APP_SHARED_SUPPORT_PATH,
-      WINE_APP_LOGS_PATH,
-      WINE_APP_ENGINE_PATH,
-      WINE_APP_PREFIX_PATH,
-      WINE_APP_DRIVE_C_PATH,
-      WINE_APP_BIN_PATH,
       WINE_ENGINE_VERSION,
     });
   };
@@ -81,32 +65,32 @@ export const useWineApp = () => {
           name: 'Create wine app - Job',
           steps: [
             {
-              name: 'Creating wine app folder',
-              fn: () => createWineAppFolder(config),
+              name: 'Creating wine app',
+              fn: () => scaffoldApp(config),
             },
-            {
-              name: 'Extracting wine engine',
-              bashScript: 'extractWineEngine',
-            },
-            {
-              name: 'Generating wine prefix',
-              bashScript: 'wineboot',
-            },
-            ...(config?.dxvkEnabled ? [dxvkStep] : []),
-            ...winetricksSteps,
-            {
-              name: 'Running setup executable',
-              bashScript: 'runProgram',
-              options: {
-                env: {
-                  EXE_PATH: config.setupExecutablePath,
-                },
-              },
-            },
-            {
-              name: 'Bundling app',
-              fn: () => bundleApp(config),
-            },
+            // {
+            //   name: 'Extracting wine engine',
+            //   bashScript: 'extractWineEngine',
+            // },
+            // {
+            //   name: 'Generating wine prefix',
+            //   bashScript: 'wineboot',
+            // },
+            // ...(config?.dxvkEnabled ? [dxvkStep] : []),
+            // ...winetricksSteps,
+            // {
+            //   name: 'Running setup executable',
+            //   bashScript: 'runProgram',
+            //   options: {
+            //     env: {
+            //       EXE_PATH: config.setupExecutablePath,
+            //     },
+            //   },
+            // },
+            // {
+            //   name: 'Bundling app',
+            //   fn: () => bundleApp(config),
+            // },
           ],
         },
       ],
@@ -117,15 +101,15 @@ export const useWineApp = () => {
   };
 
   /**
-   * Logic for creating the wine application folder.
+   * Logic for creating the wine application structure.
    */
-  const createWineAppFolder = async (config: WineApp) => {
+  const scaffoldApp = async (config: WineApp) => {
     const { stdout } = await executeBashScript('buildAppPath');
     const appName = stdout.split('/').pop();
     appName &&
       appName !== config.name &&
       buildAppEnv({ ...config, name: appName });
-    return spawnBashScript('createWineAppFolder');
+    return spawnBashScript('scaffoldApp');
   };
 
   /**

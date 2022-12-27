@@ -8,7 +8,8 @@
     "build": "vite build",
     "serve": "vite preview",
     "tauri": "tauri",
-    "app-build": "tauri build && node ../../scripts/fixAppResources.mjs"
+    "app-build": "copy-bash && tauri build && node ../../scripts/fixAppResources.mjs",
+    "copy-bash": "cp node_modules/desktop-shared/dist/bash/scaffoldApp.sh src-tauri/bash"
   },
   "license": "MIT",
   "devDependencies": {
