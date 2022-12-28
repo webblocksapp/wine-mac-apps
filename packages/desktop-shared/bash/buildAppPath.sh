@@ -1,10 +1,17 @@
-COUNTER=0
-BASE_PATH=$WINE_APP_PATH
+#!/bin/bash
 
-while [[ -d $WINE_APP_PATH || -d "$WINE_APP_PATH.app" ]] 
+# Script for generating an unique app name.
+# WINE_APP_PATH is populated by /library-app/src-tauri/bash/env.sh
+# WINE_APP_NAME is populated by the running library-app application
+counter=0
+parent_dir=$(dirname "$WINE_APP_PATH")
+CURR_WINE_APP_NAME=$WINE_APP_NAME
+
+while [[ -d $WINE_APP_PATH ]]
 do
-  $((COUNTER+=1))
-  WINE_APP_PATH="${BASE_PATH}_$COUNTER";  
+  $((counter+=1))
+  CURR_WINE_APP_NAME="${WINE_APP_NAME}_${counter}"
+  WINE_APP_PATH="${parent_dir}/$CURR_WINE_APP_NAME.app";
 done;
 
-echo $WINE_APP_PATH
+echo $CURR_WINE_APP_NAME

@@ -8,6 +8,12 @@ env() {
   export WINE_CONFIG_APP_PATH="$WINE_APP_PATH/$WINE_CONFIG_APP_NAME.app"
   export WINE_APP_SCRIPTS_PATH="$WINE_CONFIG_APP_PATH/Contents/Resources/bash"
   export COMPRESSED_PATH="$PWD/compressed"
+  
+  #Loads env from wine config app
+  if [[ -d $WINE_APP_SCRIPTS_PATH ]]
+  then
+    source $WINE_APP_SCRIPTS_PATH/env.sh ""
+  fi
 }
 
 env "$@"
