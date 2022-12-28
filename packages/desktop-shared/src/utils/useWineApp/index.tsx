@@ -183,7 +183,7 @@ export const useWineApp = () => {
         label: item.split('/').pop() || '',
       })) || [];
 
-    return await new Promise<WineAppExecutable>((resolve) => {
+    return new Promise<WineAppExecutable>((resolve) => {
       createDialog({
         content: ({ dialogId }) => {
           const [executablePath, setExecutablePath] = createSignal('');
