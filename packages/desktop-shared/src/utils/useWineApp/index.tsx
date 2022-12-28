@@ -65,10 +65,10 @@ export const useWineApp = () => {
               name: 'Extracting wine engine',
               bashScript: 'extractWineEngine',
             },
-            // {
-            //   name: 'Generating wine prefix',
-            //   bashScript: 'wineboot',
-            // },
+            {
+              name: 'Generating wine prefix',
+              bashScript: 'wineboot',
+            },
             // ...(config?.dxvkEnabled ? [dxvkStep] : []),
             // ...winetricksSteps,
             // {
