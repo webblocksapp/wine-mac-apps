@@ -57,20 +57,20 @@ export const useWineApp = () => {
         {
           name: 'Create wine app - Job',
           steps: [
-            {
-              name: 'Creating wine app',
-              fn: () => scaffoldApp(config),
-            },
-            {
-              name: 'Extracting wine engine',
-              bashScript: 'extractWineEngine',
-            },
-            {
-              name: 'Generating wine prefix',
-              bashScript: 'wineboot',
-            },
-            // ...(config?.dxvkEnabled ? [dxvkStep] : []),
-            // ...winetricksSteps,
+            // {
+            //   name: 'Creating wine app',
+            //   fn: () => scaffoldApp(config),
+            // },
+            // {
+            //   name: 'Extracting wine engine',
+            //   bashScript: 'extractWineEngine',
+            // },
+            // {
+            //   name: 'Generating wine prefix',
+            //   bashScript: 'wineboot',
+            // },
+            ...(config?.dxvkEnabled ? [dxvkStep] : []),
+            ...winetricksSteps,
             // {
             //   name: 'Running setup executable',
             //   bashScript: 'runProgram',
@@ -259,8 +259,8 @@ export const useWineApp = () => {
   const winetricksOptionsToFlags = (options?: WinetricksOptions) => {
     options = { unattended: true, force: true, ...options };
     let flags = '';
-    if (options?.unattended) flags += 'unattended ';
-    if (options?.force) flags += 'force ';
+    if (options?.unattended) flags += '--unattended ';
+    if (options?.force) flags += '--force ';
 
     return `"${flags}"`;
   };
@@ -280,11 +280,7 @@ export const useWineApp = () => {
         name: `Running winetrick ${trick}`,
         bashScript: 'winetrick',
         options: {
-          ...options,
-          env: {
-            WINE_TRICK: trick,
-            WINE_TRICK_FLAGS: flags,
-          },
+          args: `${flags} ${trick}`,
         },
       });
     }

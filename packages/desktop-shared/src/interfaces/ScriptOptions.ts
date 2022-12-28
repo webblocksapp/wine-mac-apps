@@ -1,7 +1,7 @@
-import { BashScript, BashScriptArgs, Env } from '@interfaces';
+import { Env } from '@interfaces';
 
-export type ScriptOptions<T extends BashScript> = {
+export type ScriptOptions = {
   force?: boolean;
   env?: Env;
-  args?: BashScriptArgs[T];
+  args?: string;
 };

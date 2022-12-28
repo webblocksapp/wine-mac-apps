@@ -1,9 +1,7 @@
-if [[ $WINE_TRICK_FLAGS == *"force"* ]]; then
- flags+="--force "
-fi
+winetrick() {
+  WINETRICKS_FALLBACK_LIBRARY_PATH=$WINE_APP_FRAMEWORKS_PATH \
+  $WINE_APP_SCRIPTS_PATH/wineEnv.sh \
+  $WINE_APP_SCRIPTS_PATH/winetricks.sh $@;
+}
 
-if [[ $WINE_TRICK_FLAGS == *"unattended"* ]]; then
- flags+="--unattended "
-fi
-
-PATH="$WINE_APP_BIN_PATH":$PATH WINEPREFIX=$WINE_APP_PREFIX_PATH WINE=$WINE_APP_BIN_PATH/wine32on64 winetricks $flags $WINE_TRICK;
+winetrick "$@"

@@ -54,7 +54,7 @@
         "providerShortName": null,
         "signingIdentity": null
       },
-      "resources": ["bash/*"],
+      "resources": ["bash/*", "data/*"],
       "shortDescription": "",
       "targets": "all",
       "windows": {

@@ -139,9 +139,12 @@ export const useShellRunner = (config?: CommandOptions) => {
    */
   const spawnBashScript = async (
     fileName: BashScript,
-    options?: ScriptOptions<BashScript>
+    options?: ScriptOptions
   ) => {
-    const cmd = runBashScriptCommand(fileName, { env: options?.env });
+    const cmd = runBashScriptCommand(fileName, {
+      env: options?.env,
+      args: parseArgs(options?.args),
+    });
     const child = await cmd.spawn();
 
     return { cmd: cmd as Cmd, child };
@@ -152,7 +155,7 @@ export const useShellRunner = (config?: CommandOptions) => {
    */
   const executeBashScript = async (
     fileName: BashScript,
-    options?: ScriptOptions<BashScript>
+    options?: ScriptOptions
   ) => {
     return runBashScriptCommand(fileName, {
       env: options?.env,
@@ -202,27 +205,27 @@ export const useShellRunner = (config?: CommandOptions) => {
   const runShellScriptCommand = (script: string, options?: CommandOptions) => {
     mergeEnv(options?.env);
     const envVarsCmd = buildEnvVarsCmd();
+    const args = options?.args || '';
+
     return new Command('run-script', [
       '-c',
-      `${envVarsCmd} ${ENV_SOURCE} ${script}`,
+      `${envVarsCmd} ${ENV_SOURCE} ${script} ${args}`,
     ]);
   };
 
   /**
    * Tauri command for running a shell script file located at bash folder.
    */
-  const runBashScriptCommand = (
-    fileName: string,
-    options: CommandOptions = { args: '' }
-  ) => {
+  const runBashScriptCommand = (fileName: string, options: CommandOptions) => {
     mergeEnv(options?.env);
     const envVarsCmd = buildEnvVarsCmd();
+    const args = options?.args || '';
 
     return new Command('run-script', [
       '-c',
       `${envVarsCmd} ${ENV_SOURCE} sh ${
         appEnv().BASH_SCRIPTS_PATH
-      }/${fileName}.sh ${options?.args}`,
+      }/${fileName}.sh ${args}`,
     ]);
   };
 

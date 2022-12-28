@@ -1,6 +1,5 @@
 export * from './AppState';
 export * from './BashScript';
-export * from './BashScriptArgs';
 export * from './Cmd';
 export * from './CmdArgs';
 export * from './CommandOptions';
