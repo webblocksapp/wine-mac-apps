@@ -69,17 +69,15 @@ export const useWineApp = () => {
             //   name: 'Generating wine prefix',
             //   bashScript: 'wineboot',
             // },
-            ...(config?.dxvkEnabled ? [dxvkStep] : []),
-            ...winetricksSteps,
-            // {
-            //   name: 'Running setup executable',
-            //   bashScript: 'runProgram',
-            //   options: {
-            //     env: {
-            //       EXE_PATH: config.setupExecutablePath,
-            //     },
-            //   },
-            // },
+            // ...(config?.dxvkEnabled ? [dxvkStep] : []),
+            // ...winetricksSteps,
+            {
+              name: 'Running setup executable',
+              bashScript: 'wine',
+              options: {
+                args: `${config.setupExecutablePath}`,
+              },
+            },
             // {
             //   name: 'Bundling app',
             //   fn: () => bundleApp(config),
@@ -311,11 +309,8 @@ export const useWineApp = () => {
     exeFlags: string[] = []
   ) => {
     exeFlags = exeFlags?.map?.((item) => `"${item}"`);
-    await spawnBashScript('runProgram', {
-      env: {
-        EXE_PATH: executablePath,
-        exeFlags,
-      },
+    await spawnBashScript('wine', {
+      args: `${executablePath} ${exeFlags}`,
     });
   };
 

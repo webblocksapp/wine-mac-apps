@@ -8,7 +8,6 @@ export type BashScript =
   | 'listAppExecutables'
   | 'loadDylibs'
   | 'regedit'
-  | 'runProgram'
   | 'taskmgr'
   | 'uninstaller'
   | 'wine'
