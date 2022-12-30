@@ -2,29 +2,33 @@
 # the path locations for running wine.
 env() {
   mode=$1
+  WINE_APP_SCRIPTS_PATH=$2
   # Gets the folder path of shell scripts.
   # If no scripts path is given, it takes by default the script folder.
   if test -z "$WINE_APP_SCRIPTS_PATH"
   then
     dir=$(dirname "${BASH_SOURCE[0]}")
-    export WINE_APP_SCRIPTS_PATH=$dir
+    WINE_APP_SCRIPTS_PATH=$dir
   fi
+  
+  export WINE_APP_SCRIPTS_PATH
   
   # Shell scripts folder is the current directory used as reference
   # to start creating the paths for the rest of folders.
+  
+  # Current script location:
+  # Dev mode: /root/apps/config-app/src-tauri/target/debug/bash
+  # Prod mode: /MyWineApp.app/Config.app/Contents/Resources/bash
   cd $WINE_APP_SCRIPTS_PATH;
+  cd ../
+  export WINE_APP_CONFIG_JSON=$PWD/data/config.json
   
   # Current directory is changed according to environment mode.
   if [[ $mode == "development" ]]
   then
-    # In dev mode the current script is located at
-    # /root/apps/config-app/src-tauri/target/debug/bash
-    # app-contents simulates a WineApp.app
-    cd ../../../../../../packages/app-contents
+    cd ../../../../../packages/app-contents
   else
-    # In prod mode the current script is located at
-    # /WineApp.app/Config.app/Contents/Resources/bash
-    cd ../../../../Contents # Makes current dir /WineApp.app/Contents
+    cd ../../../Contents # Makes current dir /WineApp.app/Contents
   fi
   
   dir=$PWD
@@ -39,7 +43,8 @@ env() {
   export WINE_APP_LOGS_PATH=$WINE_APP_SHARED_SUPPORT_PATH/Logs
   export WINE_APP_BIN_PATH=$WINE_APP_SHARED_SUPPORT_PATH/wine/bin
   export WINE_APP_FRAMEWORKS_PATH=$WINE_APP_CONTENTS_PATH/Frameworks
-  export WINE_APP_DRIVE_C=$WINE_APP_PREFIX_PATH/drive_c
+  export WINE_APP_DRIVE_C_PATH=$WINE_APP_PREFIX_PATH/drive_c
+  export PATH=$PATH:$WINE_APP_SCRIPTS_PATH
 }
 
 env "$@"

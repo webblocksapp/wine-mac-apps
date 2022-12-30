@@ -57,20 +57,20 @@ export const useWineApp = () => {
         {
           name: 'Create wine app - Job',
           steps: [
-            // {
-            //   name: 'Creating wine app',
-            //   fn: () => scaffoldApp(config),
-            // },
-            // {
-            //   name: 'Extracting wine engine',
-            //   bashScript: 'extractWineEngine',
-            // },
-            // {
-            //   name: 'Generating wine prefix',
-            //   bashScript: 'wineboot',
-            // },
-            // ...(config?.dxvkEnabled ? [dxvkStep] : []),
-            // ...winetricksSteps,
+            {
+              name: 'Creating wine app',
+              fn: () => scaffoldApp(config),
+            },
+            {
+              name: 'Extracting wine engine',
+              bashScript: 'extractWineEngine',
+            },
+            {
+              name: 'Generating wine prefix',
+              bashScript: 'wineboot',
+            },
+            ...(config?.dxvkEnabled ? [dxvkStep] : []),
+            ...winetricksSteps,
             {
               name: 'Running setup executable',
               bashScript: 'wine',
@@ -78,10 +78,10 @@ export const useWineApp = () => {
                 args: `${config.setupExecutablePath}`,
               },
             },
-            // {
-            //   name: 'Bundling app',
-            //   fn: () => bundleApp(config),
-            // },
+            {
+              name: 'Bundling app',
+              fn: () => bundleApp(config),
+            },
           ],
         },
       ],
@@ -245,7 +245,7 @@ export const useWineApp = () => {
   };
 
   /**
-   * Opens programs uninstaller ui.
+   * Opens file explorer ui.
    */
   const winefile = () => {
     return spawnBashScript('winefile');

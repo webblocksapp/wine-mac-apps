@@ -8,7 +8,7 @@
     "build": "vite build",
     "serve": "vite preview",
     "tauri": "tauri",
-    "app-build": "copy-bash && tauri build && node ../../scripts/fixAppResources.mjs",
+    "app-build": "pnpm copy-bash && pnpm tauri build",
     "copy-bash": "cp node_modules/desktop-shared/dist/bash/* src-tauri/bash && chmod +x src-tauri/bash/*"
   },
   "license": "MIT",
