@@ -1,5 +1,5 @@
 import { Meta, StoryObj } from 'storybook-solidjs';
-import { Select } from '@components';
+import { Box, Code, Select } from '@components';
 import { useFormHandler } from '@utils';
 import * as yup from 'yup';
 
@@ -37,17 +37,24 @@ export const ControlledSelect: Story = {
     );
 
     return (
-      <Select
-        formHandler={formHandler}
-        label="Country"
-        placeholder="Select a country"
-        name="country"
-        options={[
-          { value: 1, label: 'Colombia' },
-          { value: 2, label: 'Ecuador' },
-          { value: 3, label: 'Perú' },
-        ]}
-      />
+      <>
+        <Box mb={2}>
+          <Select
+            formHandler={formHandler}
+            label="Country"
+            placeholder="Select a country"
+            name="country"
+            options={[
+              { value: 1, label: 'Colombia' },
+              { value: 2, label: 'Ecuador' },
+              { value: 3, label: 'Perú' },
+            ]}
+          />
+        </Box>
+        <Box mb={2}>
+          <Code>{JSON.stringify(formHandler.formData())}</Code>
+        </Box>
+      </>
     );
   },
 };

@@ -1,5 +1,5 @@
 import { Meta, StoryObj } from 'storybook-solidjs';
-import { Box, TextInput } from '@components';
+import { Box, Code, TextInput } from '@components';
 import { useFormHandler } from '@utils';
 import * as yup from 'yup';
 
@@ -47,13 +47,20 @@ export const ControlledInput: Story = {
     );
 
     return (
-      <TextInput
-        {...args}
-        formHandler={formHandler}
-        label="Name"
-        placeholder="Write your name"
-        name="name"
-      />
+      <>
+        <Box mb={2}>
+          <TextInput
+            {...args}
+            formHandler={formHandler}
+            label="Name"
+            placeholder="Write your name"
+            name="name"
+          />
+        </Box>
+        <Box mb={2}>
+          <Code>{JSON.stringify(formHandler.formData())}</Code>
+        </Box>
+      </>
     );
   },
 };
