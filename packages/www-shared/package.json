@@ -49,7 +49,7 @@
     "esbuild-plugin-glob": "^2.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "solid-form-handler": "^1.0.0-alpha.5",
+    "solid-form-handler": "1.2.0-alpha.3",
     "solid-js": "^1.6.5",
     "storybook": "^7.0.0-beta.48",
     "storybook-solidjs": "^1.0.0-beta.1",

@@ -20,7 +20,11 @@ export const Accordion: Component<AccordionProps> = (props) => {
   ]);
 
   const onClick: AccordionProps['onClick'] = (event) => {
-    if (props.disabled || props.expandable === false) {
+    if (
+      props.disabled ||
+      props.expandable === false ||
+      props.children === undefined
+    ) {
       event.preventDefault();
       return;
     }

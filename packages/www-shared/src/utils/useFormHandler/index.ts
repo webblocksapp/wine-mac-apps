@@ -1,8 +1,8 @@
 import {
   FormHandlerOptions,
   useFormHandler as useBaseFormHandler,
-  yupSchema,
 } from 'solid-form-handler';
+import { yupSchema } from 'solid-form-handler/yup';
 import { SchemaOf } from 'yup';
 
 export const useFormHandler = <T>(
