@@ -6,11 +6,11 @@ const meta: Meta<typeof Grid> = {
   component: Grid,
   argTypes: {
     columnSpacing: {
-      options: [1, 2, 3, 4, 5],
+      options: [0, 1, 2, 3, 4, 5],
       control: { type: 'select' },
     },
     rowSpacing: {
-      options: [1, 2, 3, 4, 5],
+      options: [0, 1, 2, 3, 4, 5],
       control: { type: 'select' },
     },
   },
