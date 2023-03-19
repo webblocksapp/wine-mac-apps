@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "build-www-shared": "pnpm --filter www-shared build",
-    "build-desktop-shared": "pnpm --filter desktop-shared app-build",
+    "storybook-www-shared": "pnpm --filter www-shared storybook",
+    "build-desktop-shared": "pnpm --filter desktop-shared build",
     "build-config-app": "pnpm --filter config-app app-build",
     "compress-resources-library-app": "pnpm --filter library-app compress-resources",
     "build:dev": "pnpm run build-www-shared && pnpm run build-desktop-shared && pnpm run build-config-app && pnpm run compress-resources-library-app"

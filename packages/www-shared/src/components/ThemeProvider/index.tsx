@@ -6,5 +6,5 @@ export interface ThemeProviderProps {
 }
 
 export const ThemeProvider: Component<ThemeProviderProps> = (props) => {
-  return <>{props.children}</>;
+  return props.children;
 };
