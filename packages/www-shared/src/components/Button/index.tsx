@@ -1,4 +1,4 @@
-import { Component, JSX, mergeProps, splitProps } from 'solid-js';
+import { Component, createEffect, JSX, mergeProps, splitProps } from 'solid-js';
 
 export interface ButtonProps
   extends JSX.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -7,10 +7,13 @@ export interface ButtonProps
 }
 
 export const Button: Component<ButtonProps> = (props) => {
-  const mergedProps = mergeProps(props, {
-    variant: 'outline',
-    color: 'secondary',
-  });
+  const mergedProps = mergeProps(
+    {
+      variant: 'outline',
+      color: 'secondary',
+    },
+    props
+  );
   const [local, rest] = splitProps(mergedProps, [
     'classList',
     'color',
