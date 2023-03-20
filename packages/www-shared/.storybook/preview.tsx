@@ -1,4 +1,6 @@
+import React from 'react';
 import { ThemeProvider } from '../src/components';
+import { Router } from '@solidjs/router';
 
 export const parameters = {
   actions: { argTypesRegex: '^on[A-Z].*' },
@@ -16,7 +18,7 @@ export const parameters = {
 };
 
 export const decorators = [
-  (Story) => {
-    return ThemeProvider({ children: Story() });
-  },
+  (Story) => (
+    <Router children={<ThemeProvider children={<Story />} />}></Router>
+  ),
 ];
