@@ -1,5 +1,5 @@
 import { Box, FormHelperText, FormLabel, List, ListItem } from '@components';
-import { SelectableOption } from '@interfaces';
+import { CommonObject, SelectableOption } from '@interfaces';
 import { CommonEvent, Field, FieldProps } from 'solid-form-handler';
 import {
   Component,
@@ -71,7 +71,9 @@ export const Select: Component<SelectProps> = (props) => {
    */
   createEffect(() => {
     const valueKey = props.mapConfig?.valueKey;
-    const value = valueKey ? (store.value as any)[valueKey] : store.value;
+    const value = valueKey
+      ? (store?.value as CommonObject)?.[valueKey]
+      : store.value;
     const label =
       props?.options?.find((option) => option?.value == value)?.label || '';
     setStore('selectedOptionLabel', label);

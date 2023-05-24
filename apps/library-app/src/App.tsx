@@ -23,11 +23,6 @@ export const App: Component = () => {
       wineEngineModel.list(),
       winetrickModel.list(),
     ]);
-
-    appWindow.listen<EventPayload>('cmd-args', (event) => {
-      appModel.setCmdArgs(JSON.parse(event.payload.data) as CmdArgs);
-    });
-    appWindow.emit('mounted');
   };
 
   createEffect(() => {

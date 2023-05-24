@@ -40,7 +40,7 @@
     "@tauri-apps/api": "^1.2.0",
     "bootstrap": "^5.2.2",
     "desktop-shared": "workspace:*",
-    "solid-form-handler": "^1.2.0-alpha.4",
+    "solid-form-handler": "1.2.0",
     "solid-js": "^1.6.2",
     "www-shared": "workspace:*",
     "yup": "^0.32.11"

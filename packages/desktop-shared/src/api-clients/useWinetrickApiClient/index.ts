@@ -46,9 +46,12 @@ export const useWinetrickApiClient = () => {
 
   const runWinetricks = async (cmd: string) => {
     const WINETRICKS_PATH = await resolveResource('bash');
-    const { stdout } = await executeScript(
+    const { stdout, stderr } = await executeScript(
       `${WINETRICKS_PATH}/winetricks.sh ${cmd}`
     );
+
+    console.log({ stdout, stderr });
+
     return mapResponse(stdout);
   };
 
