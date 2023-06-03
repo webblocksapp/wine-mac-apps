@@ -148,13 +148,13 @@ export const useWineApp = () => {
    * Builds final application config file
    */
   const configFileHandler = (config: WineApp) => {
-    config = JSON.parse(JSON.stringify(config));
-
     const addExecutable = (executable: WineAppExecutable) => {
       config.executables.push(executable);
     };
 
     const getConfigAsString = () => JSON.stringify(config);
+
+    console.log('===>', config);
 
     return {
       addExecutable,

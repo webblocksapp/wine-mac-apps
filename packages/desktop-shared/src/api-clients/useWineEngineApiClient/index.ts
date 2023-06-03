@@ -6,6 +6,11 @@ export const useWineEngineApiClient = () => {
         version: 'WS11WineCX64Bit22.0.1',
         url: 'https://mega.nz/file/VF4mSCpQ#UDC10env2AKKAEqqfv2Gbz8sk26mkwn1VNcAOL_nIi4',
       },
+      {
+        id: 2,
+        version: 'WS11WineCX64Bit22.1.1-rc2',
+        url: 'https://mega.nz/file/VF4mSCpQ#UDC10env2AKKAEqqfv2Gbz8sk26mkwn1VNcAOL_nIi4',
+      },
     ];
   };
 
